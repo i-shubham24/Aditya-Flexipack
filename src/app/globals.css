@@ -1,26 +1,370 @@
 @import "tailwindcss";
+@import "lenis/dist/lenis.css";
+
+/*
+  Aditya Flexipack, v3. One palette, taken from the logo:
+  crimson (#CE0000) and its tints and shadows down to wine, the logo tagline's silvers, white and ink.
+*/
+@theme {
+  --color-paper: #ffffff;
+  --color-foil: #eceef1;
+  --color-foil-2: #dfe2e6;
+  --color-foil-3: #c6cbd1;
+  --color-steel: #8b9198;
+  --color-ink: #1c1517;
+  --color-ink-soft: #4d4447;
+  --color-crimson: #ce0000;
+  --color-crimson-deep: #a10000;
+  --color-crimson-light: #ff4b3e;
+  --color-crimson-wash: #ffe3df;
+  --color-wine: #45060e;
+  --color-wine-2: #5c0b15;
+  --color-blush: #ffc9c2;
+  --color-press: #141518;
+
+  --font-display: var(--font-cabinet), "Arial Black", sans-serif;
+  --font-sans: var(--font-general), system-ui, sans-serif;
+  --font-hand: var(--font-caveat), cursive;
+
+  --radius-xs: 0.375rem;
+  --radius-sm: 0.5rem;
+  --radius-md: 0.875rem;
+  --radius-lg: 1.25rem;
+  --radius-xl: 1.75rem;
+  --radius-2xl: 2.5rem;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-back: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Five display steps; nothing else is allowed for headings and figures (docs/inner-pages-creative-direction.md 2.2). */
+  --text-d0: clamp(3.5rem, 11vw, 10rem);
+  --text-d0--line-height: 0.86;
+  --text-d1: clamp(3rem, 7.5vw, 7.5rem);
+  --text-d1--line-height: 0.9;
+  --text-d2: clamp(2.5rem, 5.2vw, 5.25rem);
+  --text-d2--line-height: 0.92;
+  --text-d3: clamp(1.75rem, 2.8vw, 2.75rem);
+  --text-d3--line-height: 1;
+  --text-d4: clamp(1.375rem, 1.9vw, 1.75rem);
+  --text-d4--line-height: 1.12;
+  --text-lead: 1.25rem;
+  --text-lead--line-height: 1.55;
+  --text-note: clamp(1.5rem, 2.2vw, 2rem);
+  --text-note--line-height: 1.05;
+  --text-small: 0.9375rem;
+  --text-caption: 0.875rem;
+
+  /* The only text measures */
+  --container-measure: 36rem;
+  --container-doc: 42rem;
+
+  /* Flat by design: surfaces separate by colour and white frames, never by drop shadows. */
+  --shadow-lift: none;
+  --shadow-card: none;
+}
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --gutter: clamp(1.5rem, 3.4vw, 3rem);
+  --stack: clamp(2.5rem, 5vw, 4rem);
+  --frame: clamp(0.5rem, 1vw, 0.875rem);
+  --section-y: clamp(5rem, 11vw, 10rem);
+  --header-h: 5rem;
+  color-scheme: light;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html,
+body {
+  overflow-x: clip;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-wine);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  font-synthesis: none;
+}
+
+/* The page is one white sheet that lifts off the wine footer at the end */
+.sheet {
+  background: var(--color-paper);
+  border-radius: 0 0 var(--radius-2xl) var(--radius-2xl);
+  position: relative;
+  z-index: 1;
+}
+
+::selection {
+  background: var(--color-crimson);
+  color: #fff;
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-ink);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 6px #fff;
+}
+
+a {
+  text-underline-offset: 0.22em;
+  text-decoration-thickness: 1px;
+}
+
+html {
+  scrollbar-color: var(--color-foil-3) var(--color-paper);
+}
+
+input,
+textarea,
+select {
+  caret-color: var(--color-crimson);
+}
+
+.display {
+  font-family: var(--font-display);
+  font-weight: 800;
+  line-height: 0.9;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+
+.hand {
+  font-family: var(--font-hand);
+  font-weight: 600;
+  line-height: 1.05;
+}
+
+.shell {
+  width: 100%;
+  max-width: 92rem;
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+/* Colour panels: full-width sections set in from the edge with soft corners */
+.panel {
+  margin-inline: var(--frame);
+  border-radius: var(--radius-2xl);
+  position: relative;
+  /* clip, not hidden: hidden would make the panel a scroll container and break sticky children */
+  overflow: clip;
+}
+
+/* Panels sit in by the frame; pull their content back out so every section shares one left edge at every width. */
+.panel .shell {
+  max-width: calc(92rem - 2 * var(--frame));
+  padding-inline: calc(var(--gutter) - var(--frame));
+}
+
+/*
+  The page grid: 4 columns on phones, 8 on tablets, 12 on desktop. Content sits on named spans only,
+  so nobody invents a new split. Headings always start on column 1.
+*/
+.page-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  column-gap: 1rem;
+}
+.span-full,
+.span-lead,
+.span-side,
+.span-half-l,
+.span-half-r,
+.span-text,
+.span-quarter,
+.span-doc {
+  grid-column: 1 / -1;
+}
+@media (min-width: 640px) {
+  .page-grid {
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+    column-gap: 1.25rem;
+  }
+  .span-half-l { grid-column: 1 / 5; }
+  .span-half-r { grid-column: 5 / 9; }
+}
+@media (min-width: 1024px) {
+  .page-grid {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: clamp(1.25rem, 1.8vw, 1.5rem);
+  }
+  .span-lead { grid-column: 1 / 8; }
+  .span-side { grid-column: 8 / 13; }
+  .span-half-l { grid-column: 1 / 7; }
+  .span-half-r { grid-column: 7 / 13; }
+  .span-text { grid-column: 1 / 7; }
+  .span-quarter { grid-column: 9 / 13; }
+  .span-doc { grid-column: 3 / 10; }
+}
+
+/* Next-page tear strip: the top edge is perforated like a pack's tear notch. */
+@property --tooth {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 12px;
+}
+.tear-edge {
+  --tooth: 12px;
+  transition: --tooth 0.4s var(--ease-back);
+  --perforation:
+    conic-gradient(from 135deg at top, #0000, #000 1deg 89deg, #0000 90deg) 0 0 / calc(2 * var(--tooth)) var(--tooth) repeat-x,
+    linear-gradient(#000 0 0) 0 var(--tooth) / 100% 100% no-repeat;
+  -webkit-mask: var(--perforation);
+  mask: var(--perforation);
+}
+.tear-strip:hover,
+.tear-strip:focus-visible {
+  --tooth: 17px;
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+/*
+  Loader, timed in CSS so it plays from the first paint and clears on its own, scripts or not.
+  The AF mark pops in inside a turning ring of the tagline (0.15s), then lifts away (1.45s) and the wine field
+  breaks into four blobs that shrink back to the corners (1.55s), letting the page through the gaps.
+*/
+[data-noloader] [data-loader] {
+  display: none;
+}
+.loader {
+  animation: loader-out 1.05s 1.55s linear forwards;
+}
+.loader-field {
+  animation: loader-field 0.01s 1.55s linear forwards;
+}
+.loader-blob {
+  transform-box: fill-box;
+  animation: loader-blob 0.95s calc(1.55s + var(--i) * 0.07s) cubic-bezier(0.76, 0, 0.24, 1) forwards;
+}
+.loader-af {
+  scale: 0;
+  animation:
+    loader-pop 0.65s 0.15s var(--ease-back) forwards,
+    loader-leave 0.32s 1.45s ease-in forwards;
+}
+.loader-ring {
+  opacity: 0;
+  animation:
+    loader-ring-in 0.5s 0.45s ease-out forwards,
+    spin 9s linear infinite,
+    loader-leave 0.32s 1.42s ease-in forwards;
+}
+@keyframes loader-out {
+  0%, 94% { opacity: 1; }
+  100% { opacity: 0; visibility: hidden; }
+}
+@keyframes loader-field {
+  to { opacity: 0; }
+}
+@keyframes loader-blob {
+  to { transform: rotate(var(--turn)) scale(0); }
+}
+@keyframes loader-pop {
+  from { scale: 0; rotate: -14deg; }
+  to { scale: 1; rotate: 0deg; }
+}
+@keyframes loader-ring-in {
+  from { opacity: 0; scale: 0.8; }
+  to { opacity: 1; scale: 1; }
+}
+@keyframes loader-leave {
+  from { opacity: 1; }
+  to { opacity: 0; scale: 0.6; }
+}
+
+/* Later loads in the same session: the mark is already there and the field breaks up within half a second. */
+[data-loader-short] .loader {
+  animation-delay: 0.42s;
+}
+[data-loader-short] .loader-field {
+  animation-delay: 0.42s;
+}
+[data-loader-short] .loader-blob {
+  animation-delay: calc(0.42s + var(--i) * 0.06s);
+  animation-duration: 0.8s;
+}
+[data-loader-short] .loader-af {
+  scale: 1;
+  animation: loader-leave 0.28s 0.12s ease-in forwards;
+}
+[data-loader-short] .loader-ring {
+  opacity: 1;
+  animation: loader-leave 0.28s 0.1s ease-in forwards;
+}
+
+/* Between pages: a wine curtain with a wavy hem lifts off the page that just arrived. */
+.route-curtain {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  pointer-events: none;
+  animation: curtain-lift 0.9s 0.05s cubic-bezier(0.65, 0, 0.35, 1) both;
+}
+.route-curtain-mark {
+  animation: loader-leave 0.3s 0.05s ease-in forwards;
+}
+@keyframes curtain-lift {
+  from { translate: 0 0; }
+  to { translate: 0 -130%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .route-curtain {
+    display: none;
+  }
+}
+
+/* Web path rollers turn with the scroll */
+.roller > span {
+  rotate: var(--spin, 0deg);
+}
+
+/* Metallising: aluminium sweeping across film */
+.metal-swatch {
+  background: linear-gradient(115deg, #e9ebee 0%, #f8f9fa 22%, #a9afb7 38%, #eef0f3 52%, #8f969e 66%, #f4f5f7 82%, #c9cdd2 100%);
+  background-size: 220% 100%;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .metal-swatch {
+    animation: vapour 6s ease-in-out infinite alternate;
+  }
+  .spin-slow {
+    animation: spin 28s linear infinite;
+  }
+}
+@keyframes vapour {
+  from { background-position: 0% 0; }
+  to { background-position: 100% 0; }
+}
+@keyframes spin {
+  to { rotate: 360deg; }
+}
+
+/* Industry cards: a photo card slapped down at a tilt whenever the active aisle changes */
+.pop-card {
+  rotate: var(--tilt, 0deg);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .pop-card {
+    animation: pop-card 0.55s var(--ease-back) both;
+  }
+}
+@keyframes pop-card {
+  from { opacity: 0; scale: 0.8; translate: 0 1.5rem; }
+  to { opacity: 1; scale: 1; translate: 0 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
