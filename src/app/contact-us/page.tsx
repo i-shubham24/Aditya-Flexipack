@@ -1,14 +1,12 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { PartnerHero } from "@/components/heroes/PartnerHero";
-import { ButtonLink } from "@/components/ui/Button";
+import { ContactHero } from "@/components/heroes/ContactHero";
 import { SectionHeader } from "@/components/system/SectionHeader";
 import { TearStrip } from "@/components/system/TearStrip";
 import { EnquiryForm } from "@/components/forms/EnquiryForm";
 import { FacebookIcon, LinkedInIcon } from "@/components/ui/BrandIcons";
 import { Rise } from "@/components/desk/Rise";
-import { KilometreStone } from "@/components/desk/KilometreStone";
 import { AddressCard } from "@/components/desk/AddressCard";
 import { site } from "@/content/site";
 
@@ -26,30 +24,7 @@ const social = "grid size-12 place-items-center rounded-[var(--radius-sm)] bg-wi
 export default function ContactPage() {
   return (
     <>
-      <PartnerHero
-        tone="crimson"
-        title="Get in touch"
-        intro={
-          <>
-            <p className="hand inline-block -rotate-2 text-note text-blush">Let&apos;s connect and collaborate</p>
-            <p className="mt-4">
-              We believe in strong, long-term partnerships. We work with vendors who share our commitment to quality, innovation and
-              customer satisfaction.
-            </p>
-          </>
-        }
-        actions={
-          <>
-            <ButtonLink href="#contact-form" tone="white">
-              Fill the form
-            </ButtonLink>
-            <ButtonLink href={site.phoneHref} tone="wine" plain>
-              Call {site.phone}
-            </ButtonLink>
-          </>
-        }
-        teaser={<KilometreStone />}
-      />
+      <ContactHero />
 
       <section aria-labelledby="reach-title" className="py-[var(--section-y)]">
         <Rise className="shell">
@@ -57,26 +32,34 @@ export default function ContactPage() {
             <SectionHeader id="reach-title" title="Contact us" />
           </div>
 
-          <div className="page-grid gap-y-16">
-            <div data-rise className="span-half-l grid gap-8 lg:grid-cols-subgrid">
-              <div className="lg:col-[1/5]">
-                <AddressCard title={site.plant.label} lines={[site.legalName, ...site.plant.lines]} mapUrl={site.plant.mapUrl} email={site.email} />
-              </div>
-              <figure className="max-w-[20rem] lg:col-[5/7] lg:max-w-none">
-                <div className="relative aspect-square overflow-hidden rounded-[var(--radius-lg)]">
+          <div className="grid grid-cols-1 items-start gap-12 lg:grid-cols-12 lg:gap-16">
+            {/* Left Column: Plant and Registered Office + Campus Photo */}
+            <div data-rise className="space-y-8 lg:col-span-6">
+              <AddressCard
+                title={site.plant.label}
+                lines={[site.legalName, ...site.plant.lines]}
+                mapUrl={site.plant.mapUrl}
+                email={site.email}
+              />
+
+              <figure className="max-w-[28rem] overflow-hidden rounded-[var(--radius-xl)] bg-white p-2.5 shadow-md ring-1 ring-black/5">
+                <div className="relative aspect-[16/10] w-full overflow-hidden rounded-[var(--radius-lg)] bg-ink/5">
                   <Image
-                    src="/media/old/home/plant-exterior-building.webp"
+                    src="/media/plant/plant-exterior.webp"
                     alt="The plant building with a brown entrance block, flagpoles and a lawn"
                     fill
-                    sizes="(min-width: 1024px) 15vw, 20rem"
+                    sizes="(min-width: 1024px) 30vw, 90vw"
                     className="object-cover"
                   />
                 </div>
-                <figcaption className="mt-3 text-caption text-ink-soft">Our plant at Rania, Kanpur Dehat</figcaption>
+                <figcaption className="mt-2.5 px-2 pb-1 text-caption text-ink-soft">
+                  Our 18-acre manufacturing plant at Rania, Kanpur Dehat
+                </figcaption>
               </figure>
             </div>
 
-            <div data-rise className="span-half-r">
+            {/* Right Column: City Office (positioned on right) + Highway Connectivity & Follow Us */}
+            <div data-rise className="space-y-8 lg:col-span-6 lg:pl-4">
               <AddressCard
                 title={site.cityOffice.label}
                 lines={site.cityOffice.lines}
@@ -84,21 +67,36 @@ export default function ContactPage() {
                 phone={{ label: site.phone, href: site.phoneHref }}
                 email={site.emailAlt}
               />
-            </div>
 
-            <p data-rise className="display span-lead max-w-[36rem] text-d4 text-ink">
-              Our 18-acre campus is 15 km from Kanpur, along the Kolkata to Delhi highway (NH-2).
-            </p>
+              <div className="max-w-[28rem] rounded-[var(--radius-xl)] bg-foil p-6 sm:p-7">
+                <h4 className="display text-d4 text-ink">Highway connectivity</h4>
+                <p className="mt-2.5 text-lead text-ink-soft">
+                  Our 18-acre campus is located 15 km from Kanpur, directly along the Kolkata to Delhi highway (NH-2).
+                </p>
 
-            <div data-rise className="span-side">
-              <h3 className="display text-d4 text-ink">Follow us on</h3>
-              <div className="mt-4 flex gap-3">
-                <a href={site.social.facebook} target="_blank" rel="noreferrer" aria-label="Aditya Flexipack on Facebook" className={social}>
-                  <FacebookIcon className="size-5" />
-                </a>
-                <a href={site.social.linkedin} target="_blank" rel="noreferrer" aria-label="Aditya Flexipack on LinkedIn" className={social}>
-                  <LinkedInIcon className="size-5" />
-                </a>
+                <div className="mt-6 border-t border-black/10 pt-5">
+                  <h5 className="text-sm font-bold text-ink">Follow us on</h5>
+                  <div className="mt-3 flex gap-3">
+                    <a
+                      href={site.social.facebook}
+                      target="_blank"
+                      rel="noreferrer"
+                      aria-label="Aditya Flexipack on Facebook"
+                      className={social}
+                    >
+                      <FacebookIcon className="size-5" />
+                    </a>
+                    <a
+                      href={site.social.linkedin}
+                      target="_blank"
+                      rel="noreferrer"
+                      aria-label="Aditya Flexipack on LinkedIn"
+                      className={social}
+                    >
+                      <LinkedInIcon className="size-5" />
+                    </a>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

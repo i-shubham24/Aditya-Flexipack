@@ -116,7 +116,7 @@ export default function VendorPartnershipPage() {
         </div>
       </section>
 
-      <section aria-labelledby="route-title" className="panel bg-crimson py-[var(--section-y)]">
+      <section aria-labelledby="route-title" className="panel bg-crimson py-[calc(var(--section-y)*0.75)]">
         <div className="shell">
           <SectionHeader
             id="route-title"

@@ -16,7 +16,7 @@ export function ExtraPanel({
 }) {
   return (
     <section aria-labelledby="extra-title" className="pt-[var(--frame)]">
-      <div className="panel bg-wine py-[var(--section-y)] text-white">
+      <div className="panel bg-wine py-[calc(var(--section-y)*0.75)] text-white">
         <svg aria-hidden viewBox="0 0 1200 600" preserveAspectRatio="none" className="absolute inset-0 h-full w-full">
           <path d="M0 0 H1200 V160 C 980 240, 820 80, 600 160 S 200 260, 0 140 Z" fill="#520912" />
         </svg>

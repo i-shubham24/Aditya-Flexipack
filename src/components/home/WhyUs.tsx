@@ -8,15 +8,16 @@ import { useGSAP } from "@gsap/react";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
-/** The old site's "Why us", set as chunky stickers slapped across the seal. */
-// Laid out in rows that start just under the arc's ends, so the title always stays clear.
-// Rows start just under the arc's ends, so the title always stays clear.
+/**
+ * "Why us", set as chunky stickers slapped across the seal with intentional tilts.
+ * Calibrated to large display scale with slants preserved across render cycles.
+ */
 const STICKERS = [
-  { t: "Benchmarked quality", c: "bg-crimson text-white", pos: "left-[0%] top-[54%]", r: -4 },
-  { t: "Rapid turnaround", c: "bg-white text-crimson", pos: "right-[0%] top-[54%]", r: 3 },
+  { t: "Benchmarked quality", c: "bg-crimson text-white", pos: "left-[0%] top-[54%]", r: -4.5 },
+  { t: "Rapid turnaround", c: "bg-white text-crimson", pos: "right-[0%] top-[54%]", r: 3.5 },
   { t: "Backward integrated", c: "bg-wine text-white", pos: "left-[3%] top-[71%]", r: 3 },
   { t: "Ethical practices", c: "bg-ink text-white", pos: "right-[2%] top-[71%]", r: -3 },
-  { t: "25+ years, family owned", c: "bg-blush text-wine", pos: "lg:left-1/2 lg:-translate-x-1/2 top-[86%]", r: -2 },
+  { t: "25+ years, family owned", c: "bg-blush text-wine", pos: "lg:left-1/2 lg:-translate-x-1/2 top-[86%]", r: -2.5 },
 ];
 
 export function WhyUs() {
@@ -34,7 +35,13 @@ export function WhyUs() {
           stagger: 0.12,
           scrollTrigger: { trigger: "[data-seal]", start: "top 65%", once: true },
         });
-        gsap.from("[data-arc]", { autoAlpha: 0, y: 30, duration: 0.9, ease: "power3.out", scrollTrigger: { trigger: "[data-seal]", start: "top 75%", once: true } });
+        gsap.from("[data-arc]", {
+          autoAlpha: 0,
+          y: 30,
+          duration: 0.9,
+          ease: "power3.out",
+          scrollTrigger: { trigger: "[data-seal]", start: "top 75%", once: true },
+        });
       });
       return () => mm.revert();
     },
@@ -69,23 +76,37 @@ export function WhyUs() {
 
             {/* Centred on the arc: lift the seal by its own radius past the arc's baseline */}
             <div className="relative mx-auto -mt-[calc(min(92vw,40rem)*0.0125_+_min(26vw,8.5rem)_+_10px_-_1.25rem)] aspect-square w-[min(52vw,17rem)] rounded-full bg-[#fff6f5] ring-[10px] ring-wine">
-              <Image src="/media/brand/af-emblem.png" alt="The Aditya Flexipack AF emblem" fill sizes="17rem" className="rounded-full object-contain p-[16%]" />
+              <Image
+                src="/media/brand/af-emblem.png"
+                alt="The Aditya Flexipack AF emblem"
+                fill
+                sizes="17rem"
+                className="rounded-full object-contain p-[16%]"
+              />
             </div>
 
+            {/* Chunky slanted stickers: large display font with preserved slants */}
             <ul className="mt-10 flex flex-wrap justify-center gap-3 lg:mt-0 lg:block">
               {STICKERS.map((s) => (
                 <li
                   key={s.t}
                   data-sticker
-                  className={`display rounded-[1.25rem] px-5 py-3 text-[clamp(1.6rem,3.6vw,4.2rem)] leading-none lg:absolute lg:whitespace-nowrap lg:px-8 lg:py-5 ${s.c} ${s.pos}`}
-                  style={{ rotate: `${s.r}deg` }}
+                  className={`lg:absolute lg:whitespace-nowrap ${s.pos}`}
                 >
-                  {s.t}
+                  <div
+                    className={`display rounded-[1.25rem] px-5 py-3 text-[clamp(1.6rem,3.6vw,4.2rem)] leading-none lg:px-8 lg:py-5 shadow-lg transition-transform hover:scale-105 ${s.c}`}
+                    style={{
+                      transform: `rotate(${s.r}deg)`,
+                      rotate: `${s.r}deg`,
+                      transformOrigin: "center center",
+                    }}
+                  >
+                    {s.t}
+                  </div>
                 </li>
               ))}
             </ul>
           </div>
-
         </div>
       </div>
     </section>

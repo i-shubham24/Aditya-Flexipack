@@ -41,9 +41,9 @@ const P = {
     alt: "White, silver foil and kraft pouches, spouted, stand-up and flat-bottom, on a round wooden stand",
   },
   foilPouches: {
-    src: "/media/old/products-pouches/banner-foil-pouches-red.webp",
-    alt: "Plain silver foil zip pouches in several sizes against a dark red background",
-    caption: "Silver foil zip pouches in several sizes.",
+    src: "/media/products/pouch-lineup.webp",
+    alt: "Flexible stand-up and zipper pouches engineered for food barrier protection",
+    caption: "Stand-up, side-gusset and zipper barrier pouches.",
   },
   perfast: {
     src: "/media/old/home/plant-super-perfast-machine.webp",
@@ -101,7 +101,7 @@ export const sheets: Record<ProductSlug, ProductSheet> = {
   },
   pouches: {
     hero: P.pouchRange,
-    about: { photo: P.foilPouches, ratio: "21:9", fit: "wide", field: "wash" },
+    about: { photo: P.foilPouches, ratio: "4:3", fit: "side", field: "wash" },
     list: { photo: P.perfast, ratio: "4:5", fit: "quarter", field: "foil", source: "extra", title: "Our machines' capabilities" },
     need: "Pouches",
   },

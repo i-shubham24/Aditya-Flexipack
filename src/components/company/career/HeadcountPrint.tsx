@@ -66,7 +66,7 @@ export function HeadcountPrint() {
 
   return (
     <section ref={root} aria-labelledby="print-title" className="pt-[var(--frame)]">
-      <div className="panel bg-ink py-[var(--section-y)] text-white">
+      <div className="panel bg-ink py-[calc(var(--section-y)*0.75)] text-white">
         <div className="shell">
           <div className="page-grid mb-[var(--stack)]">
             <h2 id="print-title" className="display span-lead text-d2">

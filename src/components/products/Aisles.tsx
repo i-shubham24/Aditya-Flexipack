@@ -44,7 +44,7 @@ const AISLES: Aisle[] = [
     name: "Pet food and meat",
     items: "Pet food and meat packaging",
     note: "Stand-up and high-barrier formats for dense, heavy and aroma-rich fills.",
-    photo: { src: "/media/process/foil-pouches.webp", alt: "Silver foil zip pouches in several sizes" },
+    photo: { src: "/media/products/pouch-lineup.webp", alt: "High-barrier foil and zipper pouches in multiple formats" },
     field: "#ffe3df",
   },
   {

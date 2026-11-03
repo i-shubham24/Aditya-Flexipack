@@ -21,8 +21,10 @@ const PAGES = [
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {
+  const now = new Date();
   return PAGES.map((path) => ({
     url: `${site.url}${path}`,
+    lastModified: now,
     changeFrequency: path === "/" || path.startsWith("/products") ? "monthly" : "yearly",
     priority: path === "/" ? 1 : path.startsWith("/products") ? 0.9 : 0.6,
   }));

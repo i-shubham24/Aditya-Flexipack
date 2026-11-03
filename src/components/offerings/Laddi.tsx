@@ -103,7 +103,7 @@ export function Laddi() {
 
   return (
     <section ref={root} aria-labelledby="laddi-title" className="pt-[var(--frame)]">
-      <div className="panel bg-crimson py-[var(--section-y)] text-white">
+      <div className="panel bg-crimson py-[calc(var(--section-y)*0.75)] text-white">
         {/* Soft tonal contours, as on every colour panel */}
         <svg aria-hidden viewBox="0 0 1200 800" preserveAspectRatio="none" className="pointer-events-none absolute inset-0 h-full w-full">
           <path d="M0 0 H1200 V170 C 1010 260, 860 110, 640 190 S 230 300, 0 200 Z" fill={TONES.crimson.contour} />

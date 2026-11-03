@@ -58,6 +58,30 @@ export default async function ProductPage({ params }: Props) {
     ],
   };
 
+  const productJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: p.name,
+    description: p.lead,
+    image: `${site.url}${s.hero.src}`,
+    category: "Flexible Packaging Materials",
+    brand: {
+      "@type": "Brand",
+      name: site.name,
+    },
+    manufacturer: {
+      "@type": "Organization",
+      name: site.legalName,
+      url: site.url,
+    },
+    offers: {
+      "@type": "AggregateOffer",
+      priceCurrency: "INR",
+      availability: "https://schema.org/InStock",
+      url: `${site.url}${path}`,
+    },
+  };
+
   const listItems = s.list ? (s.list.source === "extra" ? p.extra : p.offerings) : undefined;
 
   return (
@@ -96,6 +120,7 @@ export default async function ProductPage({ params }: Props) {
       <TearStrip from={path} />
 
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(crumbs) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }} />
     </>
   );
 }

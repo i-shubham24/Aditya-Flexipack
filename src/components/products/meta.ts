@@ -76,7 +76,7 @@ export const productMeta: Record<ProductSlug, ProductMeta> = {
     cover: { src: "/media/products/branded-pouches.webp", alt: "Printed snack pouches carrying the Aditya Flexipack mark" },
     hero: [
       { src: "/media/products/branded-pouches.webp", alt: "Printed snack pouches carrying the Aditya Flexipack mark" },
-      { src: "/media/process/foil-pouches.webp", alt: "Silver foil zip pouches in several sizes" },
+      { src: "/media/products/foil-pouch-zip.webp", alt: "Premium foil zipper pouch" },
     ],
     about: { src: "/media/old/products-pouches/photo-pouch-range-autumn.webp", alt: "Spout, stand-up, flat-bottom, foil and kraft pouches" },
     extraPhoto: { src: "/media/plant/pouch-machine.webp", alt: "Machine on the Aditya Flexipack production floor" },

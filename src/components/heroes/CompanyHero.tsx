@@ -19,10 +19,19 @@ const SHAPES: Record<WindowShape, { w: number; h: number; d: string }> = {
   spout: { w: 100, h: 150, d: "M40 2 H60 V18 H56 V24 Q72 22 86 24 L92 132 Q92 146 78 146 H22 Q8 146 8 132 L14 24 Q28 22 44 24 V18 H40 Z" },
 };
 
+const CONTOURS: Record<Tone, [string, string, string]> = {
+  crimson: ["#dc0a05", "#e81911", "#b80000"],
+  wine: ["#520912", "#5c0b15", "#3a040b"],
+  deep: ["#b80000", "#8a0000", "#700000"],
+  ink: ["#2a2124", "#382e32", "#140e10"],
+  foil: ["#e4e7eb", "#dadee3", "#f4f5f7"],
+  blush: ["#ffb4aa", "#ffd6d0", "#ffa195"],
+  wash: ["#ffd9d3", "#ffcfc8", "#ffece9"],
+};
+
 /**
- * Company-page opener (About, Sustainability, Awards, Gallery, Career): H1 bottom-left on the left line, and one
- * real photograph seen through a pack-shaped die-cut window whose die line draws itself in. The window's offcut,
- * three times larger, is the field's tonal contour.
+ * Company-page opener: calibrated to the exact same height as the Home hero (h-[100svh] min-h-[640px]).
+ * Features concise, punchy typography and a die-cut photo window fitting completely within the fold.
  */
 export function CompanyHero({
   title,
@@ -45,6 +54,7 @@ export function CompanyHero({
   const clip = `win-${useId().replace(/[:«»]/g, "")}`;
   const t = TONES[tone];
   const s = SHAPES[shape];
+  const layers = CONTOURS[tone] ?? CONTOURS.crimson;
 
   useHeroIntro(root, (tl) => {
     const lines = root.current?.querySelectorAll<SVGPathElement>("[data-dieline]") ?? [];
@@ -56,31 +66,36 @@ export function CompanyHero({
   });
 
   return (
-    <section ref={root} data-hero={t.dark ? "dark" : "light"} aria-labelledby="page-title">
-      <div className={`relative overflow-clip rounded-b-[var(--radius-2xl)] ${t.bg} ${t.ink}`}>
+    <section ref={root} data-hero={t.dark ? "dark" : "light"} aria-labelledby="page-title" className="h-[100svh] min-h-[640px]">
+      <div className={`relative h-full overflow-clip rounded-b-[var(--radius-2xl)] ${t.bg} ${t.ink}`}>
+        <svg aria-hidden viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice" className="pointer-events-none absolute inset-0 h-full w-full">
+          <path d="M640 800 C 610 640, 520 560, 600 430 S 860 300, 900 170 S 1080 -20, 1200 40 V800 Z" fill={layers[0]} />
+          <path d="M760 800 C 720 680, 680 600, 760 500 S 960 420, 1010 300 S 1150 160, 1200 190 V800 Z" fill={layers[1]} />
+          <path d="M0 800 C 80 740, 190 760, 250 700 S 330 600, 420 640 S 520 760, 560 800 Z" fill={layers[2]} />
+        </svg>
         <svg aria-hidden viewBox={`0 0 ${s.w} ${s.h}`} className="pointer-events-none absolute -right-[12%] -top-[35%] h-[175%] w-auto">
           <path d={s.d} fill={t.contour} />
         </svg>
 
-        <div className="shell page-grid relative min-h-[min(78svh,46rem)] items-end gap-y-10 pb-[calc(var(--section-y)*0.7)] pt-[calc(var(--header-h)+2.5rem)]">
-          <div className="span-lead">
-            <h1 id="page-title" data-hero-title className="display text-d1">
+        <div className="shell page-grid relative z-10 flex h-full flex-col justify-center pb-[4svh] pt-[var(--header-h)] lg:grid lg:items-center lg:gap-y-6">
+          <div className="span-lead max-w-[46rem]">
+            <h1 id="page-title" data-hero-title className="display text-[clamp(2.8rem,5.8vw,6.2rem)] leading-[0.92]">
               {title}
             </h1>
             {intro && (
-              <div data-hero-fade className={`mt-6 max-w-measure text-lead ${t.sub}`}>
+              <div data-hero-fade className={`mt-4 max-w-[32rem] text-[clamp(1rem,1.2vw,1.15rem)] leading-relaxed ${t.sub}`}>
                 {intro}
               </div>
             )}
             {actions && (
-              <div data-hero-fade className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3">
+              <div data-hero-fade className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3">
                 {actions}
               </div>
             )}
           </div>
 
-          <figure className="span-side relative lg:pl-[8%]">
-            <svg viewBox={`-6 -6 ${s.w + 12} ${s.h + 12}`} role="img" aria-label={photo.alt} className="block h-auto max-h-[60svh] w-full max-w-[22rem] lg:ml-auto lg:max-h-[min(64svh,34rem)] lg:max-w-none">
+          <figure className="span-side relative mt-6 flex justify-center lg:mt-0 lg:justify-end lg:pl-[6%]">
+            <svg viewBox={`-6 -6 ${s.w + 12} ${s.h + 12}`} role="img" aria-label={photo.alt} className="block h-auto max-h-[38svh] sm:max-h-[42svh] w-full max-w-[15rem] sm:max-w-[18rem] lg:max-h-[min(48svh,24rem)] lg:max-w-[21rem]">
               <defs>
                 <clipPath id={clip}>
                   <path d={s.d} />
@@ -102,7 +117,7 @@ export function CompanyHero({
               />
             </svg>
             {note && (
-              <figcaption data-hero-fade className={`hand mt-4 inline-block -rotate-2 text-note ${t.note}`}>
+              <figcaption data-hero-fade className={`hand mt-3 inline-block -rotate-2 text-note ${t.note}`}>
                 {note}
               </figcaption>
             )}

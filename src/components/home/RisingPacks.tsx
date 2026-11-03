@@ -74,28 +74,52 @@ const LAYERS = [
   },
 ];
 
+const UNIT_PHRASE = "Packaging that powers performance \u00A0\u00A0\u00A0\u00A0·\u00A0\u00A0\u00A0\u00A0 ";
+const REPEATED_TEXT = UNIT_PHRASE.repeat(6);
+
 export function RisingPacks() {
   const root = useRef<HTMLElement>(null);
+  const textPathRef = useRef<SVGTextPathElement>(null);
+  const measureRef = useRef<SVGTextElement>(null);
 
   useGSAP(
     () => {
       const mm = gsap.matchMedia();
       mm.add("(prefers-reduced-motion: no-preference)", () => {
-        // The headline runs along its wave as the page moves, never on its own.
-        gsap.fromTo(
-          "[data-wave-text]",
-          { attr: { startOffset: 1650 } },
-          {
-            attr: { startOffset: 250 },
-            ease: "none",
-            scrollTrigger: {
-              trigger: root.current,
-              start: "top bottom",
-              end: "bottom top",
-              scrub: 0.6,
-            },
-          },
-        );
+        const textPath = textPathRef.current;
+        const measure = measureRef.current;
+
+        // Base offset where x=30px on screen begins along the wave
+        const baseOffset = 2450;
+        const phraseLength = measure?.getComputedTextLength() || 1920;
+
+        let totalProgress = 0;
+        let lastScrollY = typeof window !== "undefined" ? window.scrollY : 0;
+
+        const updateOffset = (delta: number) => {
+          if (!textPath) return;
+          totalProgress = (totalProgress + delta) % phraseLength;
+          if (totalProgress < 0) totalProgress += phraseLength;
+          textPath.setAttribute("startOffset", `${baseOffset - totalProgress}`);
+        };
+
+        // Continuous smooth infinite glide
+        const onTick = (_time: number, deltaTime: number) => {
+          updateOffset((55 * deltaTime) / 1000);
+        };
+        gsap.ticker.add(onTick);
+
+        // Responsive scroll interaction: scrolling moves the text along the wave naturally
+        const scrollListener = () => {
+          const currentY = window.scrollY;
+          const deltaY = currentY - lastScrollY;
+          lastScrollY = currentY;
+          if (deltaY !== 0) {
+            updateOffset(deltaY * 0.75);
+          }
+        };
+        window.addEventListener("scroll", scrollListener, { passive: true });
+
         // Parts rise from below, settle into the shot, then keep drifting apart at their own depth.
         const tl = gsap.timeline({
           scrollTrigger: {
@@ -124,6 +148,11 @@ export function RisingPacks() {
             1,
           );
         });
+
+        return () => {
+          gsap.ticker.remove(onTick);
+          window.removeEventListener("scroll", scrollListener);
+        };
       });
       return () => mm.revert();
     },
@@ -136,7 +165,7 @@ export function RisingPacks() {
       aria-labelledby="power-title"
       className="pt-[var(--frame)]"
     >
-      <div className="panel bg-crimson-wash pt-[calc(var(--section-y)*0.35)]">
+      <div className="panel bg-crimson-wash pt-[calc(var(--section-y)*0.35)] overflow-hidden">
         <svg
           aria-hidden
           viewBox="0 0 1200 900"
@@ -156,31 +185,46 @@ export function RisingPacks() {
         <h2 id="power-title" className="sr-only">
           Packaging that powers performance
         </h2>
-        {/* The headline set on a wave, wider than the screen, the way a printed web runs off the press */}
+        {/* The headline set on a continuous wave, infinite seamless loop */}
         <svg
           aria-hidden
-          viewBox="0 30 1600 320"
+          viewBox="0 20 1600 240"
           className="relative block w-full overflow-visible"
         >
           <defs>
             <path
               id="power-wave"
-              d="M -1700 330 C -1200 250, -700 420, -200 320 S 500 120, 900 200 S 1500 60, 2000 110 S 3000 260, 3600 160"
+              d="M -2400 150 C -2140 95, -1860 205, -1600 150 C -1340 95, -1060 205, -800 150 C -540 95, -260 205, 0 150 C 260 95, 540 205, 800 150 C 1060 95, 1340 205, 1600 150 C 1860 95, 2140 205, 2400 150 C 2660 95, 2940 205, 3200 150 C 3460 95, 3740 205, 4000 150 C 4260 95, 4540 205, 4800 150 C 5060 95, 5340 205, 5600 150 C 5860 95, 6140 205, 6400 150 C 6660 95, 6940 205, 7200 150 C 7460 95, 7740 205, 8000 150 C 8260 95, 8540 205, 8800 150 C 9060 95, 9340 205, 9600 150 C 9860 95, 10140 205, 10400 150 C 10660 95, 10940 205, 11200 150 C 11460 95, 11740 205, 12000 150"
             />
           </defs>
           <text
-            className="display"
-            fontSize="168"
-            fill="#1c1517"
-            letterSpacing="-4"
+            ref={measureRef}
+            aria-hidden
+            className="display font-bold"
+            fontSize="100"
+            letterSpacing="-2"
+            style={{ opacity: 0, position: "absolute", pointerEvents: "none" }}
           >
-            <textPath data-wave-text href="#power-wave" startOffset="900">
-              Packaging that powers performance
+            {UNIT_PHRASE}
+          </text>
+          <text
+            className="display font-bold"
+            fontSize="100"
+            fill="#1c1517"
+            letterSpacing="-2"
+          >
+            <textPath
+              ref={textPathRef}
+              data-wave-text
+              href="#power-wave"
+              startOffset="2450"
+            >
+              {REPEATED_TEXT}
             </textPath>
           </text>
         </svg>
 
-        <div className="shell relative -mt-[7vw] grid items-end gap-6 lg:grid-cols-12">
+        <div className="shell relative -mt-[2vw] lg:-mt-[1.5vw] grid items-end gap-6 lg:grid-cols-12">
           <div className="relative z-10 pb-10 lg:col-span-4 lg:pb-[12vh]">
             <p className="hand -rotate-2 text-[2rem] text-crimson">
               Quality is our identity

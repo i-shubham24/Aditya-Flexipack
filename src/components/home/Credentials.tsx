@@ -94,7 +94,7 @@ export function Credentials() {
 
         {/* The light table: real award photographs, squared up as they slide in */}
         <div data-table className="shell mt-16 lg:mt-24">
-          <ul className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-6">
+          <ul className="grid grid-cols-2 gap-4 sm:grid-cols-3 xl:grid-cols-6">
             {PRINTS.map((p) => (
               <li key={p.src} data-print className="will-change-transform">
                 <figure>
@@ -103,7 +103,7 @@ export function Credentials() {
                     alt={p.alt}
                     width={p.w}
                     height={p.h}
-                    sizes="(min-width: 1024px) 15vw, (min-width: 768px) 30vw, 48vw"
+                    sizes="(min-width: 1280px) 15vw, (min-width: 640px) 30vw, 48vw"
                     className="aspect-[4/3] w-full rounded-[var(--radius-sm)] bg-white object-cover p-2 shadow-[var(--shadow-card)]"
                   />
                   <figcaption className="mt-3 text-[0.92rem] leading-snug text-ink-soft">{p.caption}</figcaption>

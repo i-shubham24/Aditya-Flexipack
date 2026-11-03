@@ -21,9 +21,7 @@ const TONES: Record<HeroTone, { bg: string; ink: string; note: string; sub: stri
 type Photo = { src: string; alt: string };
 
 /**
- * Inner-page opener, full bleed like the home hero: a colour field with tonal contours, a chunky headline that
- * pops in word by word, a proof-pen note, and up to two real photographs dealt in as framed cards.
- * Without photos the headline is set large and centred.
+ * Inner-page opener: calibrated to the exact same height as the Home hero (h-[100svh] min-h-[640px]).
  */
 export function PageHero({
   title,
@@ -67,8 +65,8 @@ export function PageHero({
   );
 
   return (
-    <section ref={root} data-hero={t.dark ? "dark" : "light"} aria-labelledby="page-title">
-      <div className={`relative overflow-clip rounded-b-[var(--radius-2xl)] ${t.bg} ${t.ink}`}>
+    <section ref={root} data-hero={t.dark ? "dark" : "light"} aria-labelledby="page-title" className="h-[100svh] min-h-[640px]">
+      <div className={`relative h-full overflow-clip rounded-b-[var(--radius-2xl)] ${t.bg} ${t.ink}`}>
         <svg aria-hidden viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice" className="absolute inset-0 h-full w-full">
           <path data-layer d="M640 800 C 610 640, 520 560, 600 430 S 860 300, 900 170 S 1080 -20, 1200 40 V800 Z" fill={t.layers[0]} />
           <path data-layer d="M760 800 C 720 680, 680 600, 760 500 S 960 420, 1010 300 S 1150 160, 1200 190 V800 Z" fill={t.layers[1]} />
@@ -76,12 +74,12 @@ export function PageHero({
         </svg>
 
         <div
-          className={`shell relative z-10 grid min-h-[min(86svh,54rem)] items-center gap-10 pb-[calc(var(--section-y)*0.6)] pt-[calc(var(--header-h)+3rem)] ${
-            centred ? "" : "lg:grid-cols-12"
+          className={`shell relative z-10 flex h-full flex-col justify-center pb-[4svh] pt-[var(--header-h)] ${
+            centred ? "items-center" : "lg:grid lg:grid-cols-12 lg:items-center lg:gap-10"
           }`}
         >
-          <div className={centred ? "mx-auto max-w-[62rem] text-center" : "lg:col-span-7"}>
-            <h1 id="page-title" className={`display leading-[0.88] ${centred ? "text-[clamp(3.2rem,8.4vw,8.6rem)]" : "text-[clamp(3rem,7vw,7rem)]"}`}>
+          <div className={centred ? "mx-auto max-w-[56rem] text-center" : "lg:col-span-7"}>
+            <h1 id="page-title" className={`display leading-[0.92] ${centred ? "text-[clamp(2.6rem,5.6vw,5.6rem)]" : "text-[clamp(2.4rem,4.6vw,4.8rem)]"}`}>
               {title.split(" ").map((w, i) => (
                 <span key={i} data-word className="inline-block pr-[0.2em]">
                   {w}
@@ -89,40 +87,40 @@ export function PageHero({
               ))}
             </h1>
             {note && (
-              <p data-hero-fade className={`hand mt-4 inline-block -rotate-2 text-[clamp(1.8rem,2.6vw,2.4rem)] ${t.note}`}>
+              <p data-hero-fade className={`hand mt-3 inline-block -rotate-2 text-[clamp(1.6rem,2.2vw,2.2rem)] ${t.note}`}>
                 {note}
               </p>
             )}
             {intro && (
-              <div data-hero-fade className={`mt-5 max-w-[36rem] text-[1.12rem] leading-relaxed ${t.sub} ${centred ? "mx-auto" : ""}`}>
+              <div data-hero-fade className={`mt-4 max-w-[34rem] text-[clamp(1.05rem,1.3vw,1.22rem)] leading-relaxed ${t.sub} ${centred ? "mx-auto" : ""}`}>
                 {intro}
               </div>
             )}
             {actions && (
-              <div data-hero-fade className={`mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 ${centred ? "justify-center" : ""}`}>
+              <div data-hero-fade className={`mt-6 flex flex-wrap items-center gap-x-6 gap-y-3 ${centred ? "justify-center" : ""}`}>
                 {actions}
               </div>
             )}
           </div>
 
           {!centred && (
-            <div className="relative mx-auto w-[min(78vw,26rem)] lg:col-span-5 lg:w-full lg:max-w-[28rem]">
+            <div className="relative mx-auto mt-6 w-[min(70vw,22rem)] lg:col-span-5 lg:mt-0 lg:w-full lg:max-w-[26rem]">
               {photos[1] && (
-                <div data-photo className="absolute inset-0 translate-x-[30%] translate-y-[-10%] rotate-[8deg] rounded-[var(--radius-lg)] bg-white p-2">
+                <div data-photo className="absolute inset-0 translate-x-[26%] translate-y-[-8%] rotate-[8deg] rounded-[var(--radius-lg)] bg-white p-2">
                   <div className="relative h-full overflow-hidden rounded-[var(--radius-md)]">
-                    <Image src={photos[1].src} alt={photos[1].alt} fill sizes="28rem" className="object-cover" />
+                    <Image src={photos[1].src} alt={photos[1].alt} fill sizes="26rem" className="object-cover" />
                   </div>
                 </div>
               )}
               <div data-photo className="relative -rotate-[4deg] rounded-[var(--radius-lg)] bg-white p-2">
                 <div className="relative aspect-[4/5] overflow-hidden rounded-[var(--radius-md)]">
-                  <Image src={photos[0].src} alt={photos[0].alt} fill priority sizes="(min-width: 1024px) 28rem, 78vw" className="object-cover" />
+                  <Image src={photos[0].src} alt={photos[0].alt} fill priority sizes="(min-width: 1024px) 26rem, 70vw" className="object-cover" />
                 </div>
               </div>
             </div>
           )}
         </div>
-        {children && <div className="shell relative z-10 pb-[calc(var(--section-y)*0.6)]">{children}</div>}
+        {children && <div className="shell relative z-10 pb-[calc(var(--section-y)*0.4)]">{children}</div>}
       </div>
     </section>
   );

@@ -61,7 +61,7 @@ export default function AboutPage() {
         tone={pageOf(PATH).tone}
         shape="standup"
         title="Pioneering flexible packaging for India's leading food brands"
-        intro="We engineer high-performance, sustainable packaging. It protects your product and raises your brand's market presence."
+        intro="High-performance, sustainable packaging engineered for India's leading brands."
         photo={{ src: "/media/old/home/plant-exterior-building.webp", alt: "The plant: a grey factory building with a brown entrance block, flagpoles and a lawn" }}
         actions={
           <>
@@ -108,8 +108,12 @@ export default function AboutPage() {
 
       {/* 4. Why us: five reasons, typeset */}
       <section aria-labelledby="why-title" className="pt-[var(--frame)]">
-        <div className="panel bg-crimson py-[var(--section-y)] text-white">
-          <Rise className="shell page-grid gap-y-10">
+        <div className="panel bg-crimson py-[calc(var(--section-y)*0.65)] text-white">
+          <svg aria-hidden viewBox="0 0 1200 800" preserveAspectRatio="none" className="pointer-events-none absolute inset-0 h-full w-full">
+            <path d="M0 520 C 220 430, 380 620, 620 540 S 1000 360, 1200 450 V800 H0 Z" fill="#b80000" />
+            <path d="M820 0 C 860 140, 1010 190, 1090 110 S 1170 30, 1200 50 V0 Z" fill="#e01810" />
+          </svg>
+          <Rise className="shell page-grid gap-y-6 sm:gap-y-8">
             <h2 id="why-title" data-rise className="display span-lead text-d2">
               Why us
             </h2>

@@ -72,7 +72,7 @@ const STATIONS: Station[] = [
     id: "pouch",
     title: "Pouching",
     body: "Centre seal, side seal, three side seal, stand-up, shaped and liquid pouches, made at speed with an auto detection system that minimises errors and waste.",
-    photo: { src: "/media/process/foil-pouches.webp", alt: "Finished aluminium foil stand-up pouches" },
+    photo: { src: "/media/products/foil-pouch-zip.webp", alt: "Finished aluminium foil stand-up pouches" },
     swatch: "pouch",
   },
 ];
@@ -171,7 +171,7 @@ export function WebPath() {
 
   return (
     <section aria-labelledby="web-title" className="pt-[var(--frame)]">
-      <div ref={root} className="panel bg-wine py-[var(--section-y)] text-white">
+      <div ref={root} className="panel bg-wine py-[var(--section-y)] text-white overflow-hidden">
         <svg aria-hidden viewBox="0 0 1200 800" preserveAspectRatio="none" className="absolute inset-x-0 top-0 h-[42rem] w-full">
           <path d="M0 0 H1200 V250 C 980 330, 820 160, 600 250 S 200 360, 0 220 Z" fill="#520912" />
         </svg>

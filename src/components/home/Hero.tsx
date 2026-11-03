@@ -80,7 +80,7 @@ export function Hero() {
         </div>
 
         {/* Real bags from the old site, dealt like two photo cards */}
-        <div data-pouches className="pointer-events-none absolute bottom-[3svh] right-[6%] w-[min(54vw,15rem)] sm:w-[min(40vw,18rem)] lg:bottom-auto lg:right-[7%] lg:top-1/2 lg:w-[min(30vw,27rem)] lg:-translate-y-[44%]">
+        <div data-pouches className="pointer-events-none absolute bottom-[2.5svh] right-[4%] w-[min(44vw,12.5rem)] sm:bottom-[3svh] sm:right-[6%] sm:w-[min(40vw,18rem)] lg:bottom-auto lg:right-[7%] lg:top-1/2 lg:w-[min(30vw,27rem)] lg:-translate-y-[44%]">
           {/* Two layers per card: the outer one follows the scroll, the inner one plays the entrance, so they never fight */}
           <div data-scrub-back className="absolute inset-0">
             <div data-card-back className="h-full translate-x-[34%] translate-y-[-8%] rotate-[9deg] rounded-[var(--radius-lg)] bg-white p-2">

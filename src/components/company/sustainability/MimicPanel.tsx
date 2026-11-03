@@ -192,7 +192,7 @@ export function MimicPanel() {
 
   return (
     <section ref={root} aria-labelledby="mimic-title" className="pt-[var(--frame)]">
-      <div className="panel bg-wine py-[var(--section-y)] text-white">
+      <div className="panel bg-wine py-[calc(var(--section-y)*0.75)] text-white">
         <div className="shell">
           <SectionHeader id="mimic-title" title="Our key sustainability initiatives" dark />
 

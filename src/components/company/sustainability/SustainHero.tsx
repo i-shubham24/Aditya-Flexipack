@@ -1,59 +1,164 @@
 "use client";
 
+import Image from "next/image";
 import { useRef, type ReactNode } from "react";
-import { TONES, type Tone } from "@/components/system/tones";
-import { useHeroIntro } from "@/components/heroes/useHeroIntro";
-import { DIE, DieWindow, windowIntro } from "@/components/company/common/DieWindow";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
+import { ButtonLink } from "@/components/ui/Button";
+import { afterLoader } from "@/components/layout/Loader";
+import type { Tone } from "@/components/system/tones";
 
-/**
- * Sustainability's opener, composed from the company family (field, offcut contour, die-cut window, line reveal)
- * but laid out as a rail: the H1 stands alone at the bottom left across eight columns, and the right rail carries
- * the flat-bottom bag window high up, with the intro and the action under it.
- */
-export function SustainHero({
-  title,
-  intro,
-  tone,
-  photo,
-  action,
-}: {
-  title: string;
-  intro: ReactNode;
-  tone: Tone;
-  photo: { src: string; alt: string };
-  action: ReactNode;
+gsap.registerPlugin(ScrollTrigger, useGSAP);
+
+/** Tonal wavy contour layers in deep wine, matching the Home Hero aesthetic */
+function Contours() {
+  return (
+    <svg
+      aria-hidden
+      viewBox="0 0 1200 800"
+      preserveAspectRatio="xMidYMid slice"
+      className="pointer-events-none absolute inset-0 h-full w-full"
+    >
+      <path
+        data-contour
+        d="M640 800 C 610 640, 520 560, 600 430 S 860 300, 900 170 S 1080 -20, 1200 40 V800 Z"
+        fill="#520912"
+      />
+      <path
+        data-contour
+        d="M760 800 C 720 680, 680 600, 760 500 S 960 420, 1010 300 S 1150 160, 1200 190 V800 Z"
+        fill="#5c0b15"
+      />
+      <path
+        data-contour
+        d="M0 800 C 80 740, 190 760, 250 700 S 330 600, 420 640 S 520 760, 560 800 Z"
+        fill="#3a040b"
+      />
+    </svg>
+  );
+}
+
+export function SustainHero(props?: {
+  title?: string;
+  intro?: ReactNode;
+  tone?: Tone;
+  photo?: { src: string; alt: string };
+  action?: ReactNode;
 }) {
   const root = useRef<HTMLElement>(null);
-  const t = TONES[tone];
+  void props;
 
-  useHeroIntro(root, (tl) => windowIntro(root.current, DIE.gusset, tl));
+  useGSAP(
+    () => {
+      const mm = gsap.matchMedia();
+      mm.add("(prefers-reduced-motion: no-preference)", () => {
+        const intro = gsap.timeline({ paused: true, delay: 0.1 });
+        intro
+          .from(
+            "[data-hero-title]",
+            {
+              y: 40,
+              autoAlpha: 0,
+              duration: 0.9,
+              ease: "power3.out",
+            },
+            0,
+          )
+          .from(
+            "[data-hero-photo]",
+            {
+              y: 50,
+              autoAlpha: 0,
+              duration: 1,
+              ease: "power3.out",
+            },
+            0.15,
+          )
+          .from(
+            "[data-hero-fade]",
+            {
+              y: 20,
+              autoAlpha: 0,
+              duration: 0.8,
+              ease: "power3.out",
+              stagger: 0.08,
+            },
+            0.3,
+          );
+
+        const release = afterLoader(() => intro.play());
+
+        const scrub = { trigger: root.current, start: "top top", end: "bottom top", scrub: true };
+        gsap.to("[data-contour]", { yPercent: (i) => [-8, -14, 10][i], ease: "none", scrollTrigger: scrub });
+        gsap.to("[data-hero-photo]", { y: -40, ease: "none", scrollTrigger: scrub });
+
+        return release;
+      });
+      return () => mm.revert();
+    },
+    { scope: root },
+  );
 
   return (
-    <section ref={root} data-hero={t.dark ? "dark" : "light"} aria-labelledby="page-title">
-      <div className={`relative overflow-clip rounded-b-[var(--radius-2xl)] ${t.bg} ${t.ink}`}>
-        {/* The bag's offcut, three times over, rising from the bottom left */}
-        <svg aria-hidden viewBox={`0 0 ${DIE.gusset.w} ${DIE.gusset.h}`} className="pointer-events-none absolute -bottom-[75%] -left-[14%] h-[175%] w-auto">
-          <path d={DIE.gusset.d} fill={t.contour} />
-        </svg>
+    <section
+      ref={root}
+      data-hero="dark"
+      aria-labelledby="page-title"
+      className="relative h-[100svh] min-h-[640px] overflow-clip rounded-b-[var(--radius-2xl)] bg-wine text-white"
+    >
+      {/* Wavy tonal contours matching the Home Hero */}
+      <Contours />
 
-        <div className="shell page-grid relative min-h-[min(78svh,46rem)] gap-y-10 pb-[calc(var(--section-y)*0.7)] pt-[calc(var(--header-h)+2.5rem)]">
-          <h1 id="page-title" data-hero-title className="display col-span-full self-end text-d1 lg:col-span-8 lg:row-start-1">
-            {title}
-          </h1>
+      <div className="shell relative z-10 flex h-full flex-col justify-center pb-[4svh] pt-[var(--header-h)] lg:grid lg:grid-cols-12 lg:items-center lg:gap-12">
+        {/* Left Column: Bold Display Typography & Concise Copy (Zero Pills) */}
+        <div className="lg:col-span-7">
+          <div data-hero-title>
+            <h1
+              id="page-title"
+              className="display text-[clamp(3.2rem,7vw,7.2rem)] leading-[0.88] text-white"
+            >
+              Sustainable <span className="inline-block">by design.</span>
+            </h1>
+          </div>
 
-          <div className="col-span-full lg:col-span-4 lg:col-start-9 lg:row-start-1 lg:self-start">
-            <DieWindow
-              die={DIE.gusset}
-              photo={photo}
-              dark={t.dark}
-              crop={{ scale: 1.25, x: 0.5, y: 0.45 }}
-              className="h-[min(44svh,20rem)] w-auto max-w-full lg:h-[min(40svh,19rem)]"
-            />
-            <div data-hero-fade className={`mt-8 max-w-measure text-lead ${t.sub}`}>
-              {intro}
+          <p
+            data-hero-fade
+            className="mt-5 max-w-[32rem] text-[clamp(1.1rem,1.4vw,1.35rem)] leading-relaxed text-white/90"
+          >
+            Solar powered, closed-loop recycled, and engineered for recyclability across our 18-acre green campus.
+          </p>
+
+          <div data-hero-fade className="mt-7 flex flex-wrap items-center gap-4">
+            <ButtonLink href="/packaging-partnership/" tone="white">
+              Talk to us about recyclable packs
+            </ButtonLink>
+          </div>
+        </div>
+
+        {/* Right Column: Clean, Ordered Architectural Campus Photo */}
+        <div className="relative mx-auto mt-6 w-full max-w-[28rem] lg:col-span-5 lg:mt-0 lg:max-w-none">
+          <div
+            data-hero-photo
+            className="overflow-hidden rounded-[var(--radius-xl)] bg-white p-2.5 shadow-2xl ring-1 ring-black/10"
+          >
+            <div className="relative aspect-[4/3] w-full overflow-hidden rounded-[var(--radius-lg)] bg-ink/10">
+              <Image
+                src="/media/plant/plant-exterior.webp"
+                alt="The 18-acre green campus at Rania with on-site solar installation"
+                fill
+                sizes="(min-width: 1024px) 34rem, 90vw"
+                className="object-cover object-center"
+                priority
+              />
             </div>
-            <div data-hero-fade className="mt-8">
-              {action}
+            <div className="mt-3 flex items-center justify-between px-2 pb-1">
+              <span className="text-sm font-bold text-ink">
+                Rania Campus
+              </span>
+              <span className="text-xs font-semibold text-wine">
+                1.35 MW On-Site Solar Roof
+              </span>
             </div>
           </div>
         </div>

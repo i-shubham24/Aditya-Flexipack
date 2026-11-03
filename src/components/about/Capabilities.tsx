@@ -13,7 +13,7 @@ const ITEMS = [
 export function Capabilities() {
   return (
     <section aria-labelledby="infra-title" className="pt-[var(--frame)]">
-      <div className="panel bg-crimson py-[var(--section-y)] text-white">
+      <div className="panel bg-crimson py-[calc(var(--section-y)*0.75)] text-white">
         <svg aria-hidden viewBox="0 0 1200 800" preserveAspectRatio="none" className="absolute inset-0 h-full w-full">
           <path d="M0 520 C 220 430, 380 620, 620 540 S 1000 360, 1200 450 V800 H0 Z" fill="#b80000" />
           <path d="M820 0 C 860 140, 1010 190, 1090 110 S 1170 30, 1200 50 V0 Z" fill="#e01810" />

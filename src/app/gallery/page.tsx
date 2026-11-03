@@ -15,9 +15,9 @@ export default function GalleryPage() {
     <>
       <PageHero
         tone="wash"
-        title="Our journey in packaging innovation"
+        title="Our plant & journey"
         note="Capturing excellence"
-        intro="A walk through the plant, from the press hall and cylinder engraving to the film towers and converting lines."
+        intro="A visual walkthrough of our 18-acre integrated converting plant near Kanpur."
       />
       <GalleryWall />
       <CtaPanel />

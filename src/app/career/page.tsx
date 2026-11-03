@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { TearStrip } from "@/components/system/TearStrip";
 import { NumberedList } from "@/components/system/NumberedList";
 import { PhotoFrame } from "@/components/system/PhotoFrame";
@@ -7,7 +6,6 @@ import { ButtonLink } from "@/components/ui/Button";
 import { EnquiryForm } from "@/components/forms/EnquiryForm";
 import { Rise } from "@/components/company/common/Rise";
 import { CareerHero } from "@/components/company/career/CareerHero";
-import { HeadcountPrint } from "@/components/company/career/HeadcountPrint";
 import { RidingApply } from "@/components/company/career/RidingApply";
 import { pageOf } from "@/content/next";
 
@@ -29,64 +27,61 @@ const CULTURE = [
 export default function CareerPage() {
   return (
     <>
-      <CareerHero
-        tone={pageOf(PATH).tone}
-        title="A career with purpose. A company with impact."
-        note="Our team"
-        intro={
-          <>
-            <p>The future of packaging is a shared vision.</p>
-            <p className="mt-2">We want passionate people who push boundaries and redefine what is possible.</p>
-            <p className="mt-2">Our work should benefit our partners and our planet.</p>
-          </>
-        }
-        photo={{
-          src: "/media/old/home/plant-production-hall-floor.webp",
-          alt: "A wide production hall with red floor-edge markings, roll stock behind and a colleague walking through",
-        }}
-        action={
-          <ButtonLink href="#apply" tone="wine">
-            Apply now
-          </ButtonLink>
-        }
-      />
+      <CareerHero tone={pageOf(PATH).tone} />
 
       {/* 2. Join a team of visionaries */}
       <section aria-labelledby="team-title" className="py-[var(--section-y)]">
-        <Rise className="shell page-grid items-end gap-y-12">
-          <div data-rise className="col-span-full lg:col-span-6">
+        <Rise className="shell page-grid items-center gap-y-12">
+          <div data-rise className="col-span-full lg:col-span-5">
             <h2 id="team-title" className="display text-d2 text-ink">
               Join a team of visionaries
             </h2>
-            <NumberedList items={CULTURE} className="mt-[var(--stack)]" />
-            <p className="mt-10 max-w-measure text-ink-soft">
-              Business Standard gave us its Best Employer Brand Award in 2018.{" "}
-              <Link
-                href="/awards-recognitions/"
-                className="inline-flex min-h-11 items-center font-semibold text-ink underline decoration-crimson decoration-2 underline-offset-[0.25em] hover:text-crimson"
-              >
-                See our awards
-              </Link>
-            </p>
+            <div className="mt-6 max-w-measure space-y-3 text-lead text-ink-soft">
+              <p>We are a community of passionate thinkers and problem solvers.</p>
+              <p>From day one, you will find support to grow and develop.</p>
+              <p>We want leaders who act with integrity, push boundaries, and bring ideas to life.</p>
+            </div>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <ButtonLink href="#apply" tone="ink">
+                View open positions
+              </ButtonLink>
+              <ButtonLink href="/about-us/" tone="crimson" plain>
+                About us
+              </ButtonLink>
+            </div>
           </div>
           <PhotoFrame
-            src="/media/old/home/plant-press-hall-overview.webp"
-            alt="Elevated view of the press hall: a gravure press line, a yellow guard tube, colleagues at work and ink drums"
-            ratio="4:5"
-            caption="Colleagues at work in the gravure press hall"
-            sizes="(min-width: 640px) 30vw, 100vw"
-            className="col-span-full sm:col-span-4 lg:col-start-9"
+            src="/media/plant/press-hall.webp"
+            alt="The modern press hall at Rania: lines of roll stock on the right, high-speed machine hall in the centre"
+            ratio="16:9"
+            caption="The converting floor at the Rania campus"
+            sizes="(min-width: 1024px) 50vw, 100vw"
+            className="col-span-full lg:col-span-7"
           />
         </Rise>
       </section>
 
-      {/* 3. The centrepiece */}
-      <HeadcountPrint />
+      {/* 3. Our culture */}
+      <section id="culture" aria-labelledby="culture-title" className="py-[var(--section-y)]">
+        <div className="shell page-grid gap-y-12">
+          <div className="col-span-full lg:col-span-4">
+            <h2 id="culture-title" className="display text-d2 text-ink">
+              Our culture
+            </h2>
+            <p className="mt-6 max-w-measure text-lead text-ink-soft">
+              Integrity, continuous learning and purpose drive every shift across our 18-acre campus.
+            </p>
+          </div>
+          <div className="col-span-full lg:col-span-8">
+            <NumberedList items={CULTURE} cols={1} />
+          </div>
+        </div>
+      </section>
 
       {/* 4. The application form */}
-      <section id="apply" aria-labelledby="apply-title" className="scroll-mt-24 pt-[var(--frame)]">
-        <div className="panel bg-foil py-[var(--section-y)]">
-          <Rise className="shell page-grid gap-y-10">
+      <section id="apply" aria-labelledby="apply-title" className="py-[var(--section-y)]">
+        <div className="shell">
+          <Rise className="page-grid gap-y-12">
             <div data-rise className="col-span-full lg:col-span-4">
               <h2 id="apply-title" className="display text-d2 text-ink">
                 Apply now

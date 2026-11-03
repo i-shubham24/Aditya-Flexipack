@@ -60,7 +60,7 @@ export function Shelf() {
 
   return (
     <section ref={root} aria-labelledby="shelf-title" className="pt-[var(--frame)]">
-      <div className="panel bg-foil py-[var(--section-y)]">
+      <div className="panel bg-white border-t border-foil-2 py-[var(--section-y)] shadow-sm">
         <div className="shell grid gap-10 lg:grid-cols-12">
           <div className="lg:col-span-6">
             <h2 id="shelf-title" className="display text-[clamp(2.6rem,5.6vw,6rem)] text-ink">
@@ -89,7 +89,7 @@ export function Shelf() {
                   <li data-slot className="flex h-36 w-[18%] min-w-[7.5rem] items-end">
                     <Link
                       href="/contact-us/"
-                      className="grid h-full w-full place-items-center content-center gap-2 rounded-[var(--radius-lg)] bg-white/70 p-3 text-center text-ink ring-2 ring-crimson/40 ring-inset transition-colors hover:bg-white"
+                      className="grid h-full w-full place-items-center content-center gap-2 rounded-[var(--radius-lg)] bg-foil p-3 text-center text-ink ring-2 ring-crimson/40 ring-inset transition-colors hover:bg-crimson-wash"
                     >
                       <span className="grid size-10 place-items-center rounded-[var(--radius-sm)] bg-crimson text-white">
                         <Plus className="size-5" />
@@ -99,14 +99,14 @@ export function Shelf() {
                   </li>
                 )}
               </ul>
-              <div aria-hidden className="mt-0 h-4 rounded-[var(--radius-xs)] bg-white" />
+              <div aria-hidden className="mt-0 h-3 rounded-[var(--radius-xs)] bg-foil-2 border-t border-foil" />
             </div>
           ))}
         </div>
 
         <div className="shell mt-14 flex flex-wrap justify-center gap-3">
           <ButtonLink href="/contact-us/">Start an enquiry</ButtonLink>
-          <ButtonLink href="/packaging-partnership/" tone="white" plain>
+          <ButtonLink href="/packaging-partnership/" tone="ink" plain>
             Packaging partnership
           </ButtonLink>
         </div>

@@ -38,7 +38,11 @@ export function PhotoFrame({
       <div className={`relative overflow-hidden rounded-[var(--radius-lg)] ${RATIOS[ratio]}`}>
         <Image src={src} alt={alt} fill sizes={sizes} priority={priority} className="object-cover" />
       </div>
-      {caption && <figcaption className={`mt-3 text-caption ${dark ? "text-white/75" : "text-ink-soft"}`}>{caption}</figcaption>}
+      {caption && (
+        <figcaption className={`mt-3 text-caption leading-snug ${dark ? "text-white/85" : "text-ink/80 font-medium"}`}>
+          {caption}
+        </figcaption>
+      )}
     </figure>
   );
 }

@@ -61,7 +61,14 @@ const BAYS: Bay[] = [
       caption: "The Super Perfast machine",
     },
   },
-  { title: "Pyrolysis plant and waste recycling" },
+  {
+    title: "Pyrolysis plant and waste recycling",
+    photo: {
+      src: "/media/old/career/stock-recycling-sorting.webp",
+      alt: "Plant recycling and material sorting line in operation",
+      caption: "Recycling & pyrolysis recovery line",
+    },
+  },
 ];
 
 // The saw-tooth roof: one chunky tooth per bay, with three solar panels on each slope.
@@ -139,7 +146,7 @@ export function UnderOneRoof() {
 
   return (
     <section ref={root} aria-labelledby="roof-title" className="pt-[var(--frame)]">
-      <div className="panel bg-foil py-[var(--section-y)]">
+      <div className="panel bg-foil py-[calc(var(--section-y)*0.8)]">
         <Contour tone="foil" shape="high" />
         <div className="shell relative">
           <SectionHeader id="roof-title" title="Our integrated infrastructure" />

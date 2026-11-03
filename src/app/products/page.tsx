@@ -54,7 +54,7 @@ export default function ProductsPage() {
       <Slitter />
 
       <section aria-labelledby="industry-title" className="pt-[var(--frame)]">
-        <div className="panel bg-wine py-[var(--section-y)] text-white">
+        <div className="panel bg-wine py-[calc(var(--section-y)*0.7)] text-white">
           <svg aria-hidden viewBox="0 0 1200 800" preserveAspectRatio="none" className="absolute inset-0 h-full w-full">
             <path d="M0 800 V520 C 240 430, 470 640, 730 540 S 1060 420, 1200 480 V800 Z" fill={TONES.wine.contour} />
           </svg>

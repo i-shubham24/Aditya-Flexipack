@@ -7,7 +7,7 @@ import Image from "next/image";
 export function CeoMessage() {
   return (
     <section aria-labelledby="ceo-title" className="pt-[var(--frame)]">
-      <div className="panel bg-wine py-[var(--section-y)] text-white">
+      <div className="panel bg-wine py-[calc(var(--section-y)*0.75)] text-white">
         <svg aria-hidden viewBox="0 0 1200 800" preserveAspectRatio="none" className="absolute inset-0 h-full w-full">
           <path d="M0 560 C 240 470, 420 660, 700 560 S 1040 420, 1200 500 V800 H0 Z" fill="#520912" />
         </svg>
