@@ -77,7 +77,7 @@ const jsonLd = {
 
 // Before first paint: every load starts at the top; full loader on the first visit of a session,
 // a short one on later loads, none for reduced motion.
-const NO_LOADER = `try{history.scrollRestoration="manual";scrollTo(0,0)}catch(e){}try{var h=document.documentElement;if(matchMedia("(prefers-reduced-motion: reduce)").matches)h.setAttribute("data-noloader","");else if(sessionStorage.getItem("af-loader")==="1")h.setAttribute("data-loader-short","")}catch(e){}`;
+const NO_LOADER = `try{history.scrollRestoration="manual";scrollTo(0,0)}catch(e){}try{var h=document.documentElement;h.classList.add("js");if(matchMedia("(prefers-reduced-motion: reduce)").matches)h.setAttribute("data-noloader","");else if(sessionStorage.getItem("af-loader")==="1")h.setAttribute("data-loader-short","")}catch(e){}`;
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (

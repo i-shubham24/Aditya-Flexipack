@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
-import { BadgeCheck, Handshake, Leaf, Rocket, ShieldCheck, TrendingUp } from "lucide-react";
-import { PageHero } from "@/components/page/PageHero";
+import { PartnerHero } from "@/components/heroes/PartnerHero";
 import { ButtonLink } from "@/components/ui/Button";
-import { ReasonGrid, type Reason } from "@/components/partner/ReasonGrid";
-import { PartnerSteps, type Step } from "@/components/partner/PartnerSteps";
-import { FormSection } from "@/components/partner/FormSection";
+import { SectionHeader } from "@/components/system/SectionHeader";
+import { TearStrip } from "@/components/system/TearStrip";
+import { Rise } from "@/components/desk/Rise";
+import { TicketPeek } from "@/components/desk/TicketPeek";
+import { JobTicket } from "@/components/desk/JobTicket";
 
 export const metadata: Metadata = {
   title: "Packaging partnership",
@@ -13,62 +14,64 @@ export const metadata: Metadata = {
   alternates: { canonical: "/packaging-partnership/" },
 };
 
-const REASONS: Reason[] = [
-  { icon: Rocket, title: "Innovation at scale", body: "We deliver solutions custom-designed for performance and market leadership." },
-  { icon: TrendingUp, title: "Business growth", body: "Our packaging drives customer reach and elevates your brand." },
-  { icon: BadgeCheck, title: "Operational excellence", body: "Our precision-made products ensure unwavering reliability and consistent performance." },
-  { icon: Handshake, title: "Trusted collaboration", body: "We build long-term relationships with a steadfast commitment to your success." },
-  { icon: ShieldCheck, title: "Ethical leadership", body: "We uphold the highest standards of compliance, safety, and responsible practices." },
-  { icon: Leaf, title: "Purposeful sustainability", body: "Our eco-friendly processes create a positive brand impact for our partners." },
-];
-
-const ICONS = "/media/old/packaging-partnership";
-const STEPS: Step[] = [
-  { icon: `${ICONS}/icon-document-upload.webp`, title: "Submit your application", body: "Share your company profile, product list, and certifications." },
-  { icon: `${ICONS}/icon-checklist-thumbs-up.webp`, title: "Evaluation and review", body: "We assess your quality, compliance, and strategic fit." },
-  { icon: `${ICONS}/icon-handshake.webp`, title: "Testing and approval", body: "Submit samples and documents for final review." },
-  { icon: `${ICONS}/icon-clipboard-check.webp`, title: "Partnership agreement", body: "Receive onboarding confirmation and begin collaboration." },
+/** Our partnership differentiators, as published. */
+const REASONS = [
+  { title: "Innovation at scale", body: "We deliver solutions custom-designed for performance and market leadership." },
+  { title: "Business growth", body: "Our packaging drives customer reach and elevates your brand." },
+  { title: "Operational excellence", body: "Our precision-made products ensure unwavering reliability and consistent performance." },
+  { title: "Trusted collaboration", body: "We build long-term relationships with a steadfast commitment to your success." },
+  { title: "Ethical leadership", body: "We uphold the highest standards of compliance, safety and responsible practices." },
+  { title: "Purposeful sustainability", body: "Our eco-friendly processes create a positive brand impact for our partners." },
 ];
 
 export default function PackagingPartnershipPage() {
   return (
     <>
-      <PageHero
-        tone="crimson"
+      <PartnerHero
+        tone="ink"
         title="Packaging partnership"
-        note="Ready to innovate? Partner with the leaders."
-        intro="Laminates, pouches, films, polybags, inks and cylinders for brands that share our commitment to quality and innovation."
-        photos={[
-          { src: "/media/old/home/mockup-pouches-teal.webp", alt: "Two printed snack pouches carrying the Aditya Flexipack mark" },
-          { src: "/media/old/about-us/mockup-pouches-wood-table.webp", alt: "Three Aditya Flexipack printed pouches on a wooden table" },
-        ]}
+        intro={<p className="hand inline-block -rotate-2 text-note text-blush">Ready to innovate? Partner with the leaders.</p>}
         actions={
           <ButtonLink href="#begin" tone="white">
             Begin your partnership
           </ButtonLink>
         }
+        teaser={<TicketPeek />}
       />
 
-      <ReasonGrid id="why-partner" title="Why partner with Aditya Flexipack?" note="Our partnership differentiators" reasons={REASONS} />
+      <section aria-labelledby="why-title" className="py-[var(--section-y)]">
+        <Rise className="shell">
+          <div data-rise>
+            <SectionHeader id="why-title" title="Why partner with Aditya Flexipack?" />
+          </div>
+          <ol className="page-grid gap-y-[var(--stack)]">
+            {REASONS.map((r, i) => (
+              <li key={r.title} data-rise className="col-span-full sm:col-span-4">
+                <span aria-hidden className="display tabular block text-d3 text-crimson">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <h3 className="display mt-4 text-d4 text-ink">{r.title}</h3>
+                <p className="mt-2 max-w-[24rem] text-ink-soft">{r.body}</p>
+              </li>
+            ))}
+          </ol>
+        </Rise>
+      </section>
 
-      <PartnerSteps
-        id="process"
-        title="Our partnership process"
-        note="Who can apply"
-        intro="We welcome partners who share our commitment to quality and innovation. Our process is designed to find companies that align with our standards for performance, reliability, and print quality across industries like food, pharma, and personal care."
-        steps={STEPS}
-      />
+      <section id="begin" aria-labelledby="begin-title" className="scroll-mt-24">
+        <div className="panel bg-foil py-[var(--section-y)]">
+          <div className="shell">
+            <SectionHeader
+              id="begin-title"
+              title="Begin your partnership"
+              standfirst="We welcome partners who share our commitment to quality and innovation. Across food, pharma and personal care, we look for high performance, reliability and print quality."
+            />
+            <JobTicket />
+          </div>
+        </div>
+      </section>
 
-      <FormSection
-        id="begin"
-        title="Begin your partnership"
-        note="Partner with the leaders"
-        form="packaging"
-        panel="foil"
-        photo={{ src: "/media/old/home/mockup-pouches-supermarket-shelf.webp", alt: "Aditya Flexipack printed pouches on a supermarket shelf" }}
-      >
-        <p>Tell us what you pack and the format you need. Choose a product requirement and add a short brief.</p>
-      </FormSection>
+      <TearStrip from="/packaging-partnership/" />
     </>
   );
 }

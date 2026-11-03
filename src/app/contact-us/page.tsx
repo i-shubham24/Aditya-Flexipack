@@ -1,10 +1,15 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight, Mail, MapPin, Phone } from "lucide-react";
-import { PageHero } from "@/components/page/PageHero";
+import { PartnerHero } from "@/components/heroes/PartnerHero";
 import { ButtonLink } from "@/components/ui/Button";
+import { SectionHeader } from "@/components/system/SectionHeader";
+import { TearStrip } from "@/components/system/TearStrip";
 import { EnquiryForm } from "@/components/forms/EnquiryForm";
 import { FacebookIcon, LinkedInIcon } from "@/components/ui/BrandIcons";
+import { Rise } from "@/components/desk/Rise";
+import { KilometreStone } from "@/components/desk/KilometreStone";
+import { AddressCard } from "@/components/desk/AddressCard";
 import { site } from "@/content/site";
 
 export const metadata: Metadata = {
@@ -14,142 +19,113 @@ export const metadata: Metadata = {
   alternates: { canonical: "/contact-us/" },
 };
 
-// Address cards dealt at slight angles; each one squares up under the pointer.
-const card = "rounded-[var(--radius-xl)] p-7 transition-[rotate,translate] duration-500 ease-[var(--ease-back)] hover:-translate-y-1 sm:hover:rotate-0";
+const cityMap = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${site.legalName}, ${site.cityOffice.lines.join(", ")}`)}`;
+
+const social = "grid size-12 place-items-center rounded-[var(--radius-sm)] bg-wine text-white transition-colors duration-200 hover:bg-crimson";
 
 export default function ContactPage() {
   return (
     <>
-      <PageHero
-        tone="wine"
+      <PartnerHero
+        tone="crimson"
         title="Get in touch"
-        note="Let's connect and collaborate"
-        intro="At Aditya Flexipack, we believe in building strong, long-term partnerships with vendors who share our commitment to quality, innovation, and customer satisfaction."
-        photos={[
-          { src: "/media/old/home/plant-exterior-building.webp", alt: "The Aditya Flexipack plant building at Rania, Kanpur Dehat" },
-          { src: "/media/old/about-us/plant-exterior-wide.webp", alt: "The plant campus seen across its lawn" },
-        ]}
-        actions={
+        intro={
           <>
-            <ButtonLink href="#write" tone="white">
-              Fill the form
-            </ButtonLink>
-            <a href={site.phoneHref} className="font-semibold text-white underline decoration-white/50 underline-offset-4 hover:decoration-white">
-              Call {site.phone}
-            </a>
+            <p className="hand inline-block -rotate-2 text-note text-blush">Let&apos;s connect and collaborate</p>
+            <p className="mt-4">
+              We believe in strong, long-term partnerships. We work with vendors who share our commitment to quality, innovation and
+              customer satisfaction.
+            </p>
           </>
         }
+        actions={
+          <>
+            <ButtonLink href="#contact-form" tone="white">
+              Fill the form
+            </ButtonLink>
+            <ButtonLink href={site.phoneHref} tone="wine" plain>
+              Call {site.phone}
+            </ButtonLink>
+          </>
+        }
+        teaser={<KilometreStone />}
       />
 
       <section aria-labelledby="reach-title" className="py-[var(--section-y)]">
-        <div className="shell grid gap-12 lg:grid-cols-12">
-          <div className="lg:col-span-5">
-            <h2 id="reach-title" className="display text-[clamp(2.4rem,4.6vw,4.4rem)] text-ink">
-              Contact us
-            </h2>
-            <p className="hand mt-3 inline-block -rotate-2 text-[2rem] text-crimson">You can reach us anytime</p>
-
-            <ul className="mt-10 grid gap-5">
-              <li className={`${card} bg-crimson text-white sm:-rotate-[2deg]`}>
-                <MapPin aria-hidden className="size-7" strokeWidth={1.8} />
-                <h3 className="display mt-5 text-[1.9rem]">{site.plant.label}</h3>
-                <address className="mt-2 not-italic leading-relaxed text-white/90">
-                  {site.legalName}
-                  {site.plant.lines.map((l) => (
-                    <span key={l} className="block">
-                      {l}
-                    </span>
-                  ))}
-                </address>
-                <a
-                  href={site.plant.mapUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="mt-5 inline-flex min-h-11 items-center gap-2 font-semibold text-white underline decoration-white/50 underline-offset-4 hover:decoration-white"
-                >
-                  Open in Google Maps
-                  <ArrowUpRight aria-hidden className="size-4" />
-                </a>
-              </li>
-
-              <li className={`${card} bg-wine text-white sm:rotate-[1.5deg]`}>
-                <MapPin aria-hidden className="size-7" strokeWidth={1.8} />
-                <h3 className="display mt-5 text-[1.9rem]">{site.cityOffice.label}</h3>
-                <address className="mt-2 not-italic leading-relaxed text-white/85">
-                  {site.cityOffice.lines.map((l) => (
-                    <span key={l} className="block">
-                      {l}
-                    </span>
-                  ))}
-                </address>
-              </li>
-
-              <li className={`${card} bg-foil text-ink sm:-rotate-[1deg]`}>
-                <div className="flex gap-3">
-                  <Phone aria-hidden className="size-7 text-crimson" strokeWidth={1.8} />
-                  <Mail aria-hidden className="size-7 text-crimson" strokeWidth={1.8} />
-                </div>
-                <h3 className="display mt-5 text-[1.9rem]">Call or write</h3>
-                <ul className="mt-3 grid gap-1 text-[1.05rem]">
-                  <li>
-                    <a href={site.phoneHref} className="inline-flex min-h-11 items-center font-semibold underline decoration-ink/30 underline-offset-4 hover:decoration-crimson">
-                      {site.phone}
-                    </a>
-                  </li>
-                  <li>
-                    <a href={`mailto:${site.email}`} className="inline-flex min-h-11 items-center font-semibold underline decoration-ink/30 underline-offset-4 hover:decoration-crimson">
-                      {site.email}
-                    </a>
-                  </li>
-                  <li>
-                    <a href={`mailto:${site.emailAlt}`} className="inline-flex min-h-11 items-center break-all font-semibold underline decoration-ink/30 underline-offset-4 hover:decoration-crimson">
-                      {site.emailAlt}
-                    </a>
-                  </li>
-                </ul>
-              </li>
-
-              <li className={`${card} bg-blush text-wine sm:rotate-[2deg]`}>
-                <h3 className="display text-[1.9rem]">Follow us on</h3>
-                <div className="mt-4 flex gap-3">
-                  <a
-                    href={site.social.facebook}
-                    target="_blank"
-                    rel="noreferrer"
-                    aria-label="Aditya Flexipack on Facebook"
-                    className="grid size-12 place-items-center rounded-[var(--radius-sm)] bg-wine text-white transition-colors hover:bg-crimson"
-                  >
-                    <FacebookIcon className="size-5" />
-                  </a>
-                  <a
-                    href={site.social.linkedin}
-                    target="_blank"
-                    rel="noreferrer"
-                    aria-label="Aditya Flexipack on LinkedIn"
-                    className="grid size-12 place-items-center rounded-[var(--radius-sm)] bg-wine text-white transition-colors hover:bg-crimson"
-                  >
-                    <LinkedInIcon className="size-5" />
-                  </a>
-                </div>
-              </li>
-            </ul>
+        <Rise className="shell">
+          <div data-rise>
+            <SectionHeader id="reach-title" title="Contact us" />
           </div>
 
-          <div id="write" className="scroll-mt-24 lg:col-span-7">
-            <h2 className="display text-[clamp(2.4rem,4.6vw,4.4rem)] text-ink">Fill the form</h2>
-            <p className="mt-3 max-w-[34rem] text-[1.06rem] leading-relaxed text-ink-soft">
-              Tell us who you are and what you need. For packaging requirements, the{" "}
-              <Link href="/packaging-partnership/#begin" className="font-semibold text-crimson underline underline-offset-4">
-                packaging partnership form
-              </Link>{" "}
-              takes your product details too.
+          <div className="page-grid gap-y-16">
+            <div data-rise className="span-half-l grid gap-8 lg:grid-cols-subgrid">
+              <div className="lg:col-[1/5]">
+                <AddressCard title={site.plant.label} lines={[site.legalName, ...site.plant.lines]} mapUrl={site.plant.mapUrl} email={site.email} />
+              </div>
+              <figure className="max-w-[20rem] lg:col-[5/7] lg:max-w-none">
+                <div className="relative aspect-square overflow-hidden rounded-[var(--radius-lg)]">
+                  <Image
+                    src="/media/old/home/plant-exterior-building.webp"
+                    alt="The plant building with a brown entrance block, flagpoles and a lawn"
+                    fill
+                    sizes="(min-width: 1024px) 15vw, 20rem"
+                    className="object-cover"
+                  />
+                </div>
+                <figcaption className="mt-3 text-caption text-ink-soft">Our plant at Rania, Kanpur Dehat</figcaption>
+              </figure>
+            </div>
+
+            <div data-rise className="span-half-r">
+              <AddressCard
+                title={site.cityOffice.label}
+                lines={site.cityOffice.lines}
+                mapUrl={cityMap}
+                phone={{ label: site.phone, href: site.phoneHref }}
+                email={site.emailAlt}
+              />
+            </div>
+
+            <p data-rise className="display span-lead max-w-[36rem] text-d4 text-ink">
+              Our 18-acre campus is 15 km from Kanpur, along the Kolkata to Delhi highway (NH-2).
             </p>
-            <div className="mt-8">
-              <EnquiryForm form="contact" />
+
+            <div data-rise className="span-side">
+              <h3 className="display text-d4 text-ink">Follow us on</h3>
+              <div className="mt-4 flex gap-3">
+                <a href={site.social.facebook} target="_blank" rel="noreferrer" aria-label="Aditya Flexipack on Facebook" className={social}>
+                  <FacebookIcon className="size-5" />
+                </a>
+                <a href={site.social.linkedin} target="_blank" rel="noreferrer" aria-label="Aditya Flexipack on LinkedIn" className={social}>
+                  <LinkedInIcon className="size-5" />
+                </a>
+              </div>
             </div>
           </div>
-        </div>
+        </Rise>
       </section>
+
+      <section id="contact-form" aria-labelledby="contact-form-title" className="panel scroll-mt-24 bg-foil py-[var(--section-y)]">
+        <Rise className="shell page-grid gap-y-10">
+          <div data-rise className="col-span-full lg:col-[1/5]">
+            <h2 id="contact-form-title" className="display text-d2 text-ink">
+              Fill the form
+            </h2>
+            <p className="mt-5 max-w-[22rem] text-lead text-ink-soft">You can reach us anytime.</p>
+            <p className="mt-4 max-w-[22rem] text-ink-soft">
+              Need packaging?{" "}
+              <Link href="/packaging-partnership/#begin" className="inline-flex min-h-11 items-center font-semibold text-crimson underline underline-offset-4">
+                Use the packaging partnership form
+              </Link>
+            </p>
+          </div>
+          <div className="col-span-full lg:col-[5/13]">
+            <EnquiryForm form="contact" tone="wash" />
+          </div>
+        </Rise>
+      </section>
+
+      <TearStrip from="/contact-us/" />
     </>
   );
 }

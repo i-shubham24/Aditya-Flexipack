@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
-import { PageHero } from "@/components/page/PageHero";
-import { Prose } from "@/components/page/Prose";
+import { DocHero } from "@/components/heroes/DocHero";
+import { TearStrip } from "@/components/system/TearStrip";
+import { Rise } from "@/components/desk/Rise";
+import { ClauseIndex, Clauses, InfoPanel, type ClauseDef } from "@/components/desk/LegalDesk";
 import { site } from "@/content/site";
 
 export const metadata: Metadata = {
@@ -9,34 +11,51 @@ export const metadata: Metadata = {
   alternates: { canonical: "/privacy-policy/" },
 };
 
-const h2 = "display";
+/** The policy in plain words, condensed from clauses 2, 3, 5, 6 and 7. The clauses below stay in full. */
+const SUMMARY = [
+  { label: "Details you give us", value: "Name, email, phone number and company details, when you contact us or send a form." },
+  { label: "Details we record", value: "Your IP address, browser type and the pages you visit." },
+  { label: "Why we use them", value: "To improve our services, answer enquiries, send updates and promotions, and prevent fraud." },
+  { label: "Sold or rented", value: "Never", strong: true },
+  { label: "Shared with", value: "Trusted service providers, for business operations, legal compliance or security." },
+  { label: "Cookies", value: "Yes. You can control or turn them off in your browser settings." },
+  { label: "Your rights", value: "See, correct or delete your data. Opt out of marketing. Limit or object to processing in some cases." },
+];
 
-export default function PrivacyPolicyPage() {
-  return (
-    <>
-      <PageHero tone="wash" title="Privacy policy" note="We do not sell or rent your personal data" />
-
-      <Prose>
-        <h2 className={h2}>1. Introduction</h2>
-        <p>
-          Aditya Flexipack values your privacy and is committed to protecting your personal information. This Privacy Policy explains
-          how we collect, use, store, and safeguard your data when you visit our website or use our services.
-        </p>
-
-        <h2 className={h2}>2. Information we collect</h2>
+const CLAUSES: ClauseDef[] = [
+  {
+    id: "privacy-1",
+    title: "Introduction",
+    body: (
+      <p>
+        Aditya Flexipack values your privacy and is committed to protecting your personal information. This Privacy Policy explains how
+        we collect, use, store, and safeguard your data when you visit our website or use our services.
+      </p>
+    ),
+  },
+  {
+    id: "privacy-2",
+    title: "Information we collect",
+    body: (
+      <>
         <p>We may collect personal and non-personal information, including:</p>
         <ul>
           <li>
-            <strong>Personal details:</strong> name, email address, phone number, and company details when you contact us or submit a
-            form.
+            <strong>Personal details:</strong> name, email address, phone number, and company details when you contact us or submit a form.
           </li>
           <li>
-            <strong>Usage data:</strong> information about how you interact with our website, including IP address, browser type, and
-            pages visited.
+            <strong>Usage data:</strong> information about how you interact with our website, including IP address, browser type, and pages
+            visited.
           </li>
         </ul>
-
-        <h2 className={h2}>3. How we use your information</h2>
+      </>
+    ),
+  },
+  {
+    id: "privacy-3",
+    title: "How we use your information",
+    body: (
+      <>
         <p>Your information helps us:</p>
         <ul>
           <li>Improve our services and website experience.</li>
@@ -44,39 +63,65 @@ export default function PrivacyPolicyPage() {
           <li>Send updates, promotions, and important company communications.</li>
           <li>Ensure security and prevent fraudulent activities.</li>
         </ul>
-
-        <h2 className={h2}>4. Data protection and security</h2>
-        <p>
-          We implement strict security measures to protect your personal data from unauthorized access, alteration, or disclosure.
-          However, while we strive to ensure security, no method of data transmission is 100% secure.
-        </p>
-
-        <h2 className={h2}>5. Cookies and tracking technologies</h2>
-        <p>
-          We use cookies to enhance user experience, analyze website traffic, and personalize content. You can control or disable cookies
-          through your browser settings.
-        </p>
-
-        <h2 className={h2}>6. Third-party sharing</h2>
-        <p>
-          We do not sell or rent your personal data. However, we may share it with trusted third-party service providers for business
-          operations, legal compliance, or security purposes.
-        </p>
-
-        <h2 className={h2}>7. Your rights and choices</h2>
+      </>
+    ),
+  },
+  {
+    id: "privacy-4",
+    title: "Data protection and security",
+    body: (
+      <p>
+        We implement strict security measures to protect your personal data from unauthorized access, alteration, or disclosure. However,
+        while we strive to ensure security, no method of data transmission is 100% secure.
+      </p>
+    ),
+  },
+  {
+    id: "privacy-5",
+    title: "Cookies and tracking technologies",
+    body: (
+      <p>
+        We use cookies to enhance user experience, analyze website traffic, and personalize content. You can control or disable cookies
+        through your browser settings.
+      </p>
+    ),
+  },
+  {
+    id: "privacy-6",
+    title: "Third-party sharing",
+    body: (
+      <p>
+        We do not sell or rent your personal data. However, we may share it with trusted third-party service providers for business
+        operations, legal compliance, or security purposes.
+      </p>
+    ),
+  },
+  {
+    id: "privacy-7",
+    title: "Your rights and choices",
+    body: (
+      <>
         <p>You have the right to:</p>
         <ul>
           <li>Request access, correction, or deletion of your personal data.</li>
           <li>Opt-out of marketing communications at any time.</li>
           <li>Restrict or object to data processing in certain cases.</li>
         </ul>
-
-        <h2 className={h2}>8. Policy updates</h2>
-        <p>We may update this Privacy Policy periodically. Changes will be posted on this page with the updated revision date.</p>
-
-        <h2 className={h2}>9. Contact us</h2>
+      </>
+    ),
+  },
+  {
+    id: "privacy-8",
+    title: "Policy updates",
+    body: <p>We may update this Privacy Policy periodically. Changes will be posted on this page with the updated revision date.</p>,
+  },
+  {
+    id: "privacy-9",
+    title: "Contact us",
+    body: (
+      <>
         <p>For any privacy-related concerns or requests, please contact us at:</p>
-        <address className="mt-4 not-italic">
+        <address className="not-italic">
           <strong>{site.name}</strong>
           <br />
           <a href={site.phoneHref}>{site.phone}</a>
@@ -85,7 +130,38 @@ export default function PrivacyPolicyPage() {
           <br />
           <a href={`mailto:${site.emailAlt}`}>{site.emailAlt}</a>
         </address>
-      </Prose>
+      </>
+    ),
+  },
+];
+
+export default function PrivacyPolicyPage() {
+  return (
+    <>
+      <DocHero
+        tone="foil"
+        title="Privacy policy"
+        intro={<p className="hand inline-block -rotate-2 text-note text-crimson">We do not sell or rent your personal data</p>}
+      />
+
+      <section aria-labelledby="privacy-summary" className="panel bg-crimson-wash py-[var(--section-y)]">
+        <Rise className="shell page-grid gap-y-12">
+          <div data-rise className="span-lead">
+            <InfoPanel id="privacy-summary" title="Privacy information" rows={SUMMARY} />
+          </div>
+          <div data-rise className="span-quarter">
+            <ClauseIndex clauses={CLAUSES} label="Clauses of this privacy policy" />
+          </div>
+        </Rise>
+      </section>
+
+      <div className="py-[var(--section-y)]">
+        <Rise className="shell">
+          <Clauses clauses={CLAUSES} />
+        </Rise>
+      </div>
+
+      <TearStrip from="/privacy-policy/" />
     </>
   );
 }

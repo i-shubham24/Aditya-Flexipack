@@ -1,16 +1,8 @@
 import Image from "next/image";
 import type { ReactNode } from "react";
 
-const TILES = {
-  wash: "bg-crimson-wash",
-  blush: "bg-blush",
-  crimson: "bg-crimson",
-  wine: "bg-wine",
-  foil: "bg-foil",
-} as const;
-
 /**
- * Text beside a photograph set in a colour tile, the photo framed in white and slightly tilted.
+ * Text beside a photograph that sits straight on the section background.
  * Rows alternate sides with `flip`. Headings are h2 unless `as` says otherwise.
  */
 export function SplitRow({
@@ -18,7 +10,6 @@ export function SplitRow({
   note,
   children,
   photo,
-  tile = "wash",
   flip = false,
   as: Heading = "h2",
   id,
@@ -27,7 +18,6 @@ export function SplitRow({
   note?: string;
   children: ReactNode;
   photo: { src: string; alt: string; ratio?: string };
-  tile?: keyof typeof TILES;
   flip?: boolean;
   as?: "h2" | "h3";
   id?: string;
@@ -41,16 +31,9 @@ export function SplitRow({
           <div className="mt-5 space-y-4 text-[1.08rem] leading-relaxed text-ink-soft">{children}</div>
         </div>
         <div className={`lg:col-span-6 ${flip ? "lg:order-1 lg:col-start-1" : "lg:col-start-7"}`}>
-          <div className={`group rounded-[var(--radius-2xl)] p-[clamp(1.25rem,4vw,3.25rem)] ${TILES[tile]}`}>
-            <div
-              className={`rounded-[var(--radius-lg)] bg-white p-2 transition-[rotate,scale] duration-500 ease-[var(--ease-back)] group-hover:rotate-0 group-hover:scale-[1.02] ${
-                flip ? "rotate-[2deg]" : "-rotate-[2deg]"
-              }`}
-            >
-              <div className={`relative overflow-hidden rounded-[var(--radius-md)] ${photo.ratio ?? "aspect-[4/3]"}`}>
-                <Image src={photo.src} alt={photo.alt} fill sizes="(min-width: 1024px) 42vw, 92vw" className="object-cover" />
-              </div>
-            </div>
+          {/* Straight on the section's own background: no tile, no frame, no tilt */}
+          <div className={`relative overflow-hidden rounded-[var(--radius-xl)] ${photo.ratio ?? "aspect-[4/3]"}`}>
+            <Image src={photo.src} alt={photo.alt} fill sizes="(min-width: 1024px) 42vw, 92vw" className="object-cover" />
           </div>
         </div>
       </div>

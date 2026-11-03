@@ -10,7 +10,10 @@ const RATIOS = {
 
 export type Ratio = keyof typeof RATIOS;
 
-/** A real photograph in a white 8px frame, square to the grid, captioned with what it shows. Never rotated. */
+/**
+ * A real photograph set straight on its section's background: rounded corners, square to the grid, captioned with
+ * what it shows. No frame or colour tile behind it, and never rotated.
+ */
 export function PhotoFrame({
   src,
   alt,
@@ -32,10 +35,8 @@ export function PhotoFrame({
 }) {
   return (
     <figure className={className}>
-      <div className="rounded-[var(--radius-lg)] bg-white p-2">
-        <div className={`relative overflow-hidden rounded-[var(--radius-md)] ${RATIOS[ratio]}`}>
-          <Image src={src} alt={alt} fill sizes={sizes} priority={priority} className="object-cover" />
-        </div>
+      <div className={`relative overflow-hidden rounded-[var(--radius-lg)] ${RATIOS[ratio]}`}>
+        <Image src={src} alt={alt} fill sizes={sizes} priority={priority} className="object-cover" />
       </div>
       {caption && <figcaption className={`mt-3 text-caption ${dark ? "text-white/75" : "text-ink-soft"}`}>{caption}</figcaption>}
     </figure>

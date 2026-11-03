@@ -1,13 +1,15 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { BadgeCheck, Eye, Leaf, ShieldCheck, Sprout, Trophy } from "lucide-react";
-import { PageHero } from "@/components/page/PageHero";
-import { Reveal } from "@/components/page/Reveal";
+import { PartnerHero } from "@/components/heroes/PartnerHero";
 import { ButtonLink } from "@/components/ui/Button";
-import { ReasonGrid, type Reason } from "@/components/partner/ReasonGrid";
-import { PartnerSteps, type Step } from "@/components/partner/PartnerSteps";
-import { FormSection } from "@/components/partner/FormSection";
-import { VENDOR_PRODUCTS } from "@/content/forms";
+import { SectionHeader } from "@/components/system/SectionHeader";
+import { NumberedList } from "@/components/system/NumberedList";
+import { TearStrip } from "@/components/system/TearStrip";
+import { EnquiryForm } from "@/components/forms/EnquiryForm";
+import { Rise } from "@/components/desk/Rise";
+import { BinStack } from "@/components/desk/StoresBin";
+import { StoresRack } from "@/components/desk/StoresRack";
+import { VendorRoute } from "@/components/desk/VendorRoute";
 
 export const metadata: Metadata = {
   title: "Vendor partnership",
@@ -16,134 +18,133 @@ export const metadata: Metadata = {
   alternates: { canonical: "/vendor-partnership/" },
 };
 
-const REASONS: Reason[] = [
-  { icon: Trophy, title: "Join a market leader", body: "Partner with an industry leader known for reliability and high-performance solutions." },
-  { icon: Eye, title: "Transparent practices", body: "Our clear communication and well-defined processes ensure an efficient and transparent partnership." },
-  { icon: Sprout, title: "Consistent growth", body: "Form long-term partnerships that foster mutual growth and shared success." },
-  { icon: BadgeCheck, title: "Commitment to quality", body: "We uphold strict quality controls and certifications, ensuring a reliable supply chain." },
-  { icon: ShieldCheck, title: "Our integrity", body: "We value vendor relationships, honoring our commitments with integrity and respect." },
-  { icon: Leaf, title: "Shared sustainability", body: "Collaborate with a partner dedicated to eco-friendly practices and a healthier planet." },
+const REASONS = [
+  { title: "Join a market leader", body: "Partner with an industry leader known for reliability and high-performance solutions." },
+  { title: "Transparent practices", body: "Our clear communication and well-defined processes ensure an efficient and transparent partnership." },
+  { title: "Consistent growth", body: "Form long-term partnerships that foster mutual growth and shared success." },
+  { title: "Commitment to quality", body: "We uphold strict quality controls and certifications, ensuring a reliable supply chain." },
+  { title: "Our integrity", body: "We value vendor relationships, honouring our commitments with integrity and respect." },
+  { title: "Shared sustainability", body: "Collaborate with a partner dedicated to eco-friendly practices and a healthier planet." },
 ];
 
-const SUPPLY = [
+const STREAMS = [
   {
     title: "Raw materials",
     body: "We seek vendors offering top-grade materials that meet stringent global standards.",
-    photo: { src: "/media/old/products-polybags/photo-polybag-film-roll.webp", alt: "A wound roll of clear polyethylene film on a pallet" },
-    tilt: "sm:-rotate-[3deg]",
+    src: "/media/old/products-polybags/photo-polybag-film-roll.webp",
+    alt: "A large wound roll of clear polyethylene film on a pallet in a factory",
+    caption: "A wound roll of clear PE film",
   },
   {
     title: "Machinery and equipment",
     body: "We need advanced, scalable equipment to support high-volume manufacturing.",
-    photo: { src: "/media/old/home/plant-grey-enclosed-machine.webp", alt: "An enclosed production machine with an operator touchscreen at the plant" },
-    tilt: "sm:rotate-[2deg]",
+    src: "/media/old/home/plant-grey-enclosed-machine.webp",
+    alt: "A large grey enclosed production machine with an operator touchscreen and a wall-mounted monitor",
+    caption: "An enclosed production machine at our plant",
   },
   {
     title: "Logistics and distribution",
-    body: "We require agile, tech-driven logistics for smart, efficient, and sustainable delivery.",
-    photo: { src: "/media/old/home/photo-stretch-film-wrapping.webp", alt: "Stretch film being wrapped around a carton for dispatch" },
-    tilt: "sm:-rotate-[2deg]",
+    body: "We require agile, tech-driven logistics for smart, efficient and sustainable delivery.",
+    src: "/media/old/home/photo-stretch-film-wrapping.webp",
+    alt: "A worker's hand wrapping stretch film around a cardboard box",
+    caption: "Stretch film wrapped round a carton",
   },
 ];
 
-const ICONS = "/media/old/packaging-partnership";
-const STEPS: Step[] = [
-  { icon: `${ICONS}/icon-document-upload.webp`, title: "Submit your application", body: "Share your company profile, product range, and key certifications." },
-  { icon: `${ICONS}/icon-checklist-thumbs-up.webp`, title: "Application review", body: "We assess your submission for quality, capacity, and industry compliance." },
-  { icon: `${ICONS}/icon-handshake.webp`, title: "Vendor evaluation", body: "Shortlisted vendors are asked to provide samples and essential documentation." },
-  {
-    icon: `${ICONS}/icon-clipboard-check.webp`,
-    title: "Approval and onboarding",
-    body: "Once approved, you'll receive confirmation and begin the onboarding process as an official partner.",
-  },
+const STEPS = [
+  { title: "Send your application", body: "Share your company profile, product range and key certifications." },
+  { title: "Application review", body: "We assess your submission for quality, capacity and industry compliance." },
+  { title: "Vendor evaluation", body: "Shortlisted vendors are asked to provide samples and essential documentation." },
+  { title: "Approval and onboarding", body: "Once approved, you receive confirmation and begin onboarding as an official partner." },
 ];
 
 export default function VendorPartnershipPage() {
   return (
     <>
-      <PageHero
+      <PartnerHero
         tone="wine"
         title="Partner with a leader. Join a trusted supply chain."
-        note="Vendor partnership"
-        photos={[
-          { src: "/media/old/products-films/photo-clear-film-roll-on-machine.webp", alt: "A large roll of clear film on an unwinder" },
-          { src: "/media/old/home/plant-laminator-unwind-s575.webp", alt: "Laminator unwind stand with a roll of white film at the plant" },
-        ]}
         actions={
-          <ButtonLink href="#apply" tone="white">
+          <ButtonLink href="#vendor-form" tone="white">
             Fill the form
           </ButtonLink>
         }
+        teaser={<BinStack />}
       />
 
-      <ReasonGrid id="why-vendor" title="Why partner with Aditya Flexipack?" note="Why join our vendor network?" reasons={REASONS} />
-
-      <section aria-labelledby="who-title" className="py-[var(--section-y)]">
-        <Reveal className="shell">
-          <div className="grid gap-8 lg:grid-cols-12 lg:items-end">
-            <div className="lg:col-span-7">
-              <h2 id="who-title" data-reveal className="display text-[clamp(2.6rem,5.6vw,5.6rem)] text-ink">
-                Join our trusted network
-              </h2>
-              <p data-reveal className="hand mt-3 inline-block -rotate-2 text-[2rem] text-crimson">
-                Who can apply
-              </p>
-            </div>
-            <p data-reveal className="text-[1.08rem] leading-relaxed text-ink-soft lg:col-span-5">
-              We are actively seeking vendor partners who share our commitment to quality and innovation. We invite suppliers who can
-              support our evolving needs in industries like food, pharma, personal care, and beyond.
-            </p>
+      <section aria-labelledby="vendor-why-title" className="py-[var(--section-y)]">
+        <Rise className="shell">
+          <div data-rise>
+            <SectionHeader id="vendor-why-title" title="Why join our vendor network?" />
           </div>
+          <div data-rise>
+            <NumberedList cols={2} items={REASONS} />
+          </div>
+        </Rise>
+      </section>
 
-          <ul className="mt-16 grid gap-10 md:grid-cols-3 md:gap-6">
-            {SUPPLY.map((s) => (
-              <li key={s.title} data-reveal className="group">
-                <div
-                  className={`rounded-[var(--radius-lg)] bg-foil p-2 transition-[rotate,scale] duration-500 ease-[var(--ease-back)] group-hover:scale-[1.03] sm:group-hover:rotate-0 ${s.tilt}`}
-                >
-                  <div className="relative aspect-[4/3] overflow-hidden rounded-[var(--radius-md)]">
-                    <Image src={s.photo.src} alt={s.photo.alt} fill sizes="(min-width: 768px) 30vw, 92vw" className="object-cover" />
+      <section aria-labelledby="network-title" className="panel bg-crimson-wash py-[var(--section-y)]">
+        <Rise className="shell">
+          <div data-rise>
+            <SectionHeader
+              id="network-title"
+              title="Join our trusted network"
+              standfirst="We are actively seeking vendor partners who share our commitment to quality and innovation. We invite suppliers who support our evolving needs in food, pharma, personal care and beyond."
+            />
+          </div>
+          <ul className="page-grid gap-y-14">
+            {STREAMS.map((s) => (
+              <li key={s.title} data-rise className="col-span-full sm:col-span-4">
+                <figure>
+                  <div className="relative aspect-[4/3] overflow-hidden rounded-[var(--radius-lg)]">
+                    <Image src={s.src} alt={s.alt} fill sizes="(min-width: 1024px) 30vw, (min-width: 640px) 46vw, 92vw" className="object-cover" />
                   </div>
-                </div>
-                <h3 className="display mt-7 text-[clamp(1.7rem,2.4vw,2.2rem)] text-ink">{s.title}</h3>
-                <p className="mt-2 text-[1.04rem] leading-relaxed text-ink-soft">{s.body}</p>
+                  <figcaption className="mt-3 text-caption text-ink-soft">{s.caption}</figcaption>
+                </figure>
+                <h3 className="display mt-7 text-d3 text-wine">{s.title}</h3>
+                <p className="mt-3 max-w-[24rem] text-ink-soft">{s.body}</p>
               </li>
             ))}
           </ul>
-
-          <div data-reveal className="mt-20 rounded-[var(--radius-xl)] bg-crimson-wash p-[clamp(1.5rem,4vw,3rem)]">
-            <h3 className="display text-[clamp(1.9rem,3vw,2.8rem)] text-wine">Products we source</h3>
-            <ul className="mt-6 grid gap-x-8 gap-y-3 text-[1.08rem] font-semibold text-ink sm:grid-cols-2 lg:grid-cols-4">
-              {VENDOR_PRODUCTS.map((p) => (
-                <li key={p} className="flex items-center gap-3">
-                  <span aria-hidden className="size-2.5 shrink-0 rotate-45 rounded-[2px] bg-crimson" />
-                  {p}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </Reveal>
+        </Rise>
       </section>
 
-      <PartnerSteps
-        id="vendor-process"
-        title="Our vendor application process"
-        note="How to apply"
-        intro="We welcome partners who can support our commitment to premium-quality materials. Our process is designed for seamless collaboration and alignment with our quality, innovation, and compliance standards."
-        steps={STEPS}
-        panel="blush"
-      />
+      <section aria-labelledby="rack-title" className="py-[var(--section-y)]">
+        <div className="shell">
+          <SectionHeader id="rack-title" title="Products we source" standfirst="Pick what you supply. We add it to the form for you." />
+          <StoresRack formId="vendor-form" />
+        </div>
+      </section>
 
-      <FormSection
-        id="apply"
-        title="Fill the form"
-        note="Register as a vendor"
-        form="vendor"
-        panel="foil"
-        photo={{ src: "/media/old/home/plant-production-hall-floor.webp", alt: "The production hall at the Aditya Flexipack plant" }}
-      >
-        <p>Share your company details, the products you deal in and your catalogue. Fields marked with a star are required.</p>
-      </FormSection>
+      <section aria-labelledby="route-title" className="panel bg-crimson py-[var(--section-y)]">
+        <div className="shell">
+          <SectionHeader
+            id="route-title"
+            dark
+            title="Our vendor application process"
+            standfirst="We welcome partners who support our commitment to premium-quality materials. Our process keeps collaboration smooth and aligned with our quality, innovation and compliance standards."
+          />
+          <VendorRoute steps={STEPS} />
+        </div>
+      </section>
+
+      <section id="vendor-form" aria-labelledby="vendor-form-title" className="scroll-mt-24 pt-[var(--frame)]">
+        <div className="panel bg-foil py-[var(--section-y)]">
+          <Rise className="shell page-grid gap-y-10">
+            <div data-rise className="col-span-full lg:col-[1/5]">
+              <h2 id="vendor-form-title" className="display text-d2 text-ink">
+                Fill the form
+              </h2>
+              <p className="mt-5 max-w-[22rem] text-lead text-ink-soft">Register as a vendor. You can attach up to two catalogues.</p>
+            </div>
+            <div className="col-span-full lg:col-[5/13]">
+              <EnquiryForm form="vendor" tone="wash" />
+            </div>
+          </Rise>
+        </div>
+      </section>
+
+      <TearStrip from="/vendor-partnership/" />
     </>
   );
 }

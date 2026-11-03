@@ -40,8 +40,8 @@ export function Hero() {
           .from("[data-hero-fade]", { y: 24, autoAlpha: 0, duration: 0.8, ease: "power3.out", stagger: 0.08 }, 0.5);
         const release = afterLoader(() => intro.play());
         const scrub = { trigger: root.current, start: "top top", end: "bottom top", scrub: true };
-        gsap.to("[data-card-front]", { y: -70, rotate: -9, ease: "none", scrollTrigger: scrub });
-        gsap.to("[data-card-back]", { y: -150, x: 40, rotate: 14, ease: "none", scrollTrigger: scrub });
+        gsap.to("[data-scrub-front]", { y: -70, rotate: -4, ease: "none", scrollTrigger: scrub });
+        gsap.to("[data-scrub-back]", { y: -150, x: 40, rotate: 5, ease: "none", scrollTrigger: scrub });
         gsap.to("[data-contour]", { yPercent: (i) => [-8, -14, 10][i], ease: "none", scrollTrigger: scrub });
         return release;
       });
@@ -81,21 +81,26 @@ export function Hero() {
 
         {/* Real bags from the old site, dealt like two photo cards */}
         <div data-pouches className="pointer-events-none absolute bottom-[3svh] right-[6%] w-[min(54vw,15rem)] sm:w-[min(40vw,18rem)] lg:bottom-auto lg:right-[7%] lg:top-1/2 lg:w-[min(30vw,27rem)] lg:-translate-y-[44%]">
-          <div data-card-back className="absolute inset-0 translate-x-[34%] translate-y-[-8%] rotate-[9deg] rounded-[var(--radius-lg)] bg-white p-2">
-            <div className="relative h-full overflow-hidden rounded-[var(--radius-md)]">
-              <Image src="/media/products/foil-pouch-zip.webp" alt="Aluminium foil zipper pouches made by Aditya Flexipack" fill sizes="27rem" className="object-cover" />
+          {/* Two layers per card: the outer one follows the scroll, the inner one plays the entrance, so they never fight */}
+          <div data-scrub-back className="absolute inset-0">
+            <div data-card-back className="h-full translate-x-[34%] translate-y-[-8%] rotate-[9deg] rounded-[var(--radius-lg)] bg-white p-2">
+              <div className="relative h-full overflow-hidden rounded-[var(--radius-md)]">
+                <Image src="/media/products/foil-pouch-zip.webp" alt="Aluminium foil zipper pouches made by Aditya Flexipack" fill sizes="27rem" className="object-cover" />
+              </div>
             </div>
           </div>
-          <div data-card-front className="relative -rotate-[5deg] rounded-[var(--radius-lg)] bg-white p-2">
-            <div className="relative aspect-[1100/1456] overflow-hidden rounded-[var(--radius-md)]">
-              <Image
-                src="/media/products/branded-pouches.webp"
-                alt="Printed pillow packs carrying the Aditya Flexipack mark"
-                fill
-                priority
-                sizes="(min-width: 1024px) 30vw, 54vw"
-                className="object-cover"
-              />
+          <div data-scrub-front className="relative">
+            <div data-card-front className="relative -rotate-[5deg] rounded-[var(--radius-lg)] bg-white p-2">
+              <div className="relative aspect-[1100/1456] overflow-hidden rounded-[var(--radius-md)]">
+                <Image
+                  src="/media/products/branded-pouches.webp"
+                  alt="Printed pillow packs carrying the Aditya Flexipack mark"
+                  fill
+                  priority
+                  sizes="(min-width: 1024px) 30vw, 54vw"
+                  className="object-cover"
+                />
+              </div>
             </div>
           </div>
         </div>

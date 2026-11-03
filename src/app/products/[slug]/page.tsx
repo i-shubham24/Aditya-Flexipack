@@ -1,20 +1,16 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { products, productBySlug } from "@/content/products";
+import { pageOf } from "@/content/next";
 import { site } from "@/content/site";
-import { PageHero } from "@/components/page/PageHero";
-import { SplitRow } from "@/components/page/SplitRow";
-import { CtaPanel } from "@/components/page/CtaPanel";
+import { RangeHero } from "@/components/heroes/RangeHero";
+import { TearStrip } from "@/components/system/TearStrip";
+import { TONES } from "@/components/system/tones";
 import { ButtonLink } from "@/components/ui/Button";
-import { productMeta } from "@/components/products/meta";
-import { Glance } from "@/components/products/Glance";
-import { OfferingList } from "@/components/products/OfferingList";
-import { SolutionCards } from "@/components/products/SolutionCards";
-import { ExtraPanel } from "@/components/products/ExtraPanel";
-import { FilmIndex, FilmSection } from "@/components/products/FilmLines";
-import { RelatedProducts } from "@/components/products/RelatedProducts";
-import { RecycleBand } from "@/components/products/RecycleBand";
+import { sheets } from "@/components/products/sheet";
+import { ProductAbout, ProductList } from "@/components/products/ProductBlocks";
+import { FilmAdvantages, FilmSections } from "@/components/products/FilmSections";
+import { Centrepiece } from "@/components/products/centrepieces";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -34,16 +30,23 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: p.name,
     description: p.lead,
     alternates: { canonical: url },
-    openGraph: { url, title: `${p.name} | ${site.name}`, description: p.lead, images: [productMeta[p.slug].cover.src] },
+    openGraph: { url, title: `${p.name} | ${site.name}`, description: p.lead, images: [sheets[p.slug].hero.src] },
   };
 }
 
+/**
+ * One template for the six products: spec-sheet hero in the product's field, the About panel, the product's own
+ * centrepiece on the white sheet, its other list on a panel, and the tear strip to the next product. No
+ * neighbours share a field (see `sheets` for each page's order). Inquire now lives in the hero.
+ */
 export default async function ProductPage({ params }: Props) {
   const { slug } = await params;
   const p = productBySlug(slug);
   if (!p) notFound();
-  const m = productMeta[p.slug];
-  const dark = m.tone === "crimson" || m.tone === "wine";
+  const s = sheets[p.slug];
+  const path = `/products/${p.slug}/`;
+  const tone = pageOf(path).tone;
+  const t = TONES[tone];
 
   const crumbs = {
     "@context": "https://schema.org",
@@ -51,62 +54,46 @@ export default async function ProductPage({ params }: Props) {
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "Home", item: `${site.url}/` },
       { "@type": "ListItem", position: 2, name: "Products", item: `${site.url}/products/` },
-      { "@type": "ListItem", position: 3, name: p.name, item: `${site.url}/products/${p.slug}/` },
+      { "@type": "ListItem", position: 3, name: p.name, item: `${site.url}${path}` },
     ],
   };
 
+  const listItems = s.list ? (s.list.source === "extra" ? p.extra : p.offerings) : undefined;
+
   return (
     <>
-      <PageHero
-        tone={m.tone}
-        title={p.name}
-        note={p.headline}
-        intro={<p>{p.lead}</p>}
-        photos={m.hero}
+      <RangeHero
+        name={p.name}
+        tone={tone}
+        lead={<p>{p.short}</p>}
+        photo={s.hero}
+        spec={p.glance}
         actions={
           <>
-            <ButtonLink href="/packaging-partnership/" tone={dark ? "white" : "crimson"}>
+            <ButtonLink href={`/packaging-partnership/?product=${encodeURIComponent(s.need)}#begin`} tone={t.dark ? "white" : "crimson"}>
               Inquire now
             </ButtonLink>
-            <Link
-              href="/products/"
-              className={`font-semibold underline underline-offset-4 ${
-                dark ? "text-white decoration-white/50 hover:decoration-white" : "text-ink decoration-ink/30 hover:decoration-ink"
-              }`}
-            >
+            <ButtonLink href="/products/" tone={tone === "ink" || tone === "wine" ? "crimson" : "ink"} plain>
               All products
-            </Link>
+            </ButtonLink>
           </>
         }
       />
 
-      {/* Section fields alternate so no two neighbours share a colour: hero, glance panel, white, silver, ... */}
-      <Glance items={m.glance} field={m.tone === "wash" ? "foil" : "wash"} />
+      {s.about && <ProductAbout title={p.headline} lines={p.brief} slot={s.about} />}
 
-      <SplitRow title={`About ${p.name.toLowerCase()}`} photo={m.about} tile="blush">
-        {p.body.map((para) => (
-          <p key={para.slice(0, 40)}>{para}</p>
-        ))}
-      </SplitRow>
+      <Centrepiece slug={p.slug} />
 
       {p.films ? (
         <>
-          <FilmIndex films={p.films} />
-          {p.films.map((f, i) => (
-            <FilmSection key={f.id} film={f} onWash={i % 2 === 1} />
-          ))}
+          <FilmSections films={p.films} />
+          <FilmAdvantages films={p.films} />
         </>
       ) : (
-        <OfferingList title={p.offeringsTitle} items={p.offerings} />
+        s.list && listItems && <ProductList title={s.list.title} items={listItems} slot={s.list} />
       )}
 
-      {p.solutions && <SolutionCards title={p.solutionsTitle ?? "Our solutions"} items={p.solutions} note="Mono-structured options for recycling" />}
-
-      {p.extra && <ExtraPanel title={p.extraTitle ?? "Key features"} items={p.extra} icons={m.extraIcons} photo={m.extraPhoto ?? m.hero[1]} />}
-
-      <RelatedProducts current={p.slug} />
-      <RecycleBand />
-      <CtaPanel />
+      <TearStrip from={path} />
 
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(crumbs) }} />
     </>

@@ -36,6 +36,8 @@ export function useHeroIntro(scope: RefObject<HTMLElement | null>, extra?: (tl: 
         extra?.(tl);
         const release = afterLoader(() => {
           started = true;
+          // The title is hidden by CSS until now; its lines carry their own start state.
+          if (title) gsap.set(title, { visibility: "visible" });
           lines?.play();
           tl.play();
         });

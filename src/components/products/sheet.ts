@@ -12,16 +12,16 @@ export type Photo = { src: string; alt: string; caption: string };
 export type PhotoSlot = { photo: Photo; ratio: Ratio; fit: "quarter" | "side" | "wide" };
 
 /**
- * The page sequence around each product's centrepiece. Centrepieces sit on the white sheet, so the About block
- * before them and the block after them are colour panels, and every neighbour pair differs.
+ * The page sequence around each product's centrepiece. Centrepieces sit on the white sheet, so the block before
+ * them (the About panel, or the hero on Films) and the block after them (a list panel, or the tear strip) are
+ * colour fields, and no two neighbours share one.
  */
 export type ProductSheet = {
   hero: Omit<Photo, "caption">;
-  about: PhotoSlot & { field: Tone };
+  /** Films has none: its copy is the Three Dies' header, so the centrepiece follows the hero. */
+  about?: PhotoSlot & { field: Tone };
   /** The product's other list after the centrepiece (Films has its three film lines instead). */
-  list?: PhotoSlot & { field: Tone; source: "extra" | "offerings" };
-  /** Colour of the closing block: a panel after the white centrepiece, the white sheet after a panel. */
-  closing: Tone | "white";
+  list?: PhotoSlot & { field: Tone; source: "extra" | "offerings"; title: string };
   /** The matching "Product requirement" option on the packaging partnership form. */
   need: string;
 };
@@ -53,11 +53,6 @@ const P = {
   slittingRolls: {
     src: "/media/old/products-films/banner-film-slitting-rolls.webp",
     alt: "Narrow rolls of metallised film on a slitter rewinder shaft",
-  },
-  productionHall: {
-    src: "/media/old/home/plant-production-hall-floor.webp",
-    alt: "Wide production hall with red floor-edge markings, roll stock behind and a worker walking",
-    caption: "Our production hall, with roll stock in the background.",
   },
   inkRoller: {
     src: "/media/old/products-inks/banner-yellow-ink-roller.webp",
@@ -102,40 +97,33 @@ export const sheets: Record<ProductSlug, ProductSheet> = {
   laminates: {
     hero: P.laminateRoller,
     about: { photo: P.laminatorUnwind, ratio: "1:1", fit: "quarter", field: "foil" },
-    closing: "wash",
     need: "Laminate",
   },
   pouches: {
     hero: P.pouchRange,
     about: { photo: P.foilPouches, ratio: "21:9", fit: "wide", field: "wash" },
-    list: { photo: P.perfast, ratio: "4:5", fit: "quarter", field: "foil", source: "extra" },
-    closing: "white",
+    list: { photo: P.perfast, ratio: "4:5", fit: "quarter", field: "foil", source: "extra", title: "Our machines' capabilities" },
     need: "Pouches",
   },
   films: {
     hero: P.slittingRolls,
-    about: { photo: P.productionHall, ratio: "1:1", fit: "quarter", field: "foil" },
-    closing: "white",
     need: "CPP films",
   },
   inks: {
     hero: P.inkRoller,
     about: { photo: P.inkStirring, ratio: "4:5", fit: "side", field: "foil" },
-    list: { photo: P.inkPots, ratio: "4:3", fit: "quarter", field: "wash", source: "extra" },
-    closing: "white",
+    list: { photo: P.inkPots, ratio: "4:3", fit: "quarter", field: "wash", source: "extra", title: "Key features" },
     need: "Inks",
   },
   cylinders: {
     hero: P.engraver,
     about: { photo: P.cylindersClose, ratio: "4:3", fit: "side", field: "foil" },
-    list: { photo: P.engraverWide, ratio: "1:1", fit: "quarter", field: "wash", source: "offerings" },
-    closing: "white",
+    list: { photo: P.engraverWide, ratio: "1:1", fit: "quarter", field: "wash", source: "offerings", title: "Our offering" },
     need: "Cylinders",
   },
   polybags: {
     hero: P.polybagRoll,
     about: { photo: P.polybagRolls, ratio: "16:9", fit: "side", field: "foil" },
-    closing: "wash",
     need: "Laddi pack / polybag",
   },
 };

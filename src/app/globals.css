@@ -198,26 +198,6 @@ select {
   .span-doc { grid-column: 3 / 10; }
 }
 
-/* Next-page tear strip: the top edge is perforated like a pack's tear notch. */
-@property --tooth {
-  syntax: "<length>";
-  inherits: false;
-  initial-value: 12px;
-}
-.tear-edge {
-  --tooth: 12px;
-  transition: --tooth 0.4s var(--ease-back);
-  --perforation:
-    conic-gradient(from 135deg at top, #0000, #000 1deg 89deg, #0000 90deg) 0 0 / calc(2 * var(--tooth)) var(--tooth) repeat-x,
-    linear-gradient(#000 0 0) 0 var(--tooth) / 100% 100% no-repeat;
-  -webkit-mask: var(--perforation);
-  mask: var(--perforation);
-}
-.tear-strip:hover,
-.tear-strip:focus-visible {
-  --tooth: 17px;
-}
-
 .tabular {
   font-variant-numeric: tabular-nums lining-nums;
 }
@@ -314,6 +294,40 @@ select {
 @media (prefers-reduced-motion: reduce) {
   .route-curtain {
     display: none;
+  }
+}
+
+/*
+  Hero entrances: with scripts on, these stay hidden from first paint until their entrance plays, so nothing
+  shows in place and then jumps back to its start. If the scripts never arrive, the failsafe shows them anyway.
+*/
+.js [data-word],
+.js [data-hero-fade],
+.js [data-hero-title],
+.js [data-hero-teaser],
+.js [data-card-front],
+.js [data-card-back],
+.js [data-photo],
+.js [data-range-photo],
+.js [data-spec] > * {
+  visibility: hidden;
+  animation: intro-failsafe 0s 4.5s forwards;
+}
+@keyframes intro-failsafe {
+  to { visibility: visible; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .js [data-word],
+  .js [data-hero-fade],
+  .js [data-hero-title],
+  .js [data-hero-teaser],
+  .js [data-card-front],
+  .js [data-card-back],
+  .js [data-photo],
+  .js [data-range-photo],
+  .js [data-spec] > * {
+    visibility: visible;
+    animation: none;
   }
 }
 

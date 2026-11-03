@@ -1,19 +1,21 @@
 "use client";
 
 import { useRef } from "react";
-import Link from "next/link";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import { SectionHeader } from "@/components/system/SectionHeader";
 import { PhotoFrame } from "@/components/system/PhotoFrame";
-import { BAY_W, BLUSH, BayGlyph, CRIMSON, EAVE, FLOOR, FOIL, FOIL_3, RIDGE, Tanks, slopePanels } from "./roof-drawing";
+import { ButtonLink } from "@/components/ui/Button";
+import { CountUp } from "@/components/company/common/CountUp";
+import { Contour } from "@/components/company/common/Contour";
+import { facts } from "@/content/site";
+import { BAY_W, BayGlyph, CRIMSON, CRIMSON_LIGHT, FOIL_2, FOIL_3, ROOM_H, ROOM_Y, Tanks, WHITE, WINE, slopePanels } from "./roof-drawing";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 const INK = "#1c1517";
 const INK_SOFT = "#4d4447";
-const WHITE = "#ffffff";
 
 type Bay = { title: string; photo?: { src: string; alt: string; caption: string } };
 
@@ -32,7 +34,7 @@ const BAYS: Bay[] = [
     photo: {
       src: "/media/old/home/plant-copper-cylinder-engraver.webp",
       alt: "A copper-plated gravure cylinder mounted on an engraving machine",
-      caption: "A copper gravure cylinder on the engraving machine",
+      caption: "A copper cylinder on the engraving machine",
     },
   },
   {
@@ -48,7 +50,7 @@ const BAYS: Bay[] = [
     photo: {
       src: "/media/old/products-films/banner-film-slitting-rolls.webp",
       alt: "Narrow rolls of metallised film on a slitter-rewinder shaft",
-      caption: "Metallised film rolls on a slitter-rewinder",
+      caption: "Metallised film rolls on a slitter",
     },
   },
   {
@@ -62,17 +64,18 @@ const BAYS: Bay[] = [
   { title: "Pyrolysis plant and waste recycling" },
 ];
 
-const ROOF_PATH =
-  `M0 ${FLOOR} V${EAVE}` + BAYS.map((_, i) => ` L${(i + 1) * BAY_W} ${RIDGE}${i < BAYS.length - 1 ? ` V${EAVE}` : ""}`).join("") + ` V${FLOOR}`;
-const DESK_PANELS = BAYS.flatMap((_, i) => slopePanels(i * BAY_W, EAVE, (i + 1) * BAY_W, RIDGE, 5, 32, 6, 14));
-const MOBILE_PANELS = [0, 1, 2].flatMap((i) => slopePanels(i * 120, 60, (i + 1) * 120, 24, 3, 34, 7, 8));
+// The saw-tooth roof: one chunky tooth per bay, with three solar panels on each slope.
+const TEETH = BAYS.map((_, i) => `${i * BAY_W + 10},160 ${i * BAY_W + 190},100 ${i * BAY_W + 190},160`);
+const DESK_PANELS = BAYS.flatMap((_, i) => slopePanels(i * BAY_W + 10, 160, i * BAY_W + 190, 100, 3, 44, 12, 22));
+const MOBILE_TEETH = [0, 1, 2].map((i) => `${i * 120 + 8},92 ${i * 120 + 112},48 ${i * 120 + 112},92`);
+const MOBILE_PANELS = [0, 1, 2].flatMap((i) => slopePanels(i * 120 + 8, 92, i * 120 + 112, 48, 2, 34, 10, 16, [7, 17]));
 
-const lines = "fill-none stroke-crimson [stroke-linecap:round] [stroke-linejoin:round] [stroke-width:2] [&_*]:[vector-effect:non-scaling-stroke]";
+const gap = "lg:gap-x-[clamp(1.25rem,1.8vw,1.5rem)]";
 
 /**
- * About's centrepiece: an architect's section through the integrated plant. Six bays under one saw-tooth roof,
- * one per in-house capability, with solar on the slopes and rainwater tanks under the ground line. Scrolling
- * lights the bays one by one (scrubbed, linear, no pin) until the whole plant is lit. The HTML ships lit.
+ * About's centrepiece: the integrated plant as one long shed under a chunky saw-tooth roof. Six rooms, one per
+ * in-house capability, with solar panels on the roof and rainwater tanks below ground. Scrolling lights the rooms
+ * one by one (scrubbed, linear, no pin) until the whole plant is lit. The HTML ships fully lit.
  */
 export function UnderOneRoof() {
   const root = useRef<HTMLElement>(null);
@@ -90,16 +93,18 @@ export function UnderOneRoof() {
           defaults: { ease: "none" },
           scrollTrigger: { trigger: el, start: "top 75%", end: "bottom 40%", scrub: true },
         });
-        gsap.utils.toArray<SVGElement>("[data-bay]", el).forEach((bay, i) => {
-          tl.fromTo(bay, { fill: FOIL }, { fill: WHITE, duration: 1 }, i);
-          const li = storeys[i];
-          const cap = li?.querySelector("[data-cap]");
-          const thumb = li?.querySelector("[data-thumb]");
+        const rooms = gsap.utils.toArray<SVGElement>("[data-desk] [data-room]", el);
+        const glyphs = gsap.utils.toArray<SVGElement>("[data-desk] [data-glyph]", el);
+        rooms.forEach((room, i) => {
+          tl.fromTo(room, { fill: FOIL_2 }, { fill: WHITE, duration: 1 }, i);
+          tl.fromTo(glyphs[i], { color: FOIL_3 }, { color: CRIMSON, duration: 1 }, i);
+          const cap = storeys[i]?.querySelector("[data-cap]");
+          const thumb = storeys[i]?.querySelector("[data-thumb]");
           if (cap) tl.fromTo(cap, { color: INK_SOFT }, { color: INK, duration: 1 }, i);
           if (thumb) tl.fromTo(thumb, { opacity: 0.4 }, { opacity: 1, duration: 1 }, i);
         });
-        // At 90%: the roof lights in one quick pass and the tanks fill. Everything under one roof.
-        tl.fromTo("[data-desk] [data-panel]", { fill: FOIL_3 }, { fill: CRIMSON, duration: 0.15, stagger: 0.012 }, 6);
+        // At 90%: the solar roof lights in one quick pass and the tanks fill. Everything is under one roof.
+        tl.fromTo("[data-desk] [data-panel]", { fill: FOIL_3 }, { fill: CRIMSON_LIGHT, duration: 0.15, stagger: 0.02 }, 6);
         tl.fromTo("[data-desk] [data-water]", { scaleY: 0 }, { scaleY: 1, transformOrigin: "50% 100%", duration: 0.4 }, 6.1);
         tl.fromTo("[data-cap-7]", { color: INK_SOFT }, { color: INK, duration: 0.4 }, 6.1);
         tl.set({}, {}, 6.67);
@@ -110,14 +115,16 @@ export function UnderOneRoof() {
         const toggle = (trigger: Element) =>
           gsap.timeline({ defaults: { duration: 0.45, ease: "power1.out" }, scrollTrigger: { trigger, start: "top 60%", toggleActions: "play none none reverse" } });
         storeys.forEach((li) => {
-          const tl = toggle(li).fromTo(li, { backgroundColor: FOIL }, { backgroundColor: WHITE }, 0);
+          const tl = toggle(li).fromTo(li, { backgroundColor: FOIL_2 }, { backgroundColor: WHITE }, 0);
+          const glyph = li.querySelector("[data-glyph]");
           const cap = li.querySelector("[data-cap]");
           const thumb = li.querySelector("[data-thumb]");
+          if (glyph) tl.fromTo(glyph, { color: FOIL_3 }, { color: CRIMSON }, 0);
           if (cap) tl.fromTo(cap, { color: INK_SOFT }, { color: INK }, 0);
           if (thumb) tl.fromTo(thumb, { opacity: 0.4 }, { opacity: 1 }, 0);
         });
         const roof = el.querySelector("[data-mobile-roof]");
-        if (roof) toggle(roof).fromTo(roof.querySelectorAll("[data-panel]"), { fill: FOIL_3 }, { fill: CRIMSON, stagger: 0.03 }, 0);
+        if (roof) toggle(roof).fromTo(roof.querySelectorAll("[data-panel]"), { fill: FOIL_3 }, { fill: CRIMSON_LIGHT, stagger: 0.04 }, 0);
         const base = el.querySelector("[data-mobile-base]");
         if (base)
           toggle(base)
@@ -133,60 +140,57 @@ export function UnderOneRoof() {
   return (
     <section ref={root} aria-labelledby="roof-title" className="pt-[var(--frame)]">
       <div className="panel bg-foil py-[var(--section-y)]">
-        <div className="shell">
-          <SectionHeader id="roof-title" title="Our integrated infrastructure" standfirst="Heavily backward integrated" />
+        <Contour tone="foil" shape="high" />
+        <div className="shell relative">
+          <SectionHeader id="roof-title" title="Our integrated infrastructure" />
 
           <div className="relative">
-            {/* The capacity plate on the left gable: real text, so it is read even though the drawing is not */}
-            <p className="mb-6 inline-flex flex-col rounded-[var(--radius-sm)] border-2 border-crimson bg-white px-4 py-2.5 lg:absolute lg:left-0 lg:top-[0.5%] lg:z-10 lg:mb-0">
-              <span className="display tabular text-d4 text-crimson">4,000 MT/month</span>
-              <span className="text-caption font-semibold text-ink">Laminates production capacity</span>
+            <p aria-hidden className="hand mb-2 text-right text-note text-crimson sm:absolute sm:right-0 sm:top-0 sm:mb-0">
+              <span className="inline-block -rotate-2">everything under one roof</span>
             </p>
 
             {/* Phones: the saw-tooth roof with its solar panels caps the stack of storeys */}
-            <svg data-mobile-roof aria-hidden viewBox="0 0 360 96" className={`block h-auto w-full overflow-visible sm:hidden ${lines}`}>
-              {MOBILE_PANELS.map((pts) => (
-                <polygon key={pts} data-panel points={pts} fill={CRIMSON} stroke="none" />
+            <svg data-mobile-roof aria-hidden viewBox="0 0 360 100" className="block h-auto w-full overflow-visible sm:hidden">
+              {MOBILE_TEETH.map((pts) => (
+                <polygon key={pts} points={pts} fill={WINE} stroke={WINE} strokeWidth="10" strokeLinejoin="round" />
               ))}
-              <path d="M1 96 V60 L120 24 V60 L240 24 V60 L359 24 V96" />
+              {MOBILE_PANELS.map((pts) => (
+                <polygon key={pts} data-panel points={pts} fill={CRIMSON_LIGHT} stroke="none" />
+              ))}
             </svg>
 
-            {/* 640 and up: the whole section, one bay per pair of grid columns */}
-            <svg data-desk aria-hidden viewBox="0 0 1200 420" className={`hidden h-auto w-full overflow-visible sm:block ${lines}`}>
-              {BAYS.map((_, i) => {
-                const x = i * BAY_W;
-                return <polygon key={x} data-bay points={`${x},${EAVE} ${x + BAY_W},${RIDGE} ${x + BAY_W},${FLOOR} ${x},${FLOOR}`} fill={WHITE} stroke="none" />;
-              })}
-              {DESK_PANELS.map((pts) => (
-                <polygon key={pts} data-panel points={pts} fill={CRIMSON} stroke="none" />
+            {/* 640 and up: the whole shed, one room over each pair of grid columns */}
+            <svg data-desk aria-hidden viewBox="0 0 1200 430" className="hidden h-auto w-full overflow-visible sm:block">
+              {TEETH.map((pts) => (
+                <polygon key={pts} points={pts} fill={WINE} stroke={WINE} strokeWidth="14" strokeLinejoin="round" />
               ))}
-              <g opacity="0.35">
-                {BAYS.slice(1).map((_, i) => (
-                  <path key={i} d={`M${(i + 1) * BAY_W} ${EAVE} V${FLOOR}`} />
-                ))}
-              </g>
+              {DESK_PANELS.map((pts) => (
+                <polygon key={pts} data-panel points={pts} fill={CRIMSON_LIGHT} stroke="none" />
+              ))}
               {BAYS.map((_, i) => (
                 <g key={i} transform={`translate(${i * BAY_W} 0)`}>
-                  <BayGlyph index={i} />
+                  <rect data-room x="8" y={ROOM_Y} width={BAY_W - 16} height={ROOM_H} rx="22" fill={WHITE} />
+                  <g data-glyph fill="currentColor" style={{ color: CRIMSON }}>
+                    <BayGlyph index={i} />
+                  </g>
                 </g>
               ))}
-              <path d={ROOF_PATH} />
-              {/* Gutter and downpipe at the right gable, feeding the tanks below ground */}
-              <path d={`M1192 ${RIDGE + 6} V378 H1180`} />
-              <path d={`M-12 ${FLOOR} H1212`} />
-              <Tanks xs={[1012, 1072, 1132]} top={368} />
+              <rect x="0" y="358" width="1200" height="14" rx="7" fill={WINE} />
+              <Tanks xs={[1010, 1070, 1130]} top={380} />
             </svg>
           </div>
 
-          <ol className="grid sm:mt-8 sm:grid-cols-3 sm:gap-x-5 sm:gap-y-12 lg:grid-cols-6 lg:gap-x-[clamp(1.25rem,1.8vw,1.5rem)]">
+          <ol className={`grid gap-2 sm:mt-8 sm:grid-cols-3 sm:gap-x-5 sm:gap-y-12 lg:grid-cols-6 ${gap}`}>
             {BAYS.map((b, i) => (
               <li
                 key={b.title}
                 data-storey
-                className="grid grid-cols-2 items-start gap-x-4 border-x-2 border-b-2 border-crimson bg-white p-4 sm:block sm:border-0 sm:bg-transparent sm:p-0"
+                className="grid grid-cols-2 items-center gap-x-4 rounded-[var(--radius-xl)] bg-white p-4 sm:block sm:rounded-none sm:bg-transparent sm:p-0"
               >
-                <svg aria-hidden viewBox="0 164 200 198" className={`block h-auto w-full self-center overflow-visible sm:hidden ${lines}`}>
-                  <BayGlyph index={i} />
+                <svg aria-hidden viewBox={`0 ${ROOM_Y + 8} 200 ${ROOM_H - 8}`} className="block h-auto w-full sm:hidden">
+                  <g data-glyph fill="currentColor" style={{ color: CRIMSON }}>
+                    <BayGlyph index={i} />
+                  </g>
                 </svg>
                 <div>
                   <span aria-hidden className="display tabular block text-d3 text-crimson">
@@ -211,44 +215,47 @@ export function UnderOneRoof() {
             ))}
           </ol>
 
-          {/* Phones: the tanks sit under the ground line at the base of the stack */}
-          <svg data-mobile-base aria-hidden viewBox="0 0 360 72" className={`block h-auto w-full overflow-visible sm:hidden ${lines}`}>
-            <path d="M-8 1 H368" />
-            <Tanks xs={[196, 252, 308]} top={14} />
+          {/* Phones: the ground and the tanks under it, at the base of the stack */}
+          <svg data-mobile-base aria-hidden viewBox="0 0 360 80" className="mt-2 block h-auto w-full sm:hidden">
+            <rect x="0" y="0" width="360" height="12" rx="6" fill={WINE} />
+            <Tanks xs={[190, 248, 306]} top={24} w={50} h={52} />
           </svg>
 
-          {/* Second row, under the ground line: solar and rainwater, then the way to the gallery */}
-          <div className="mt-8 grid gap-y-6 sm:mt-14 sm:grid-cols-2 sm:gap-x-5 lg:grid-cols-12 lg:gap-x-[clamp(1.25rem,1.8vw,1.5rem)]">
-            <ol start={7} className="lg:col-span-4 lg:col-start-9">
+          {/* Second row, under the ground: the solar roof and the tanks, then the way to the gallery */}
+          <div className={`mt-10 grid gap-y-10 sm:mt-16 sm:grid-cols-2 sm:gap-x-5 lg:grid-cols-12 ${gap}`}>
+            <ol start={7} className="sm:col-span-2 lg:col-span-6 lg:col-start-7">
               <li>
                 <span aria-hidden className="display tabular block text-d3 text-crimson">
                   07
                 </span>
-                <h3 className="display mt-2 text-d4">
-                  <Link
-                    href="/sustainability/"
-                    data-cap-7
-                    className="inline-flex min-h-11 items-center text-ink underline decoration-crimson decoration-2 underline-offset-[0.2em] hover:text-crimson"
-                  >
-                    Solar energy generation and rainwater harvesting
-                  </Link>
+                <h3 data-cap-7 className="display mt-2 text-d4 text-ink">
+                  Solar energy generation and rainwater harvesting
                 </h3>
+                <dl className="mt-6 grid grid-cols-2 gap-x-5">
+                  {[facts.solar, facts.rainwater].map((f) => (
+                    <div key={f.label} className="flex flex-col-reverse">
+                      <dt className="mt-1 text-small text-ink-soft">{f.label}</dt>
+                      <dd className="display tabular text-d2 text-crimson">
+                        <CountUp value={f.value} />
+                        <span className="ml-2 text-d4 text-ink">{f.unit}</span>
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
+                <p className="mt-5 max-w-measure text-ink-soft">Sustainable pack options, built to cut waste and champion recyclability.</p>
+                <ButtonLink href="/sustainability/" tone="crimson" className="mt-6">
+                  Our sustainability work
+                </ButtonLink>
               </li>
             </ol>
-            <p className="self-end lg:order-first lg:col-span-4">
-              <Link
-                href="/gallery/"
-                className="inline-flex min-h-11 items-center text-lead font-semibold text-ink underline decoration-crimson decoration-2 underline-offset-[0.25em] hover:text-crimson"
-              >
+            <div className="self-end sm:col-span-2 lg:order-first lg:col-span-4">
+              <ButtonLink href="/gallery/" tone="ink">
                 Visit the gallery
-              </Link>
-            </p>
+              </ButtonLink>
+            </div>
           </div>
         </div>
       </div>
     </section>
   );
 }
-
-// Keep the palette import honest for the tanks' water colour, used inside <Tanks>.
-void BLUSH;

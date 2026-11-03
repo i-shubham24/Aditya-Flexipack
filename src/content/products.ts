@@ -6,6 +6,8 @@ export type FilmLine = {
   id: string;
   name: string;
   intro: string[];
+  /** The intro cut to short, plain sentences for the page (every fact kept). */
+  brief?: string[];
   offerings: string[];
   featuresTitle?: string;
   features?: string[];
@@ -22,10 +24,16 @@ export type Product = {
   summary: string;
   headline: string;
   body: string[];
+  /** One short line (15 words at most) for heroes and index cards. */
+  short: string;
+  /** `body` cut to short, plain sentences, every fact kept. */
+  brief: string[];
   offeringsTitle: string;
   offerings: string[];
   solutionsTitle?: string;
   solutions?: Feature[];
+  /** Laminates only: each offering's solution line, in offering order (paper and foil share one sentence). */
+  layup?: string[];
   extraTitle?: string;
   extra?: string[];
   photo: { src: string; alt: string };
@@ -44,6 +52,12 @@ export const products: Product[] = [
     headline: "Premium laminates for durable, versatile packaging",
     body: [
       "Our laminates are designed as a strategic asset for your brand. We engineer multi-layer structures that deliver more than protection: unparalleled barrier performance, product longevity, and a powerful canvas for brand storytelling.",
+    ],
+    short: "Multi-layer laminates that protect, preserve and carry your brand.",
+    brief: [
+      "We engineer multi-layer structures as a strategic asset for your brand.",
+      "They give strong barrier performance and a longer product life.",
+      "And a bold canvas for your brand's story.",
     ],
     offeringsTitle: "Our offering",
     offerings: [
@@ -70,11 +84,23 @@ export const products: Product[] = [
       { title: "Single layer surface printed products", body: "High-impact graphics and a clean, modern aesthetic." },
       { title: "Mono structured", body: "Ideal for recycling." },
     ],
+    layup: [
+      "Ultimate impact resistance for products that need maximum protection.",
+      "Optimal breathability that keeps freshness and quality.",
+      "For heavy-duty contents: unmatched durability and integrity.",
+      "Superior aroma retention and a longer shelf life.",
+      "Lightweight yet robust, with strength and flexibility.",
+      "A sustainable choice with a high-end feel,",
+      "and excellent barrier properties.",
+      "Custom-engineered for seamless application and a strong, lasting bond.",
+      "High-impact graphics and a clean, modern look.",
+      "Ideal for recycling.",
+    ],
     glance: [
       { value: "10", label: "laminate structures, from high-dart to mono-structured" },
       { value: "High barrier", label: "superior aroma retention for a longer shelf life" },
       { value: "Mono", label: "structured laminates, ideal for recycling" },
-      { value: "4,000 MT", label: "laminates production capacity every month" },
+      { value: "Paper and foil", label: "based laminates with a high-end feel" },
     ],
     photo: { src: "/media/plant/laminator-unwind.webp", alt: "Printed film rolls on a laminator unwind stand at the Aditya Flexipack plant" },
   },
@@ -86,6 +112,12 @@ export const products: Product[] = [
     headline: "Packaging that protects and promotes",
     body: [
       "Our pouches are a custom-designed blend of robust engineering and modern style. More than a protective layer, they provide a sleek, high-impact surface for your brand, guaranteeing your product a commanding presence on the shelf.",
+    ],
+    short: "Custom pouches that protect the product and promote the brand.",
+    brief: [
+      "Robust engineering with a modern style, designed for each brand.",
+      "A sleek, high-impact surface for your artwork.",
+      "So your product commands its place on the shelf.",
     ],
     offeringsTitle: "Our offering",
     offerings: [
@@ -121,6 +153,8 @@ export const products: Product[] = [
     body: [
       "Our films are a blend of versatility and advanced science, crafted to provide superior strength, clarity, and barrier protection for your products.",
     ],
+    short: "CPP, metallised and blown films, made on our own lines.",
+    brief: ["Versatile, science-led films for strength, clarity and barrier protection."],
     offeringsTitle: "Three film lines",
     offerings: ["CPP film", "Metallised film", "Blown film"],
     glance: [
@@ -136,6 +170,10 @@ export const products: Product[] = [
         name: "CPP film",
         intro: [
           "Cast polypropylene (CPP) films are widely used in flexible packaging for their excellent heat sealability, high clarity and robust mechanical properties. Our CPP line lets us make custom solutions for different laminates.",
+        ],
+        brief: [
+          "Cast polypropylene (CPP) film seals well, stays clear and is mechanically strong.",
+          "Our CPP line lets us make custom film for different laminates.",
         ],
         offerings: [
           "High metal bond, high barrier metallised CPP",
@@ -164,6 +202,10 @@ export const products: Product[] = [
         intro: [
           "Our metallised film products are ideal for extending shelf life in high-performance packaging. Our metalliser is equipped with Hawk-Eye inspection to enhance product quality.",
         ],
+        brief: [
+          "Metallised film extends shelf life in high-performance packs.",
+          "Our metalliser has Hawk-Eye inspection for better quality.",
+        ],
         offerings: [
           "High barrier metallised CPP film",
           "High barrier metallised PE film",
@@ -191,6 +233,14 @@ export const products: Product[] = [
           "Ink makers send their inks through blown film trials too, so that the ink used in flexible packaging reflects well and looks attractive on the shelf.",
           "We run multiple blown film lines producing 7-layer, 5-layer and 3-layer films. Every machine has an auto gauge controller and automatic mixing and feeding with a Plast-Control system.",
         ],
+        brief: [
+          "Molten polymer is pushed through a ring die and blown into a bubble.",
+          "The bubble is cooled, setting the film at the size we need.",
+          "Most adhesive laminates rely on blown film for their shine.",
+          "Ink makers trial their inks on blown film, so print looks good on shelf.",
+          "We run several lines making 7, 5 and 3-layer film.",
+          "Each has an auto gauge controller and Plast-Control mixing and feeding.",
+        ],
         offerings: [
           "Transparent films and shrink films",
           "Transparent polyethylene films",
@@ -217,6 +267,12 @@ export const products: Product[] = [
     headline: "Engineered for impact",
     body: [
       "Our ISO 22000:2018 certified sister concern manufactures high-performance inks designed for the flexible packaging industry. The portfolio covers PU, non-toluene, non-ketone, ARSR and water-based inks to serve a wide range of applications.",
+    ],
+    short: "Inks for flawless, vibrant print on flexible packaging.",
+    brief: [
+      "Made by our ISO 22000:2018 certified sister concern.",
+      "High-performance inks for flexible packaging.",
+      "PU, non-toluene non-ketone, ARSR and water-based inks.",
     ],
     offeringsTitle: "Our offering",
     offerings: [
@@ -251,6 +307,12 @@ export const products: Product[] = [
     body: [
       "Gravure cylinders are the backbone of high-quality flexible packaging. Ours are engineered for precision, durability, and repeatability, ensuring consistent reproduction across long production runs and diverse substrates.",
     ],
+    short: "Precision-engraved gravure cylinders: the base of sharp, consistent print.",
+    brief: [
+      "Gravure cylinders are the backbone of quality flexible packaging.",
+      "Ours are built for precision, durability and repeatability.",
+      "Print stays consistent across long runs and different substrates.",
+    ],
     offeringsTitle: "Our offering",
     offerings: [
       "A complete workflow, from prepress to production",
@@ -277,6 +339,13 @@ export const products: Product[] = [
     body: [
       "Our polybags are engineered for quality, seal integrity and clarity, designed for the packaging needs of varied industries. Made from high-quality single and multi-coloured mono-layer film, these 3-side seal polybags can be customised up to 120 microns for superior strength and protection.",
       "With consistent sealing quality and an excellent print finish, our bags are trusted across industries for both primary and secondary packaging.",
+    ],
+    short: "Strong, light 3-side seal polybags for a wide range of products.",
+    brief: [
+      "3-side seal polybags in single and multi-coloured mono-layer film.",
+      "Customisable up to 120 microns for strength and protection.",
+      "Seal integrity, clarity and a clean print finish.",
+      "Trusted for primary and secondary packaging across industries.",
     ],
     offeringsTitle: "Our offering",
     offerings: [

@@ -1,35 +1,68 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import { Check } from "lucide-react";
 import { CompanyHero } from "@/components/heroes/CompanyHero";
-import { SplitRow } from "@/components/page/SplitRow";
-import { FactCards } from "@/components/page/FactCards";
 import { TearStrip } from "@/components/system/TearStrip";
-import { Reveal } from "@/components/page/Reveal";
+import { SectionHeader } from "@/components/system/SectionHeader";
+import { NumberedList } from "@/components/system/NumberedList";
+import { PhotoFrame } from "@/components/system/PhotoFrame";
 import { ButtonLink } from "@/components/ui/Button";
-import { Capabilities } from "@/components/about/Capabilities";
-import { ReasonTags } from "@/components/about/ReasonTags";
-import { Applications } from "@/components/about/Applications";
-import { PlantStrip } from "@/components/about/PlantStrip";
-import { compliance } from "@/content/site";
+import { Pack, type PackFormat } from "@/components/ui/Pack";
+import { Rise } from "@/components/company/common/Rise";
+import { CountUp } from "@/components/company/common/CountUp";
+import { DriftPhoto } from "@/components/company/common/DriftPhoto";
+import { UnderOneRoof } from "@/components/company/about/UnderOneRoof";
+import { compliance, facts } from "@/content/site";
+import { pageOf } from "@/content/next";
+
+const PATH = "/about-us/";
 
 export const metadata: Metadata = {
   title: "About us",
   description:
     "Over 25 years of flexible packaging for India's leading FMCG brands: 4,000 MT a month of laminates, in-house inks, cylinders and metallising, on an 18-acre BRC A Grade campus near Kanpur.",
-  alternates: { canonical: "/about-us/" },
+  alternates: { canonical: PATH },
 };
+
+/** The four published figures, as type only. */
+const IDENTITY = [
+  { value: facts.years.value, unit: "years", label: "Of flexible packaging expertise" },
+  { value: facts.team.value, unit: "people", label: "Skilled professionals" },
+  { value: facts.capacity.value, unit: "MT / month", label: "Laminates production capacity" },
+  { value: facts.acres.value, unit: "acres", label: "Campus near Kanpur, Uttar Pradesh" },
+];
+
+const REASONS = ["Benchmarked quality", "Rapid turnaround time", "Heavily backward integrated", "Customer satisfaction", "Ethical practices"];
+
+const QUALITY = [
+  { title: "Raw materials inspected on arrival" },
+  { title: "Processes monitored in real time" },
+  { title: "Finished products validated" },
+  { title: "Computer-regulated systems keep every run consistent" },
+  { title: "Retained samples and data for full traceability" },
+  { title: "Standards set to client needs and international norms" },
+];
+
+/** The old About page's application areas, each drawn as the pack format it typically runs in. */
+const AREAS: { name: string; format: PackFormat }[] = [
+  { name: "Biscuits and cakes", format: "pillow" },
+  { name: "Confectionery", format: "wrapper" },
+  { name: "Shrink films and collation packs", format: "polybag" },
+  { name: "Atta, salt and oil", format: "gusset" },
+  { name: "Pouches", format: "standup" },
+  { name: "Home, personal and healthcare", format: "sachet" },
+  { name: "Aluminium foil based wrappers", format: "laddi" },
+  { name: "Pet food and meat packaging", format: "spout" },
+];
 
 export default function AboutPage() {
   return (
     <>
       <CompanyHero
-        tone="wine"
+        tone={pageOf(PATH).tone}
         shape="standup"
         title="Pioneering flexible packaging for India's leading food brands"
-        note="25+ years, one campus"
-        intro="Aditya Flexipack engineers high-performance, sustainable packaging solutions. We empower your brand to protect products, elevate market presence and drive the future of food packaging in India."
-        photo={{ src: "/media/old/about-us/plant-exterior-wide.webp", alt: "The Aditya Flexipack plant across its lawn under a hazy sun" }}
+        intro="We engineer high-performance, sustainable packaging. It protects your product and raises your brand's market presence."
+        photo={{ src: "/media/old/home/plant-exterior-building.webp", alt: "The plant: a grey factory building with a brown entrance block, flagpoles and a lawn" }}
         actions={
           <>
             <ButtonLink href="/contact-us/" tone="white">
@@ -42,148 +75,166 @@ export default function AboutPage() {
         }
       />
 
-      <Reveal>
-        <section aria-labelledby="story-title" className="py-[var(--section-y)]">
-          <div className="shell grid gap-10 lg:grid-cols-12">
-            <h2 id="story-title" data-reveal className="display text-[clamp(2.4rem,5vw,5rem)] text-ink lg:col-span-6">
-              A trusted partner to top-tier FMCG brands for over <span className="text-crimson">25 years</span>
-            </h2>
-            <div data-reveal className="space-y-5 text-[1.1rem] leading-relaxed text-ink-soft lg:col-span-5 lg:col-start-8">
-              <p>
-                Aditya Flexipack is a key player in India&apos;s flexible packaging industry, recognised for its unwavering focus on
-                innovation, quality and ethical practices. With over 25 years of expertise, we serve as trusted partners to top-tier
-                FMCG brands, delivering packaging solutions that meet the highest global standards.
-              </p>
-              <p>
-                Driven by a team of 500+ skilled professionals, we combine technical expertise, operational scale and a
-                customer-first approach to deliver packaging that not only protects and preserves, but also enhances brand value.
-              </p>
-              <p className="font-semibold text-ink">
-                At Aditya Flexipack, we don&apos;t just manufacture packaging. We engineer solutions that shape the future of
-                sustainable consumer goods.
-              </p>
-            </div>
+      {/* 2. The story, then the four published figures as type */}
+      <section aria-labelledby="story-title" className="py-[var(--section-y)]">
+        <Rise className="shell page-grid gap-y-8">
+          <h2 id="story-title" data-rise className="display span-lead text-d2 text-ink">
+            A trusted partner to top-tier FMCG brands
+          </h2>
+          <div data-rise className="span-side max-w-measure space-y-3 self-end text-lead text-ink-soft">
+            <p>We are a key player in India&apos;s flexible packaging industry.</p>
+            <p>We are known for innovation, quality and ethical practice.</p>
+            <p>Our packs meet the highest global standards. They protect, preserve and add brand value.</p>
+            <p className="font-semibold text-ink">We don&apos;t just make packaging. We engineer solutions for sustainable consumer goods.</p>
           </div>
-          <div data-reveal className="shell mt-16">
-            <FactCards keys={["years", "team", "capacity", "acres"]} />
-          </div>
-        </section>
-      </Reveal>
-
-      <Capabilities />
-
-      <ReasonTags />
-
-      <SplitRow
-        title="Infrastructure"
-        note="On the Kolkata to Delhi highway"
-        photo={{ src: "/media/old/home/plant-exterior-building.webp", alt: "The plant building with its entrance block, flagpoles and lawn", ratio: "aspect-square" }}
-        tile="foil"
-      >
-        <p>
-          Our infrastructure is spread over 18 acres just 15 km from Kanpur, Uttar Pradesh. The plant is strategically located
-          along the Kolkata to Delhi highway (NH-2), enabling efficient logistics and rapid delivery across key markets in India.
-        </p>
-        <p className="font-semibold text-ink">Our unit is compliant with:</p>
-        <ul className="grid gap-2">
-          {compliance.map((c) => (
-            <li key={c} className="flex items-start gap-3 text-ink">
-              <span className="mt-1 grid size-6 shrink-0 place-items-center rounded-[var(--radius-xs)] bg-crimson text-white">
-                <Check className="size-4" strokeWidth={3} aria-hidden />
-              </span>
-              {c}
-            </li>
-          ))}
-        </ul>
-        <p>The unit is partially run on solar energy and has pyrolysis and rainwater harvesting facilities.</p>
-      </SplitRow>
-
-      <div className="pt-[var(--frame)]">
-        <div className="panel bg-foil">
-          <SplitRow
-            title="Quality"
-            note="Checked from resin to reel"
-            flip
-            tile="wash"
-            photo={{ src: "/media/old/gallery/plant-proof-press-wide.webp", alt: "Proof printing press with a printed sleeve on the cylinder and ink cups on the bench", ratio: "aspect-square" }}
-          >
-            <p>
-              Our Quality Control laboratory is fully equipped to deliver stringent oversight across all phases of production, from
-              the inspection of incoming raw materials to real-time process monitoring and finished product validation. Automated,
-              computer-regulated systems ensure uniform and repeatable reaction parameters, guaranteeing consistent product quality.
-            </p>
-            <p>
-              We maintain a comprehensive archive of retained samples and analytical data, enabling complete traceability and
-              long-term quality assurance. Our internal standards are precisely calibrated to meet client requirements and comply
-              with international standards, so we consistently supply reliable, high-performance products tailored to our
-              customers&apos; exacting standards.
-            </p>
-          </SplitRow>
-        </div>
-      </div>
-
-      <SplitRow
-        title="Recognised by clients and the nation"
-        note="Two past Presidents of India"
-        tile="blush"
-        photo={{ src: "/media/awards/award-pratibha-patil.webp", alt: "Smt. Pratibha Devisingh Patil presenting the Entrepreneur of the Year award", ratio: "aspect-[16/11]" }}
-      >
-        <p>
-          Over the years, we&apos;ve earned accolades from leading clients, commendations from two Past Presidents of India, and
-          multiple awards from the Government of Uttar Pradesh for our entrepreneurial excellence and innovation.
-        </p>
-        <p>
-          Certified with BRC A Grade, our operations adhere to the most stringent international food safety and quality standards.
-          We are deeply committed to environmental responsibility, offering sustainable packaging options and continuously
-          investing in eco-conscious technologies.
-        </p>
-        <ButtonLink href="/awards-recognitions/" tone="ink" className="mt-2">
-          Awards and recognitions
-        </ButtonLink>
-      </SplitRow>
-
-      <section aria-labelledby="circular-title" className="pt-[var(--frame)]">
-        <div className="panel bg-wine py-[var(--section-y)] text-white">
-          <svg aria-hidden viewBox="0 0 1200 800" preserveAspectRatio="none" className="absolute inset-0 h-full w-full">
-            <path d="M0 0 H1200 V230 C 980 320, 820 150, 600 240 S 200 350, 0 210 Z" fill="#520912" />
-          </svg>
-          <div className="shell relative grid gap-12 lg:grid-cols-12 lg:items-center">
-            <div className="lg:col-span-5">
-              <h2 id="circular-title" className="display text-[clamp(2.4rem,4.8vw,4.8rem)]">
-                Pioneering sustainable packaging for a better future
-              </h2>
-              <p className="hand mt-3 -rotate-2 text-[2rem] text-blush">Circular economy focus</p>
-              <h3 className="mt-8 text-[1.3rem] font-semibold">Sustainable solutions. Real-world impact.</h3>
-              <p className="mt-3 max-w-[32rem] text-[1.08rem] leading-relaxed text-white/80">
-                At Aditya Flexipack, we engineer packaging to reduce waste, optimise resources and champion recyclability. Our
-                commitment ensures high-performance solutions that actively build a cleaner, greener tomorrow.
-              </p>
-              <ButtonLink href="/sustainability/" tone="white" className="mt-8">
-                Our sustainability work
-              </ButtonLink>
-            </div>
-            <div className="lg:col-span-7">
-              <div className="-rotate-[2deg] rounded-[var(--radius-lg)] bg-white p-2 transition-[rotate] duration-500 ease-[var(--ease-back)] hover:rotate-0">
-                <div className="relative aspect-[2000/885] overflow-hidden rounded-[var(--radius-md)]">
-                  <Image
-                    src="/media/old/about-us/mockup-pouches-wood-table.webp"
-                    alt="Three printed pouches carrying the Aditya Flexipack mark, with a milk bottle and oranges on a wooden table"
-                    fill
-                    sizes="(min-width: 1024px) 56vw, 92vw"
-                    className="object-cover"
-                  />
-                </div>
+          <dl className="col-span-full mt-[var(--stack)] grid grid-cols-subgrid gap-y-10">
+            {IDENTITY.map((f) => (
+              <div key={f.unit} data-rise className="col-span-2 flex flex-col-reverse lg:col-span-3">
+                <dt className="mt-3 text-small">
+                  <span className="block font-semibold text-ink">{f.unit}</span>
+                  <span className="block text-ink-soft">{f.label}</span>
+                </dt>
+                <dd className="display tabular text-d2 text-crimson">
+                  <CountUp value={f.value} />
+                </dd>
               </div>
-            </div>
-          </div>
+            ))}
+          </dl>
+        </Rise>
+      </section>
+
+      {/* 3. The centrepiece */}
+      <UnderOneRoof />
+
+      {/* 4. Why us: five reasons, typeset */}
+      <section aria-labelledby="why-title" className="pt-[var(--frame)]">
+        <div className="panel bg-crimson py-[var(--section-y)] text-white">
+          <Rise className="shell page-grid gap-y-10">
+            <h2 id="why-title" data-rise className="display span-lead text-d2">
+              Why us
+            </h2>
+            <ul className="span-lead space-y-3 lg:row-start-2">
+              {REASONS.map((r) => (
+                <li key={r} data-rise className="display text-d3">
+                  {r}
+                </li>
+              ))}
+            </ul>
+            <ul data-rise className="span-side max-w-measure space-y-3 self-end text-lead text-white/90 lg:row-start-2">
+              <li>We are family-owned and managed. We pair experience with professionalism.</li>
+              <li>Stable leadership and open communication mean quick decisions.</li>
+              <li>That builds lasting partnerships and steady growth.</li>
+              <li>We treat every challenge as a chance to excel.</li>
+            </ul>
+          </Rise>
         </div>
       </section>
 
-      <PlantStrip />
+      {/* 5. Infrastructure */}
+      <section aria-labelledby="infra-title" className="py-[var(--section-y)]">
+        <Rise className="shell page-grid items-center gap-y-12">
+          <div data-rise className="col-span-full lg:col-span-6">
+            <h2 id="infra-title" className="display text-d2 text-ink">
+              Infrastructure
+            </h2>
+            <div className="mt-6 max-w-measure space-y-3 text-lead text-ink-soft">
+              <p>Our campus is 15 km from Kanpur, Uttar Pradesh.</p>
+              <p>It sits on the Kolkata to Delhi highway (NH-2), for fast delivery across India.</p>
+              <p>We meet strict international food safety and quality standards. Our unit complies with:</p>
+            </div>
+            <ul className="mt-6 max-w-measure">
+              {compliance.map((c, i) => (
+                <li
+                  key={c}
+                  className={`flex min-h-12 items-center gap-3 rounded-[var(--radius-sm)] px-4 py-2 font-semibold text-ink ${i % 2 === 0 ? "bg-foil" : "bg-white"}`}
+                >
+                  <Check aria-hidden className="size-5 shrink-0 text-crimson" strokeWidth={3} />
+                  {c}
+                </li>
+              ))}
+            </ul>
+          </div>
+          <DriftPhoto
+            src="/media/old/about-us/plant-exterior-wide.webp"
+            alt="Wide view of the plant across its lawn under a hazy sun, with a tall mast"
+            ratio="16:9"
+            caption="The plant across its lawn, near Kanpur"
+            sizes="(min-width: 1024px) 46vw, 100vw"
+            className="col-span-full lg:col-span-6 lg:col-start-7"
+          />
+        </Rise>
+      </section>
 
-      <Applications />
+      {/* 6. Quality */}
+      <section aria-labelledby="quality-title" className="pt-[var(--frame)]">
+        <div className="panel bg-foil py-[var(--section-y)]">
+          <Rise className="shell">
+            <div data-rise>
+              <SectionHeader id="quality-title" title="Quality" standfirst="Our fully equipped QC laboratory checks every stage of production." />
+            </div>
+            <div className="page-grid gap-y-12">
+              <div data-rise className="col-span-full lg:col-span-8">
+                <NumberedList items={QUALITY} cols={2} />
+              </div>
+              <PhotoFrame
+                src="/media/old/gallery/plant-proof-press-sleeve-close.webp"
+                alt="The proof press with a blue printed sleeve on the cylinder and cleaning cloths"
+                ratio="4:5"
+                caption="The proof press, with a printed sleeve on the cylinder"
+                sizes="(min-width: 640px) 30vw, 100vw"
+                className="col-span-full sm:col-span-4 lg:col-start-9"
+              />
+            </div>
+          </Rise>
+        </div>
+      </section>
 
-      <TearStrip from="/about-us/" />
+      {/* 7. Recognition, in short; the evidence lives on the Awards page */}
+      <section aria-labelledby="recognition-title" className="py-[var(--section-y)]">
+        <Rise className="shell page-grid gap-y-8">
+          <h2 id="recognition-title" data-rise className="display span-lead text-d2 text-ink">
+            Recognised by clients and the nation
+          </h2>
+          <div data-rise className="span-side self-end">
+            <ul className="max-w-measure space-y-3 text-lead text-ink-soft">
+              <li>Accolades from leading clients.</li>
+              <li>Commendations from two past Presidents of India.</li>
+              <li>Multiple awards from the Uttar Pradesh government for entrepreneurship and innovation.</li>
+            </ul>
+            <ButtonLink href="/awards-recognitions/" tone="ink" className="mt-8">
+              Awards and recognitions
+            </ButtonLink>
+          </div>
+        </Rise>
+      </section>
+
+      {/* 8. Application areas, as pack silhouettes on the panel */}
+      <section aria-labelledby="apps-title" className="pt-[var(--frame)]">
+        <div className="panel bg-crimson-wash py-[var(--section-y)]">
+          <Rise className="shell page-grid gap-y-12">
+            <h2 id="apps-title" data-rise className="display span-lead text-d2 text-ink">
+              Application areas
+            </h2>
+            <div data-rise className="span-side self-end lg:justify-self-end">
+              <ButtonLink href="/offerings/" tone="ink">
+                Our offerings
+              </ButtonLink>
+            </div>
+            <ul className="col-span-full grid grid-cols-subgrid gap-y-12">
+              {AREAS.map((a, i) => (
+                <li key={a.name} data-rise className="col-span-2 lg:col-span-3">
+                  <span className="flex h-28 items-end sm:h-36">
+                    <Pack format={a.format} ink={i % 2 ? "#45060e" : "#ce0000"} className="h-full w-auto max-w-full" />
+                  </span>
+                  <h3 className="display mt-5 text-d4 text-ink">{a.name}</h3>
+                </li>
+              ))}
+            </ul>
+          </Rise>
+        </div>
+      </section>
+
+      <TearStrip from={PATH} />
     </>
   );
 }
