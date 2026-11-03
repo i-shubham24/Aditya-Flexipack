@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import { DocHero } from "@/components/heroes/DocHero";
 import { TearStrip } from "@/components/system/TearStrip";
 import { Rise } from "@/components/desk/Rise";
-import { ClauseIndex, Clauses, InfoPanel, type ClauseDef } from "@/components/desk/LegalDesk";
+import { ClauseIndex, Clauses, FactBlocks, type ClauseDef, type Fact } from "@/components/desk/LegalDesk";
+import { Contour } from "@/components/desk/Contour";
+import { SectionHeader } from "@/components/system/SectionHeader";
 import { site } from "@/content/site";
 
 export const metadata: Metadata = {
@@ -12,14 +14,14 @@ export const metadata: Metadata = {
 };
 
 /** The policy in plain words, condensed from clauses 2, 3, 5, 6 and 7. The clauses below stay in full. */
-const SUMMARY = [
+const SUMMARY: Fact[] = [
   { label: "Details you give us", value: "Name, email, phone number and company details, when you contact us or send a form." },
   { label: "Details we record", value: "Your IP address, browser type and the pages you visit." },
+  { label: "Sold or rented", value: "Never", tone: "crimson" },
   { label: "Why we use them", value: "To improve our services, answer enquiries, send updates and promotions, and prevent fraud." },
-  { label: "Sold or rented", value: "Never", strong: true },
   { label: "Shared with", value: "Trusted service providers, for business operations, legal compliance or security." },
-  { label: "Cookies", value: "Yes. You can control or turn them off in your browser settings." },
-  { label: "Your rights", value: "See, correct or delete your data. Opt out of marketing. Limit or object to processing in some cases." },
+  { label: "Cookies", value: "Yes. You can control or turn them off in your browser settings.", tone: "blush" },
+  { label: "Your rights", value: "See, correct or delete your data. Opt out of marketing. Limit or object to processing in some cases.", tone: "ink", wide: true },
 ];
 
 const CLAUSES: ClauseDef[] = [
@@ -144,13 +146,19 @@ export default function PrivacyPolicyPage() {
         intro={<p className="hand inline-block -rotate-2 text-note text-crimson">We do not sell or rent your personal data</p>}
       />
 
-      <section aria-labelledby="privacy-summary" className="panel bg-crimson-wash py-[var(--section-y)]">
-        <Rise className="shell page-grid gap-y-12">
-          <div data-rise className="span-lead">
-            <InfoPanel id="privacy-summary" title="Privacy information" rows={SUMMARY} />
+      <section aria-labelledby="privacy-summary" className="panel relative bg-crimson-wash py-[var(--section-y)]">
+        <Contour hue="wash" shape={1} />
+        <Rise className="shell relative">
+          <div data-rise>
+            <SectionHeader id="privacy-summary" title="Privacy information" standfirst="The policy in plain words. The full clauses follow below." />
           </div>
-          <div data-rise className="span-quarter">
-            <ClauseIndex clauses={CLAUSES} label="Clauses of this privacy policy" />
+          <div className="page-grid gap-y-12">
+            <div data-rise className="span-lead">
+              <FactBlocks facts={SUMMARY} />
+            </div>
+            <div data-rise className="span-quarter">
+              <ClauseIndex clauses={CLAUSES} label="Clauses of this privacy policy" />
+            </div>
           </div>
         </Rise>
       </section>

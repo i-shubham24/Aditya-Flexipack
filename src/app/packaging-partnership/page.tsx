@@ -6,6 +6,7 @@ import { TearStrip } from "@/components/system/TearStrip";
 import { Rise } from "@/components/desk/Rise";
 import { TicketPeek } from "@/components/desk/TicketPeek";
 import { JobTicket } from "@/components/desk/JobTicket";
+import { Contour } from "@/components/desk/Contour";
 
 export const metadata: Metadata = {
   title: "Packaging partnership",
@@ -60,7 +61,8 @@ export default function PackagingPartnershipPage() {
 
       <section id="begin" aria-labelledby="begin-title" className="scroll-mt-24">
         <div className="panel bg-foil py-[var(--section-y)]">
-          <div className="shell">
+          <Contour hue="foil" />
+          <div className="shell relative">
             <SectionHeader
               id="begin-title"
               title="Begin your partnership"

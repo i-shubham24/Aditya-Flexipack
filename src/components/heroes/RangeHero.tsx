@@ -129,7 +129,7 @@ export function RangeHero({
           {/* Photo column: columns 9-12, framed cleanly with shadow and rounded corners */}
           <div
             data-range-photo
-            className="relative -mx-[var(--gutter)] aspect-[16/10] lg:col-[9/13] lg:mx-0 lg:mr-[calc(-1*(var(--gutter)+max(0px,(100vw-92rem)/2)))] lg:aspect-auto lg:h-[min(54svh,28rem)]"
+            className="relative -mx-[var(--gutter)] aspect-[16/10] lg:col-[9/13] lg:mx-0 lg:mr-[calc(-1*(var(--gutter)+max(0px,(100vw-92rem)/2)))] lg:aspect-auto lg:h-[min(48svh,25rem)]"
           >
             <div className="relative h-full w-full overflow-hidden rounded-l-[var(--radius-xl)] shadow-2xl border-l border-y border-white/20">
               <Image
@@ -146,7 +146,7 @@ export function RangeHero({
 
         {spec && spec.length > 0 && (
           <div className={`${t.deeper} shrink-0 relative z-10 backdrop-blur-md`}>
-            <dl data-spec className="shell page-grid gap-y-4 py-5">
+            <dl data-spec className="shell page-grid gap-y-3 py-4">
               {spec.slice(0, 4).map((s) => (
                 <div key={s.label} className="col-span-2 sm:col-span-4 lg:col-span-3">
                   <dt className="sr-only">{s.label}</dt>

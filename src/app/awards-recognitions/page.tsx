@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { TearStrip } from "@/components/system/TearStrip";
 import { AwardsHero } from "@/components/company/awards/AwardsHero";
-import { HonoursBoard } from "@/components/company/awards/HonoursBoard";
 import { ContactSheet } from "@/components/company/awards/ContactSheet";
 import { GROUPS } from "@/components/company/awards/data";
 import { pageOf } from "@/content/next";
@@ -19,7 +18,6 @@ export default function AwardsPage() {
   return (
     <>
       <AwardsHero tone={pageOf(PATH).tone} />
-      <HonoursBoard />
       {GROUPS.map((group) => (
         <ContactSheet key={group.id} group={group} />
       ))}

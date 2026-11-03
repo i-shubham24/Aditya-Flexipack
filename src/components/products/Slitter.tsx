@@ -128,7 +128,7 @@ export function Slitter() {
                       <span
                         aria-hidden
                         className={`grid w-11 shrink-0 place-items-center rounded-[var(--radius-sm)] transition-transform duration-300 ease-[var(--ease-back)] group-hover:-translate-y-0.5 group-hover:translate-x-0.5 ${
-                          t.dark ? "bg-ink text-white" : "bg-press text-white"
+                          !t.dark ? "bg-press text-white" : t.bg === "bg-ink" ? "bg-crimson text-white" : "bg-ink text-white"
                         }`}
                       >
                         <ArrowRight className="size-[1.15rem]" strokeWidth={2.4} />

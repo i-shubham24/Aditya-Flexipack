@@ -8,9 +8,8 @@ import { SectionHeader } from "@/components/system/SectionHeader";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
-const LAMP_ON = "#ff4b3e"; // crimson-light
-const FOIL_3 = "#c6cbd1";
-const WINE = "#45060e";
+const LAMP_ON = "#ce0000"; // crimson
+const FOIL_3 = "#cbd1d8";
 
 /** Where each flake of recycled film starts before the band closes up. */
 const LOOSE = [
@@ -24,7 +23,7 @@ const LOOSE = [
   { x: 6, y: 19, r: -11 },
 ];
 
-const glyph = "block h-auto w-24 shrink-0 overflow-visible fill-none stroke-foil-3 [stroke-linecap:round] [stroke-linejoin:round] [stroke-width:2] sm:w-40 [&_*]:[vector-effect:non-scaling-stroke]";
+const glyph = "block h-auto w-24 shrink-0 overflow-visible fill-none stroke-ink/40 [stroke-linecap:round] [stroke-linejoin:round] [stroke-width:2] sm:w-40 [&_*]:[vector-effect:non-scaling-stroke]";
 
 function Tanks() {
   return (
@@ -115,9 +114,8 @@ const REGIONS: Region[] = [
 ];
 
 /**
- * Sustainability's centrepiece: the plant's resources as a control-room mimic panel. The wine panel is the board,
- * a foil bus runs round the four systems into the plant node, and each system has its lamp, readout and glyph.
- * When the board arrives the lamps switch on one by one and each system comes to life once. The HTML ships lit.
+ * Sustainability's centrepiece: the plant's resources as a control-room mimic panel.
+ * Stylised in crisp, tactile light foil (anodised aluminium instrument board) with bright crimson status lamps.
  */
 export function MimicPanel() {
   const root = useRef<HTMLElement>(null);
@@ -146,7 +144,7 @@ export function MimicPanel() {
         if (levels.length) tl.from(levels, { scaleY: 0, transformOrigin: "50% 100%", duration: 0.8, ease: "power1.inOut" }, at);
         const cells = a.querySelectorAll<SVGElement>("[data-cell]");
         if (cells.length)
-          tl.fromTo(cells, { fill: WINE }, { fill: LAMP_ON, duration: 0.15, stagger: (_i, target: SVGElement) => Number(target.dataset.d) * (0.45 / 7) }, at);
+          tl.fromTo(cells, { fill: FOIL_3 }, { fill: LAMP_ON, duration: 0.15, stagger: (_i, target: SVGElement) => Number(target.dataset.d) * (0.45 / 7) }, at);
         const chambers = a.querySelectorAll("[data-chamber]");
         if (chambers.length) tl.fromTo(chambers, { fill: FOIL_3 }, { fill: LAMP_ON, duration: 0.2, stagger: 0.2 }, at);
         const flakes = a.querySelectorAll("[data-flake]");
@@ -192,21 +190,21 @@ export function MimicPanel() {
 
   return (
     <section ref={root} aria-labelledby="mimic-title" className="pt-[var(--frame)]">
-      <div className="panel bg-wine py-[calc(var(--section-y)*0.75)] text-white">
+      <div className="panel bg-foil py-[calc(var(--section-y)*0.75)] text-ink">
         <div className="shell">
-          <SectionHeader id="mimic-title" title="Our key sustainability initiatives" dark />
+          <SectionHeader id="mimic-title" title="Our key sustainability initiatives" />
 
           <div className="relative">
             {/* The bus: a loop round the four systems and a cross into the plant node (desktop), a ladder below */}
             <div aria-hidden className="pointer-events-none absolute inset-0 hidden lg:block">
-              <span className="absolute inset-0 rounded-[var(--radius-xl)] border-2 border-foil-3" />
-              <span className="absolute inset-y-0 left-1/2 w-0.5 -translate-x-1/2 bg-foil-3" />
-              <span className="absolute inset-x-0 top-1/2 h-0.5 -translate-y-1/2 bg-foil-3" />
+              <span className="absolute inset-0 rounded-[var(--radius-xl)] border-2 border-black/10" />
+              <span className="absolute inset-y-0 left-1/2 w-0.5 -translate-x-1/2 bg-black/10" />
+              <span className="absolute inset-x-0 top-1/2 h-0.5 -translate-y-1/2 bg-black/10" />
             </div>
-            <span aria-hidden className="absolute bottom-10 left-2 top-[1.375rem] w-0.5 -translate-x-1/2 bg-foil-3 lg:hidden" />
+            <span aria-hidden className="absolute bottom-10 left-2 top-[1.375rem] w-0.5 -translate-x-1/2 bg-black/10 lg:hidden" />
 
-            <p className="relative z-10 flex min-h-11 items-center pl-10 text-small font-semibold lg:absolute lg:left-1/2 lg:top-1/2 lg:min-h-0 lg:-translate-x-1/2 lg:-translate-y-1/2 lg:rounded-[var(--radius-sm)] lg:border-2 lg:border-foil-3 lg:bg-wine lg:px-4 lg:py-2">
-              <span aria-hidden className="absolute left-2 top-1/2 size-4 -translate-x-1/2 -translate-y-1/2 rounded-[3px] border-2 border-foil-3 bg-wine lg:hidden" />
+            <p className="relative z-10 flex min-h-11 items-center pl-10 text-small font-bold text-ink lg:absolute lg:left-1/2 lg:top-1/2 lg:min-h-0 lg:-translate-x-1/2 lg:-translate-y-1/2 lg:rounded-[var(--radius-sm)] lg:border-2 lg:border-black/10 lg:bg-white lg:px-4 lg:py-2 lg:shadow-sm">
+              <span aria-hidden className="absolute left-2 top-1/2 size-4 -translate-x-1/2 -translate-y-1/2 rounded-[3px] border-2 border-black/10 bg-white lg:hidden" />
               <span className="sr-only">Our plant at </span>Rania, Kanpur Dehat
             </p>
 
@@ -216,12 +214,12 @@ export function MimicPanel() {
                   <span
                     aria-hidden
                     data-lamp
-                    className="absolute left-2 top-[calc(2rem+0.46*var(--text-d2))] size-6 -translate-x-1/2 -translate-y-1/2 rounded-full border-4 border-wine bg-crimson-light lg:left-0 lg:top-[calc(clamp(2rem,3.5vw,3.5rem)+0.46*var(--text-d2))]"
+                    className="absolute left-2 top-[calc(2rem+0.46*var(--text-d2))] size-6 -translate-x-1/2 -translate-y-1/2 rounded-full border-4 border-white bg-crimson shadow-sm lg:left-0 lg:top-[calc(clamp(2rem,3.5vw,3.5rem)+0.46*var(--text-d2))]"
                   />
                   <div className="flex flex-col">
-                    <h3 className="display mt-6 text-d4 text-white">{r.title}</h3>
+                    <h3 className="display mt-6 text-d4 text-wine">{r.title}</h3>
                     <div className="order-first flex items-start justify-between gap-6">
-                      <p className="display tabular text-d2 text-white">
+                      <p className="display tabular text-d2 text-crimson font-extrabold">
                         {/^\d/.test(r.readout) ? (
                           <span data-count={r.readout} className="inline-block">
                             {r.readout}
@@ -229,12 +227,12 @@ export function MimicPanel() {
                         ) : (
                           r.readout
                         )}
-                        {r.unit && <span className="ml-2 text-d4">{r.unit}</span>}
+                        {r.unit && <span className="ml-2 text-d4 font-bold text-ink">{r.unit}</span>}
                         {r.spoken && <span className="sr-only"> {r.spoken}</span>}
                       </p>
                       {r.glyph}
                     </div>
-                    <p className="mt-3 max-w-measure text-white/80">{r.body}</p>
+                    <p className="mt-3 max-w-measure text-ink-soft leading-relaxed">{r.body}</p>
                   </div>
                 </article>
               ))}

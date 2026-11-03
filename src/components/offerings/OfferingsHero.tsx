@@ -17,8 +17,8 @@ const BAND_EDGE: CSSProperties = { WebkitMask: PINKED, mask: PINKED };
 
 /**
  * The Offerings opener. Unlike the other range heroes (name beside a tall photo column), this one is a shop
- * front: the name and one line along the top, and a full-bleed panoramic band of real packs filling the lower
- * half of the field, its top edge pinked like a sachet seal. The band unrolls downward once after the loader,
+ * front: the name, its Caveat note and one line along the top over a soft tonal contour, and a full-bleed
+ * panoramic band of real packs filling the lower half of the field, its top edge pinked like a sachet seal. The band unrolls downward once after the loader,
  * and its photo drifts inside it as the hero scrolls away (linear, one to one). The HTML holds the open band.
  */
 export function OfferingsHero({

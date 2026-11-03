@@ -308,8 +308,7 @@ select {
 .js [data-card-front],
 .js [data-card-back],
 .js [data-photo],
-.js [data-range-photo],
-.js [data-spec] > * {
+.js [data-range-photo] {
   visibility: hidden;
   animation: intro-failsafe 0s 4.5s forwards;
 }
@@ -324,8 +323,7 @@ select {
   .js [data-card-front],
   .js [data-card-back],
   .js [data-photo],
-  .js [data-range-photo],
-  .js [data-spec] > * {
+  .js [data-range-photo] {
     visibility: visible;
     animation: none;
   }

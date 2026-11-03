@@ -3,7 +3,9 @@ import Link from "next/link";
 import { DocHero } from "@/components/heroes/DocHero";
 import { TearStrip } from "@/components/system/TearStrip";
 import { Rise } from "@/components/desk/Rise";
-import { ClauseIndex, Clauses, DeclarationPanel, type ClauseDef } from "@/components/desk/LegalDesk";
+import { ClauseIndex, Clauses, SplitFacts, type ClauseDef } from "@/components/desk/LegalDesk";
+import { Contour } from "@/components/desk/Contour";
+import { SectionHeader } from "@/components/system/SectionHeader";
 import { site } from "@/content/site";
 
 export const metadata: Metadata = {
@@ -161,13 +163,19 @@ export default function TermsPage() {
         intro={<p className="hand inline-block -rotate-2 text-note text-crimson">Governed by the laws of India</p>}
       />
 
-      <section aria-labelledby="terms-summary" className="panel bg-foil py-[var(--section-y)]">
-        <Rise className="shell page-grid gap-y-12">
-          <div data-rise className="span-lead">
-            <DeclarationPanel id="terms-summary" title="Declaration" rows={SUMMARY} />
+      <section aria-labelledby="terms-summary" className="panel relative bg-foil py-[var(--section-y)]">
+        <Contour hue="foil" shape={2} />
+        <Rise className="shell relative">
+          <div data-rise>
+            <SectionHeader id="terms-summary" title="Declaration" standfirst="The terms in plain words. The full clauses follow below." />
           </div>
-          <div data-rise className="span-quarter">
-            <ClauseIndex clauses={CLAUSES} label="Clauses of these terms" />
+          <div className="page-grid gap-y-12">
+            <div data-rise className="span-lead">
+              <SplitFacts facts={SUMMARY} />
+            </div>
+            <div data-rise className="span-quarter">
+              <ClauseIndex clauses={CLAUSES} label="Clauses of these terms" />
+            </div>
           </div>
         </Rise>
       </section>
