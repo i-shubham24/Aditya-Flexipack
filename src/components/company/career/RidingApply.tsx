@@ -9,8 +9,8 @@ import { ButtonLink } from "@/components/ui/Button";
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 /**
- * Phones only: an "Apply now" split button rides along at the bottom right and drops away (12em, 0.8s) once the
- * form's top reaches 80% of the viewport, coming back if the reader scrolls up again. Once it has dropped it is
+ * Phones only: an "Apply now" split button rides along at the bottom right once the hero has scrolled away, and
+ * drops away (12em, 0.8s) once the form's top reaches 80% of the viewport, coming back if the reader scrolls up again. Once it has dropped it is
  * also hidden from keyboard and screen readers. Without scripts it simply stays put.
  */
 export function RidingApply({ target }: { target: string }) {
@@ -31,6 +31,10 @@ export function RidingApply({ target }: { target: string }) {
           gsap.set(el, { visibility: "visible" });
           gsap.to(el, { y: 0, duration, ease: "power3.out", overwrite: true });
         };
+        // Hidden over the hero; rides once the hero has gone, and drops again when the form arrives.
+        gsap.set(el, { y: "12em", visibility: "hidden" });
+        const hero = document.querySelector("main > section");
+        if (hero) ScrollTrigger.create({ trigger: hero, start: "bottom 70%", onEnter: ride, onLeaveBack: drop });
         ScrollTrigger.create({ trigger: form, start: "top 80%", end: "max", onEnter: drop, onLeaveBack: ride });
       });
       return () => mm.revert();

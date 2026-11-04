@@ -103,13 +103,7 @@ export function RisingPacks() {
           textPath.setAttribute("startOffset", `${baseOffset - totalProgress}`);
         };
 
-        // Continuous smooth infinite glide
-        const onTick = (_time: number, deltaTime: number) => {
-          updateOffset((55 * deltaTime) / 1000);
-        };
-        gsap.ticker.add(onTick);
-
-        // Responsive scroll interaction: scrolling moves the text along the wave naturally
+        // The text travels along the wave only as the page scrolls, never on its own
         const scrollListener = () => {
           const currentY = window.scrollY;
           const deltaY = currentY - lastScrollY;
@@ -150,7 +144,6 @@ export function RisingPacks() {
         });
 
         return () => {
-          gsap.ticker.remove(onTick);
           window.removeEventListener("scroll", scrollListener);
         };
       });

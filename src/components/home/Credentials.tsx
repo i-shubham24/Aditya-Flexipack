@@ -104,7 +104,7 @@ export function Credentials() {
                     width={p.w}
                     height={p.h}
                     sizes="(min-width: 1280px) 15vw, (min-width: 640px) 30vw, 48vw"
-                    className="aspect-[4/3] w-full rounded-[var(--radius-sm)] bg-white object-cover p-2 shadow-[var(--shadow-card)]"
+                    className="aspect-[4/3] w-full rounded-[var(--radius-sm)] bg-white object-cover p-2 "
                   />
                   <figcaption className="mt-3 text-[0.92rem] leading-snug text-ink-soft">{p.caption}</figcaption>
                 </figure>

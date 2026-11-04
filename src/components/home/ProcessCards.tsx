@@ -78,7 +78,7 @@ export function ProcessCards() {
             >
               {/* GSAP deals the card; this layer straightens and lifts it on hover */}
               <div
-                className={`h-full rounded-[var(--radius-xl)] p-6 transition-[rotate,scale,translate] duration-500 ease-[var(--ease-back)] group-hover:-translate-y-4 group-hover:scale-[1.06] md:min-h-[22rem] md:group-hover:[rotate:calc(var(--tilt)*-1)] ${bg} ${ink}`}
+                className={`h-full rounded-[var(--radius-xl)] p-6 md:p-5 lg:p-6 transition-[rotate,scale,translate] duration-500 ease-[var(--ease-back)] group-hover:-translate-y-4 group-hover:scale-[1.06] md:min-h-[22rem] md:group-hover:[rotate:calc(var(--tilt)*-1)] ${bg} ${ink}`}
               >
                 <span className="flex items-start justify-between">
                   <span className="grid size-14 place-items-center rounded-[var(--radius-md)] bg-white text-ink">
@@ -86,7 +86,7 @@ export function ProcessCards() {
                   </span>
                   <span className="hand text-[1.9rem] opacity-90">Step {i + 1}</span>
                 </span>
-                <h3 className="display mt-10 text-[clamp(1.8rem,2.4vw,2.3rem)]">{title}</h3>
+                <h3 className="display mt-10 text-[1.8rem] md:text-[1.35rem] lg:text-[clamp(1.8rem,2.4vw,2.3rem)]">{title}</h3>
                 <p className="mt-3 text-[1rem] leading-snug opacity-90">{body}</p>
               </div>
             </li>

@@ -4,7 +4,7 @@ import { ButtonLink } from "@/components/ui/Button";
 import { SectionHeader } from "@/components/system/SectionHeader";
 import { TearStrip } from "@/components/system/TearStrip";
 import { Rise } from "@/components/desk/Rise";
-import { TicketPeek } from "@/components/desk/TicketPeek";
+import { PartnerCounts } from "@/components/desk/PartnerCounts";
 import { JobTicket } from "@/components/desk/JobTicket";
 import { Contour } from "@/components/desk/Contour";
 
@@ -37,7 +37,7 @@ export default function PackagingPartnershipPage() {
             Begin your partnership
           </ButtonLink>
         }
-        teaser={<TicketPeek />}
+        teaser={<PartnerCounts />}
       />
 
       <section aria-labelledby="why-title" className="py-[var(--section-y)]">

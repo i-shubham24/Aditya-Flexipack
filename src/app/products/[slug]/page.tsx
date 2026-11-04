@@ -6,7 +6,7 @@ import { site } from "@/content/site";
 import { RangeHero } from "@/components/heroes/RangeHero";
 import { TearStrip } from "@/components/system/TearStrip";
 import { TONES } from "@/components/system/tones";
-import { ButtonLink } from "@/components/ui/Button";
+import { ButtonLink, TextLink } from "@/components/ui/Button";
 import { sheets } from "@/components/products/sheet";
 import { ProductAbout, ProductList } from "@/components/products/ProductBlocks";
 import { FilmAdvantages, FilmSections } from "@/components/products/FilmSections";
@@ -97,9 +97,9 @@ export default async function ProductPage({ params }: Props) {
             <ButtonLink href={`/packaging-partnership/?product=${encodeURIComponent(s.need)}#begin`} tone={t.dark ? "white" : "crimson"}>
               Inquire now
             </ButtonLink>
-            <ButtonLink href="/products/" tone={tone === "ink" || tone === "wine" ? "crimson" : "ink"} plain>
+            <TextLink href="/products/" tone={t.dark ? "white" : "ink"}>
               All products
-            </ButtonLink>
+            </TextLink>
           </>
         }
       />

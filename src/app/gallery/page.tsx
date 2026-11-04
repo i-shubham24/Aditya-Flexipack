@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { PageHero } from "@/components/page/PageHero";
+import { GalleryHero } from "@/components/company/gallery/GalleryHero";
 import { CtaPanel } from "@/components/page/CtaPanel";
 import { GalleryWall } from "@/components/about/GalleryWall";
 
@@ -13,12 +13,7 @@ export const metadata: Metadata = {
 export default function GalleryPage() {
   return (
     <>
-      <PageHero
-        tone="wash"
-        title="Our plant & journey"
-        note="Capturing excellence"
-        intro="A visual walkthrough of our 18-acre integrated converting plant near Kanpur."
-      />
+      <GalleryHero />
       <GalleryWall />
       <CtaPanel />
     </>

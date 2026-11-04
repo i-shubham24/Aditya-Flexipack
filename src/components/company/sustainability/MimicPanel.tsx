@@ -203,7 +203,7 @@ export function MimicPanel() {
             </div>
             <span aria-hidden className="absolute bottom-10 left-2 top-[1.375rem] w-0.5 -translate-x-1/2 bg-black/10 lg:hidden" />
 
-            <p className="relative z-10 flex min-h-11 items-center pl-10 text-small font-bold text-ink lg:absolute lg:left-1/2 lg:top-1/2 lg:min-h-0 lg:-translate-x-1/2 lg:-translate-y-1/2 lg:rounded-[var(--radius-sm)] lg:border-2 lg:border-black/10 lg:bg-white lg:px-4 lg:py-2 lg:shadow-sm">
+            <p className="relative z-10 flex min-h-11 items-center pl-10 text-small font-bold text-ink lg:absolute lg:left-1/2 lg:top-1/2 lg:min-h-0 lg:-translate-x-1/2 lg:-translate-y-1/2 lg:rounded-[var(--radius-sm)] lg:border-2 lg:border-black/10 lg:bg-white lg:px-4 lg:py-2 ">
               <span aria-hidden className="absolute left-2 top-1/2 size-4 -translate-x-1/2 -translate-y-1/2 rounded-[3px] border-2 border-black/10 bg-white lg:hidden" />
               <span className="sr-only">Our plant at </span>Rania, Kanpur Dehat
             </p>
@@ -214,7 +214,7 @@ export function MimicPanel() {
                   <span
                     aria-hidden
                     data-lamp
-                    className="absolute left-2 top-[calc(2rem+0.46*var(--text-d2))] size-6 -translate-x-1/2 -translate-y-1/2 rounded-full border-4 border-white bg-crimson shadow-sm lg:left-0 lg:top-[calc(clamp(2rem,3.5vw,3.5rem)+0.46*var(--text-d2))]"
+                    className="absolute left-2 top-[calc(2rem+0.46*var(--text-d2))] size-6 -translate-x-1/2 -translate-y-1/2 rounded-full border-4 border-white bg-crimson  lg:left-0 lg:top-[calc(clamp(2rem,3.5vw,3.5rem)+0.46*var(--text-d2))]"
                   />
                   <div className="flex flex-col">
                     <h3 className="display mt-6 text-d4 text-wine">{r.title}</h3>

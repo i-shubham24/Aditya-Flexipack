@@ -94,7 +94,7 @@ export function WhyUs() {
                   className={`lg:absolute lg:whitespace-nowrap ${s.pos}`}
                 >
                   <div
-                    className={`display rounded-[1.25rem] px-5 py-3 text-[clamp(1.6rem,3.6vw,4.2rem)] leading-none lg:px-8 lg:py-5 shadow-lg transition-transform hover:scale-105 ${s.c}`}
+                    className={`display rounded-[1.25rem] px-5 py-3 text-[clamp(1.6rem,3.6vw,4.2rem)] leading-none lg:px-8 lg:py-5  transition-transform hover:scale-105 ${s.c}`}
                     style={{
                       transform: `rotate(${s.r}deg)`,
                       rotate: `${s.r}deg`,

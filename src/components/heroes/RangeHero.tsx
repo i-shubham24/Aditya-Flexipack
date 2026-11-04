@@ -70,7 +70,7 @@ export function RangeHero({
   );
 
   return (
-    <section ref={root} data-hero={t.dark ? "dark" : "light"} aria-labelledby="page-title" className="h-[100svh] min-h-[640px]">
+    <section ref={root} data-hero={t.dark ? "dark" : "light"} aria-labelledby="page-title" className="hero-h">
       <div className={`relative h-full flex flex-col justify-between overflow-clip rounded-b-[var(--radius-2xl)] ${t.bg} ${t.ink}`}>
         {/* Dynamic wavy contour graphics matched to the product's color palette */}
         <svg
@@ -126,12 +126,12 @@ export function RangeHero({
             )}
           </div>
 
-          {/* Photo column: columns 9-12, framed cleanly with shadow and rounded corners */}
+          {/* Photo: a full-width band under the title on phones and tablets, columns 9-12 bleeding off the right on desktop */}
           <div
             data-range-photo
-            className="relative -mx-[var(--gutter)] aspect-[16/10] lg:col-[9/13] lg:mx-0 lg:mr-[calc(-1*(var(--gutter)+max(0px,(100vw-92rem)/2)))] lg:aspect-auto lg:h-[min(48svh,25rem)]"
+            className="relative col-span-full -mx-[var(--gutter)] aspect-[16/10] sm:aspect-[16/8] lg:col-[9/13] lg:mx-0 lg:mr-[calc(-1*(var(--gutter)+max(0px,(100vw-92rem)/2)))] lg:aspect-auto lg:h-[min(48svh,25rem)]"
           >
-            <div className="relative h-full w-full overflow-hidden rounded-l-[var(--radius-xl)] shadow-2xl border-l border-y border-white/20">
+            <div className="relative h-full w-full overflow-hidden lg:rounded-l-[var(--radius-xl)]">
               <Image
                 src={photo.src}
                 alt={photo.alt}

@@ -203,7 +203,7 @@ export function UnderOneRoof() {
                   <span aria-hidden className="display tabular block text-d3 text-crimson">
                     {String(i + 1).padStart(2, "0")}
                   </span>
-                  <h3 data-cap className="display mt-2 text-d4 text-ink">
+                  <h3 data-cap className="display mt-2 text-d4 text-ink hyphens-auto [overflow-wrap:break-word]">
                     {b.title}
                   </h3>
                   {b.photo && (
@@ -235,7 +235,7 @@ export function UnderOneRoof() {
                 <span aria-hidden className="display tabular block text-d3 text-crimson">
                   07
                 </span>
-                <h3 data-cap-7 className="display mt-2 text-d4 text-ink">
+                <h3 data-cap-7 className="display mt-2 text-d4 text-ink hyphens-auto [overflow-wrap:break-word]">
                   Solar energy generation and rainwater harvesting
                 </h3>
                 <dl className="mt-6 grid grid-cols-2 gap-x-5">

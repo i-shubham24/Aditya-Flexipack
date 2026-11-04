@@ -72,7 +72,7 @@ export function Hero() {
               <ButtonLink href="/products/" tone="white">
                 Explore solutions
               </ButtonLink>
-              <Link href="/packaging-partnership/" className="font-semibold text-white underline decoration-white/50 underline-offset-4 hover:decoration-white">
+              <Link href="/packaging-partnership/" className="inline-flex min-h-11 items-center font-semibold text-white underline decoration-white/50 underline-offset-4 hover:decoration-white">
                 Partner with us
               </Link>
             </div>

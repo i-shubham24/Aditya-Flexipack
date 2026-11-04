@@ -6,87 +6,53 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import { ButtonLink } from "@/components/ui/Button";
-import { afterLoader } from "@/components/layout/Loader";
+import { CountUp } from "@/components/company/common/CountUp";
+import { useHeroIntro } from "@/components/heroes/useHeroIntro";
+import { certificates } from "@/content/awards";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
-/** Tonal wavy contour layers in crimson, matching the Home Hero */
-function Contours() {
-  return (
-    <svg
-      aria-hidden
-      viewBox="0 0 1200 800"
-      preserveAspectRatio="xMidYMid slice"
-      className="pointer-events-none absolute inset-0 h-full w-full"
-    >
-      <path
-        data-contour
-        d="M640 800 C 610 640, 520 560, 600 430 S 860 300, 900 170 S 1080 -20, 1200 40 V800 Z"
-        fill="#dc0a05"
-      />
-      <path
-        data-contour
-        d="M760 800 C 720 680, 680 600, 760 500 S 960 420, 1010 300 S 1150 160, 1200 190 V800 Z"
-        fill="#e81911"
-      />
-      <path
-        data-contour
-        d="M0 800 C 80 740, 190 760, 250 700 S 330 600, 420 640 S 520 760, 560 800 Z"
-        fill="#b80000"
-      />
-    </svg>
-  );
-}
+// Where each seal lands in the square stage, as percentages; sizes vary so the cluster reads like a stamped crate.
+const PLACES = [
+  { left: 4, top: 6, size: 42 },
+  { left: 52, top: 0, size: 34 },
+  { left: 40, top: 38, size: 40 },
+  { left: 0, top: 54, size: 33 },
+  { left: 70, top: 62, size: 28 },
+];
 
+const STATS = [
+  { value: "2", label: "Presidents of India honoured us" },
+  { value: String(certificates.length), label: "certifications held" },
+  { value: "3", label: "FMCG clients' awards: Parle, ITC, Britannia" },
+];
+
+/**
+ * Awards and certifications opener: the five certification seals stamp down one after another on the crimson
+ * field, and the honours count up along the foot. The cluster (outer) drifts with the scroll; each seal (inner)
+ * plays its own stamp, so no element is moved by two animations.
+ */
 export function AwardsHero({ tone }: { tone?: string } = {}) {
   const root = useRef<HTMLElement>(null);
   void tone;
+
+  useHeroIntro(root, (tl) => {
+    tl.from(
+      "[data-hero-photo]",
+      { scale: 1.7, rotate: -12, autoAlpha: 0, duration: 0.55, ease: "back.out(2.2)", stagger: 0.14 },
+      0.2,
+    );
+  });
 
   useGSAP(
     () => {
       const mm = gsap.matchMedia();
       mm.add("(prefers-reduced-motion: no-preference)", () => {
-        const intro = gsap.timeline({ paused: true, delay: 0.1 });
-        intro
-          .from(
-            "[data-hero-title]",
-            {
-              y: 40,
-              autoAlpha: 0,
-              duration: 0.9,
-              ease: "power3.out",
-            },
-            0,
-          )
-          .from(
-            "[data-hero-photo]",
-            {
-              y: 50,
-              autoAlpha: 0,
-              duration: 1,
-              ease: "power3.out",
-            },
-            0.15,
-          )
-          .from(
-            "[data-hero-fade]",
-            {
-              y: 20,
-              autoAlpha: 0,
-              duration: 0.8,
-              ease: "power3.out",
-              stagger: 0.08,
-            },
-            0.3,
-          );
-
-        const release = afterLoader(() => intro.play());
-
-        const scrub = { trigger: root.current, start: "top top", end: "bottom top", scrub: true };
-        gsap.to("[data-contour]", { yPercent: (i) => [-8, -14, 10][i], ease: "none", scrollTrigger: scrub });
-        gsap.to("[data-hero-photo]", { y: -40, ease: "none", scrollTrigger: scrub });
-
-        return release;
+        gsap.to("[data-seals]", {
+          yPercent: -10,
+          ease: "none",
+          scrollTrigger: { trigger: root.current, start: "top top", end: "bottom top", scrub: true },
+        });
       });
       return () => mm.revert();
     },
@@ -94,66 +60,65 @@ export function AwardsHero({ tone }: { tone?: string } = {}) {
   );
 
   return (
-    <section
-      ref={root}
-      data-hero="dark"
-      aria-labelledby="page-title"
-      className="relative h-[100svh] min-h-[640px] overflow-clip rounded-b-[var(--radius-2xl)] bg-crimson text-white"
-    >
-      {/* Wavy tonal contours matching the Home Hero */}
-      <Contours />
+    <section ref={root} data-hero="dark" aria-labelledby="page-title" className="hero-h">
+      <div className="relative flex h-full flex-col overflow-clip rounded-b-[var(--radius-2xl)] bg-crimson text-white">
+        <svg aria-hidden viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice" className="pointer-events-none absolute inset-0 h-full w-full">
+          <path d="M640 800 C 610 640, 520 560, 600 430 S 860 300, 900 170 S 1080 -20, 1200 40 V800 Z" fill="#dc0a05" />
+          <path d="M0 800 C 80 740, 190 760, 250 700 S 330 600, 420 640 S 520 760, 560 800 Z" fill="#b80000" />
+        </svg>
 
-      <div className="shell relative z-10 flex h-full flex-col justify-center pb-[4svh] pt-[var(--header-h)] lg:grid lg:grid-cols-12 lg:items-center lg:gap-12">
-        {/* Left Column: Bold Display Headline & Short Crisp Copy (Zero Pills) */}
-        <div className="lg:col-span-7">
-          <div data-hero-title>
-            <h1
-              id="page-title"
-              className="display text-[clamp(3.2rem,7vw,7.2rem)] leading-[0.88] text-white"
-            >
-              Recognised <span className="inline-block">by Presidents.</span>
+        <div className="shell page-grid relative flex-1 content-center items-center gap-y-10 pb-8 pt-[calc(var(--header-h)+1.5rem)]">
+          <div className="span-lead">
+            <h1 id="page-title" data-hero-title className="display text-d1">
+              Recognised by Presidents.
             </h1>
+            <p data-hero-fade className="mt-5 max-w-[30rem] text-lead text-white/90">
+              Twice Entrepreneur of the Year, and certified for safe, quality packaging.
+            </p>
+            <div data-hero-fade className="mt-7">
+              <ButtonLink href="/about-us/" tone="white">
+                Our story
+              </ButtonLink>
+            </div>
           </div>
 
-          <p
-            data-hero-fade
-            className="mt-5 max-w-[32rem] text-[clamp(1.1rem,1.4vw,1.35rem)] leading-relaxed text-white/90"
-          >
-            Honoured twice as Entrepreneur of the Year by two Presidents of India, alongside excellence awards from Parle, Britannia, and ITC Foods.
-          </p>
-
-          <div data-hero-fade className="mt-7 flex flex-wrap items-center gap-4">
-            <ButtonLink href="/about-us/" tone="white">
-              Our story
-            </ButtonLink>
+          <div className="span-side flex justify-center lg:justify-end">
+            <ul data-seals aria-label="Our certifications" className="relative aspect-square w-[min(72vw,19rem)] lg:w-[min(28vw,24rem)]">
+              {certificates.map((c, i) => {
+                const p = PLACES[i % PLACES.length];
+                return (
+                  <li
+                    key={c.name}
+                    className="absolute"
+                    style={{ left: `${p.left}%`, top: `${p.top}%`, width: `${p.size}%` }}
+                  >
+                    <div
+                      data-hero-photo
+                      className="group relative aspect-square rounded-full bg-white p-[17%] ring-[6px] ring-crimson transition-transform duration-300 ease-[var(--ease-back)] hover:scale-[1.06]"
+                    >
+                      <Image src={c.mark} alt={c.name} fill priority sizes="12rem" className="object-contain p-[17%]" />
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
           </div>
         </div>
 
-        {/* Right Column: Clean, Ordered, Museum-Grade Presidential Award Photo */}
-        <div className="relative mx-auto mt-6 w-full max-w-[28rem] lg:col-span-5 lg:mt-0 lg:max-w-none">
-          <div
-            data-hero-photo
-            className="overflow-hidden rounded-[var(--radius-xl)] bg-white p-2.5 shadow-2xl ring-1 ring-black/10"
-          >
-            <div className="relative aspect-[4/3] w-full overflow-hidden rounded-[var(--radius-lg)] bg-ink/10">
-              <Image
-                src="/media/awards/award-apj-abdul-kalam.webp"
-                alt="President Dr. A.P.J. Abdul Kalam presenting the Entrepreneur of the Year award"
-                fill
-                sizes="(min-width: 1024px) 34rem, 90vw"
-                className="object-cover object-center"
-                priority
-              />
-            </div>
-            <div className="mt-3 flex items-center justify-between px-2 pb-1">
-              <span className="text-sm font-bold text-ink">
-                Presented by Dr. A.P.J. Abdul Kalam
-              </span>
-              <span className="text-xs font-semibold text-crimson">
-                Entrepreneur of the Year
-              </span>
-            </div>
-          </div>
+        <div className="relative bg-crimson-deep">
+          <dl className="shell page-grid gap-y-4 py-5">
+            {STATS.map((s) => (
+              <div key={s.label} className="col-span-full sm:col-span-4 lg:col-span-4">
+                <dt className="sr-only">{s.label}</dt>
+                <dd className="flex items-baseline gap-3">
+                  <span className="display tabular text-[clamp(2rem,3.4vw,3.2rem)] leading-none">
+                    <CountUp value={s.value} />
+                  </span>
+                  <span className="text-small leading-snug text-white/85">{s.label}</span>
+                </dd>
+              </div>
+            ))}
+          </dl>
         </div>
       </div>
     </section>

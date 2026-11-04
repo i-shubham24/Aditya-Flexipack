@@ -71,7 +71,7 @@ export const metadata: Metadata = {
     siteName: site.name,
     locale: "en_IN",
     url: site.url,
-    title: "Aditya Flexipack | Quality is our Identity — Flexible Packaging Manufacturer",
+    title: "Aditya Flexipack | Quality is our Identity | Flexible Packaging Manufacturer",
     description:
       "Premier flexible packaging manufacturer in Kanpur, India: high-barrier laminates, stand-up pouches, CPP & blown films, inks and gravure cylinders made on one 18-acre campus.",
     images: [

@@ -42,7 +42,7 @@ export default function ContactPage() {
                 email={site.email}
               />
 
-              <figure className="max-w-[28rem] overflow-hidden rounded-[var(--radius-xl)] bg-white p-2.5 shadow-md ring-1 ring-black/5">
+              <figure className="max-w-[28rem] overflow-hidden rounded-[var(--radius-xl)] bg-white p-2.5  ring-1 ring-black/5">
                 <div className="relative aspect-[16/10] w-full overflow-hidden rounded-[var(--radius-lg)] bg-ink/5">
                   <Image
                     src="/media/plant/plant-exterior.webp"

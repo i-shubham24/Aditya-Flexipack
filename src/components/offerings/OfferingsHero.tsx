@@ -10,10 +10,9 @@ import { TONES, type Tone } from "@/components/system/tones";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
-// The band's top edge is pinked, the zig-zag a sachet's crimp is cut with, so the photo reads as a pack torn open.
-const TOOTH = 12;
-const PINKED = `conic-gradient(from 135deg at top, #0000, #000 1deg 89deg, #0000 90deg) 0 0 / ${TOOTH * 2}px ${TOOTH}px repeat-x, linear-gradient(#000 0 0) 0 ${TOOTH}px / 100% 100% no-repeat`;
-const BAND_EDGE: CSSProperties = { WebkitMask: PINKED, mask: PINKED };
+// The band's top edge is a soft wave, the same curve as the site's contours, so the photo flows out of the field.
+const WAVE = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 40' preserveAspectRatio='none'%3E%3Cpath d='M0 40V22C200 2 400 42 600 22S1000 2 1200 22V40Z'/%3E%3C/svg%3E") 0 0 / 100% 40px no-repeat, linear-gradient(#000 0 0) 0 39px / 100% 100% no-repeat`;
+const BAND_EDGE: CSSProperties = { WebkitMask: WAVE, mask: WAVE };
 
 /**
  * The Offerings opener. Unlike the other range heroes (name beside a tall photo column), this one is a shop

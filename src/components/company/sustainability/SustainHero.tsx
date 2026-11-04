@@ -6,94 +6,44 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import { ButtonLink } from "@/components/ui/Button";
-import { afterLoader } from "@/components/layout/Loader";
+import { CountUp } from "@/components/company/common/CountUp";
+import { useHeroIntro } from "@/components/heroes/useHeroIntro";
+import { facts } from "@/content/site";
 import type { Tone } from "@/components/system/tones";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
-/** Tonal wavy contour layers in deep wine, matching the Home Hero aesthetic */
-function Contours() {
-  return (
-    <svg
-      aria-hidden
-      viewBox="0 0 1200 800"
-      preserveAspectRatio="xMidYMid slice"
-      className="pointer-events-none absolute inset-0 h-full w-full"
-    >
-      <path
-        data-contour
-        d="M640 800 C 610 640, 520 560, 600 430 S 860 300, 900 170 S 1080 -20, 1200 40 V800 Z"
-        fill="#520912"
-      />
-      <path
-        data-contour
-        d="M760 800 C 720 680, 680 600, 760 500 S 960 420, 1010 300 S 1150 160, 1200 190 V800 Z"
-        fill="#5c0b15"
-      />
-      <path
-        data-contour
-        d="M0 800 C 80 740, 190 760, 250 700 S 330 600, 420 640 S 520 760, 560 800 Z"
-        fill="#3a040b"
-      />
-    </svg>
-  );
-}
+const HILL = "#3a040b";
 
-export function SustainHero(props?: {
-  title?: string;
-  intro?: ReactNode;
-  tone?: Tone;
-  photo?: { src: string; alt: string };
-  action?: ReactNode;
-}) {
+// The three things the old Sustainability page leads with, as figures.
+const STATS = [
+  { value: facts.solar.value, unit: "MW", label: "solar power on site" },
+  { value: facts.rainwater.value, unit: "", label: "rainwater harvesting systems" },
+  { value: "3-stage", unit: "", label: "pyrolysis, turning waste into energy" },
+];
+
+/**
+ * Sustainability opener, "sunrise over Rania": the campus seen through a round sun that rises from behind a dark
+ * hill on load and sets as the page scrolls, with the plant's green figures counting up on the hill.
+ * The sun has two layers: the outer one follows the scroll, the inner one plays the entrance.
+ */
+export function SustainHero(props?: { title?: string; intro?: ReactNode; tone?: Tone; photo?: { src: string; alt: string }; action?: ReactNode }) {
   const root = useRef<HTMLElement>(null);
   void props;
+
+  useHeroIntro(root, (tl) => {
+    tl.from("[data-hero-photo]", { yPercent: 55, autoAlpha: 0, duration: 1.3, ease: "power3.out" }, 0.1);
+  });
 
   useGSAP(
     () => {
       const mm = gsap.matchMedia();
       mm.add("(prefers-reduced-motion: no-preference)", () => {
-        const intro = gsap.timeline({ paused: true, delay: 0.1 });
-        intro
-          .from(
-            "[data-hero-title]",
-            {
-              y: 40,
-              autoAlpha: 0,
-              duration: 0.9,
-              ease: "power3.out",
-            },
-            0,
-          )
-          .from(
-            "[data-hero-photo]",
-            {
-              y: 50,
-              autoAlpha: 0,
-              duration: 1,
-              ease: "power3.out",
-            },
-            0.15,
-          )
-          .from(
-            "[data-hero-fade]",
-            {
-              y: 20,
-              autoAlpha: 0,
-              duration: 0.8,
-              ease: "power3.out",
-              stagger: 0.08,
-            },
-            0.3,
-          );
-
-        const release = afterLoader(() => intro.play());
-
-        const scrub = { trigger: root.current, start: "top top", end: "bottom top", scrub: true };
-        gsap.to("[data-contour]", { yPercent: (i) => [-8, -14, 10][i], ease: "none", scrollTrigger: scrub });
-        gsap.to("[data-hero-photo]", { y: -40, ease: "none", scrollTrigger: scrub });
-
-        return release;
+        gsap.to("[data-sun-scroll]", {
+          yPercent: 35,
+          ease: "none",
+          scrollTrigger: { trigger: root.current, start: "top top", end: "bottom top", scrub: true },
+        });
       });
       return () => mm.revert();
     },
@@ -101,65 +51,65 @@ export function SustainHero(props?: {
   );
 
   return (
-    <section
-      ref={root}
-      data-hero="dark"
-      aria-labelledby="page-title"
-      className="relative h-[100svh] min-h-[640px] overflow-clip rounded-b-[var(--radius-2xl)] bg-wine text-white"
-    >
-      {/* Wavy tonal contours matching the Home Hero */}
-      <Contours />
+    <section ref={root} data-hero="dark" aria-labelledby="page-title" className="hero-h">
+      <div className="relative flex h-full flex-col overflow-clip rounded-b-[var(--radius-2xl)] bg-wine text-white">
+        <svg aria-hidden viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice" className="pointer-events-none absolute inset-0 h-full w-full">
+          <path d="M0 0 H1200 V160 C 980 250, 820 90, 600 170 S 200 290, 0 150 Z" fill="#520912" />
+        </svg>
 
-      <div className="shell relative z-10 flex h-full flex-col justify-center pb-[4svh] pt-[var(--header-h)] lg:grid lg:grid-cols-12 lg:items-center lg:gap-12">
-        {/* Left Column: Bold Display Typography & Concise Copy (Zero Pills) */}
-        <div className="lg:col-span-7">
-          <div data-hero-title>
-            <h1
-              id="page-title"
-              className="display text-[clamp(3.2rem,7vw,7.2rem)] leading-[0.88] text-white"
-            >
-              Sustainable <span className="inline-block">by design.</span>
+        <div className="shell page-grid relative flex-1 items-end gap-y-8 pt-[calc(var(--header-h)+1.5rem)]">
+          <div className="span-lead relative z-10 pb-[clamp(1rem,5svh,4rem)]">
+            <h1 id="page-title" data-hero-title className="display text-d1">
+              Sustainable by design.
             </h1>
+            <p data-hero-fade className="mt-5 max-w-[30rem] text-lead text-white/85">
+              Clean energy, saved water and recycled waste, on one 18-acre campus.
+            </p>
+            <div data-hero-fade className="mt-7">
+              <ButtonLink href="/packaging-partnership/" tone="white">
+                Talk to us
+              </ButtonLink>
+            </div>
           </div>
 
-          <p
-            data-hero-fade
-            className="mt-5 max-w-[32rem] text-[clamp(1.1rem,1.4vw,1.35rem)] leading-relaxed text-white/90"
-          >
-            Solar powered, closed-loop recycled, and engineered for recyclability across our 18-acre green campus.
-          </p>
-
-          <div data-hero-fade className="mt-7 flex flex-wrap items-center gap-4">
-            <ButtonLink href="/packaging-partnership/" tone="white">
-              Talk to us about recyclable packs
-            </ButtonLink>
+          <div className="span-side flex justify-center lg:justify-end">
+            <div data-sun-scroll className="w-[min(60vw,19rem)] lg:w-[min(26vw,24rem)]">
+              <div data-hero-photo className="rounded-full bg-blush p-[4%]">
+                <div className="relative aspect-square overflow-hidden rounded-full">
+                  <Image
+                    src="/media/plant/plant-exterior.webp"
+                    alt="The Aditya Flexipack campus at Rania, near Kanpur"
+                    fill
+                    priority
+                    sizes="(min-width: 1024px) 29rem, 68vw"
+                    className="object-cover"
+                  />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* Right Column: Clean, Ordered Architectural Campus Photo */}
-        <div className="relative mx-auto mt-6 w-full max-w-[28rem] lg:col-span-5 lg:mt-0 lg:max-w-none">
-          <div
-            data-hero-photo
-            className="overflow-hidden rounded-[var(--radius-xl)] bg-white p-2.5 shadow-2xl ring-1 ring-black/10"
-          >
-            <div className="relative aspect-[4/3] w-full overflow-hidden rounded-[var(--radius-lg)] bg-ink/10">
-              <Image
-                src="/media/plant/plant-exterior.webp"
-                alt="The 18-acre green campus at Rania with on-site solar installation"
-                fill
-                sizes="(min-width: 1024px) 34rem, 90vw"
-                className="object-cover object-center"
-                priority
-              />
-            </div>
-            <div className="mt-3 flex items-center justify-between px-2 pb-1">
-              <span className="text-sm font-bold text-ink">
-                Rania Campus
-              </span>
-              <span className="text-xs font-semibold text-wine">
-                1.35 MW On-Site Solar Roof
-              </span>
-            </div>
+        {/* The hill sits in front of the sun, so the sun rises from behind it and sets into it */}
+        <div className="relative z-[5] -mt-[clamp(4.5rem,13vw,11rem)]">
+          <svg aria-hidden viewBox="0 0 1200 160" preserveAspectRatio="none" className="block h-[clamp(4.5rem,13vw,11rem)] w-full">
+            <path d="M0 160 V78 C 210 18, 430 112, 650 62 S 1030 8, 1200 52 V160 Z" fill={HILL} />
+          </svg>
+          <div style={{ background: HILL }}>
+            <dl className="shell page-grid gap-y-5 pb-[clamp(1.25rem,4svh,2.5rem)] pt-1">
+              {STATS.map((s) => (
+                <div key={s.label} className="col-span-full sm:col-span-4 lg:col-span-4">
+                  <dt className="sr-only">{s.label}</dt>
+                  <dd className="flex items-baseline gap-3 sm:block">
+                    <span className="display tabular text-[clamp(2rem,3.4vw,3.2rem)] leading-none">
+                      <CountUp value={s.value} />
+                      {s.unit && <span className="ml-1.5 text-[0.55em]">{s.unit}</span>}
+                    </span>
+                    <span className="block text-small text-white/75 sm:mt-1.5">{s.label}</span>
+                  </dd>
+                </div>
+              ))}
+            </dl>
           </div>
         </div>
       </div>

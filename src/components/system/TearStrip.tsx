@@ -22,7 +22,7 @@ export function TearStrip({ from, tone }: { from: string; tone?: Tone }) {
       <Link
         href={next.href}
         onClick={() => setCurtainTone(field)}
-        className="panel group block min-h-[clamp(18rem,45vh,28rem)] bg-white text-ink border-t border-foil-2 shadow-sm transition-transform duration-500 ease-[var(--ease-back)] hover:-translate-y-1.5 focus-visible:-translate-y-1.5"
+        className="panel group block min-h-[clamp(18rem,45vh,28rem)] bg-white text-ink  transition-transform duration-500 ease-[var(--ease-back)] hover:-translate-y-1.5 focus-visible:-translate-y-1.5"
       >
         <div className="shell page-grid min-h-[inherit] content-end gap-y-8 pb-[var(--section-y)] pt-[var(--section-y)]">
           <div className="span-lead">
@@ -40,7 +40,7 @@ export function TearStrip({ from, tone }: { from: string; tone?: Tone }) {
           <div className="span-side flex items-end lg:justify-end">
             <span
               aria-hidden
-              className="grid size-16 place-items-center rounded-[var(--radius-sm)] bg-crimson text-white transition-all duration-300 ease-[var(--ease-back)] group-hover:translate-x-1 group-hover:bg-wine shadow-sm"
+              className="grid size-16 place-items-center rounded-[var(--radius-sm)] bg-crimson text-white transition-all duration-300 ease-[var(--ease-back)] group-hover:translate-x-1 group-hover:bg-wine "
             >
               <ArrowRight className="size-7" strokeWidth={2.2} />
             </span>

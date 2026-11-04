@@ -91,7 +91,7 @@ export function IndustryList() {
                       setActive(i);
                     }}
                     onFocus={() => setActive(i)}
-                    className={`display block py-1 text-[clamp(2rem,4.9vw,5.6rem)] leading-[1] transition-colors duration-300 ${
+                    className={`display block py-2 text-[clamp(2rem,4.9vw,5.6rem)] leading-[1] transition-colors duration-300 ${
                       i === active ? "text-crimson" : "text-[#c26a62] hover:text-crimson"
                     }`}
                   >
@@ -100,7 +100,7 @@ export function IndustryList() {
                 </li>
               ))}
               <li>
-                <Link href="/offerings/" className="hand mt-4 inline-block text-[2.4rem] text-wine underline decoration-wine/30 underline-offset-8 hover:decoration-wine">
+                <Link href="/offerings/" className="hand mt-4 inline-flex min-h-11 items-center text-[2.4rem] text-wine underline decoration-wine/30 underline-offset-8 hover:decoration-wine">
                   and more
                 </Link>
               </li>

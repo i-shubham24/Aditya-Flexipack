@@ -25,11 +25,11 @@ const SUMMARY = [
     label: "Contact",
     value: (
       <>
-        <a href={site.phoneHref} className="font-semibold text-crimson underline underline-offset-4">
+        <a href={site.phoneHref} className="inline-flex min-h-11 items-center font-semibold text-crimson underline underline-offset-4">
           {site.phone}
         </a>
         , {site.cityOffice.lines.join(", ")},{" "}
-        <a href={`mailto:${site.emailAlt}`} className="font-semibold text-crimson underline underline-offset-4 [overflow-wrap:anywhere]">
+        <a href={`mailto:${site.emailAlt}`} className="inline-flex min-h-11 items-center font-semibold text-crimson underline underline-offset-4 [overflow-wrap:anywhere]">
           {site.emailAlt}
         </a>
       </>
@@ -143,11 +143,11 @@ const CLAUSES: ClauseDef[] = [
         <address className="not-italic">
           <strong>{site.name}</strong>
           <br />
-          <a href={site.phoneHref}>{site.phone}</a>
+          <a href={site.phoneHref} className="inline-flex min-h-11 items-center">{site.phone}</a>
           <br />
           {site.cityOffice.lines.join(", ")}
           <br />
-          <a href={`mailto:${site.emailAlt}`}>{site.emailAlt}</a>
+          <a href={`mailto:${site.emailAlt}`} className="inline-flex min-h-11 items-center [overflow-wrap:anywhere]">{site.emailAlt}</a>
         </address>
       </>
     ),

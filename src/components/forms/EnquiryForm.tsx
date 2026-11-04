@@ -48,7 +48,7 @@ function Control({ form, f, error }: { form: FormId; f: Field; error?: string })
           type="file"
           multiple={(f.maxFiles ?? 1) > 1}
           accept=".pdf,.doc,.docx"
-          className="w-full text-[0.95rem] text-ink-soft file:mr-4 file:rounded-[var(--radius-xs)] file:border-0 file:bg-foil file:px-4 file:py-2 file:font-semibold file:text-ink"
+          className="min-h-11 w-full text-[0.95rem] text-ink-soft file:mr-4 file:rounded-[var(--radius-xs)] file:border-0 file:bg-foil file:px-4 file:py-2 file:font-semibold file:text-ink"
         />
       </span>
     );

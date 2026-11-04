@@ -60,7 +60,7 @@ export function Shelf() {
 
   return (
     <section ref={root} aria-labelledby="shelf-title" className="pt-[var(--frame)]">
-      <div className="panel bg-white border-t border-foil-2 py-[var(--section-y)] shadow-sm">
+      <div className="panel bg-white py-[var(--section-y)] ">
         <div className="shell grid gap-10 lg:grid-cols-12">
           <div className="lg:col-span-6">
             <h2 id="shelf-title" className="display text-[clamp(2.6rem,5.6vw,6rem)] text-ink">

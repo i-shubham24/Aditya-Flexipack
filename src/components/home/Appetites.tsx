@@ -152,7 +152,7 @@ export function Appetites() {
             <div className="relative col-span-5 col-start-8 grid h-[72%] place-items-center">
               {AISLES.map((a, i) => (
                 <div key={a.name} data-pack={i} className={`absolute inset-0 grid place-items-center ${i ? "invisible" : ""}`}>
-                  <Pack format={a.format} className="h-full w-full drop-shadow-[0_40px_40px_rgb(28_21_23/0.25)]" />
+                  <Pack format={a.format} className="h-full w-full " />
                 </div>
               ))}
             </div>

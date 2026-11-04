@@ -4,31 +4,23 @@ import { Logo } from "@/components/ui/Logo";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useId, useRef, useState } from "react";
-import { ArrowRight, ChevronDown, X } from "lucide-react";
+import { ChevronDown } from "lucide-react";
+import { gsap } from "gsap";
 import { nav, site, type NavGroup } from "@/content/site";
 import { ButtonLink } from "@/components/ui/Button";
-import { gsap } from "gsap";
+import { DanceText, danceHandlers } from "@/components/ui/dance";
 
+// Aardvark's nav tab: a soft rounded tab whose letters dance on hover.
 const tab =
-  "flex min-h-10 items-center gap-1 rounded-[var(--radius-sm)] bg-white/90 px-3.5 text-[0.95rem] font-semibold text-ink backdrop-blur transition-[background-color,transform] duration-300 ease-[var(--ease-back)] hover:-translate-y-0.5 hover:bg-white";
+  "flex h-11 items-center gap-1 rounded-[1.4rem] bg-white/90 px-4 text-[0.98rem] font-semibold text-ink backdrop-blur transition-[background-color,scale] duration-150 ease-out hover:bg-white active:scale-[0.96]";
 
-function Dropdown({
-  group,
-  open,
-  onToggle,
-  onClose,
-}: {
-  group: NavGroup;
-  open: boolean;
-  onToggle: () => void;
-  onClose: () => void;
-}) {
+function Dropdown({ group, open, onToggle, onClose }: { group: NavGroup; open: boolean; onToggle: () => void; onClose: () => void }) {
   const id = useId();
   return (
     <li className="relative" onMouseEnter={() => !open && onToggle()} onMouseLeave={() => open && onClose()}>
-      <button type="button" aria-expanded={open} aria-controls={id} onClick={onToggle} className={tab}>
-        {group.label}
-        <ChevronDown className={`size-4 transition-transform duration-300 ${open ? "rotate-180" : ""}`} strokeWidth={2.4} />
+      <button type="button" aria-expanded={open} aria-controls={id} onClick={onToggle} className={tab} {...danceHandlers}>
+        <DanceText text={group.label} />
+        <ChevronDown aria-hidden className={`size-4 transition-transform duration-300 ${open ? "rotate-180" : ""}`} strokeWidth={2.4} />
       </button>
       <div
         id={id}
@@ -36,10 +28,10 @@ function Dropdown({
           open ? "visible translate-y-0 opacity-100" : "invisible -translate-y-1 opacity-0"
         }`}
       >
-        <ul className="rounded-[var(--radius-lg)] bg-white p-2 ring-1 ring-foil-2 shadow-lg">
+        <ul className="rounded-[var(--radius-xl)] bg-white p-2 ring-1 ring-foil-2">
           {group.children?.map((c) => (
             <li key={c.href + c.label}>
-              <Link href={c.href} onClick={onClose} className="group/item flex flex-col rounded-[var(--radius-md)] px-4 py-3 transition-colors hover:bg-crimson-wash">
+              <Link href={c.href} onClick={onClose} className="group/item flex flex-col rounded-[var(--radius-lg)] px-4 py-3 transition-colors hover:bg-crimson-wash">
                 <span className="font-semibold text-ink group-hover/item:text-crimson">{c.label}</span>
                 {c.note && <span className="text-[0.88rem] text-ink-soft">{c.note}</span>}
               </Link>
@@ -51,132 +43,43 @@ function Dropdown({
   );
 }
 
-/**
- * Dancing text: splits text into individual characters that animate on hover with the
- * exact Aardvark Book Club elastic wave animation (yPercent 55, scaleY 0.3, rotate 17deg -> elastic bounce).
- */
-function DancingText({ text }: { text: string }) {
+/** Two offset strokes, crimson over ink, that turn into a cross when the menu is open. */
+function MenuIcon({ open }: { open: boolean }) {
   return (
-    <span className="inline-flex select-none pointer-events-none">
-      {text.split("").map((char, i) => (
-        <span
-          key={i}
-          data-char
-          className="inline-block transform-gpu will-change-transform"
-          style={{ whiteSpace: char === " " ? "pre" : "normal" }}
-        >
-          {char}
-        </span>
-      ))}
+    <span aria-hidden className="relative block h-3.5 w-6">
+      <span
+        className={`absolute left-0 top-0 h-[3px] w-6 rounded-[2px] bg-crimson transition-[translate,rotate,width] duration-300 ease-[var(--ease-back)] ${
+          open ? "translate-y-[5.5px] rotate-45" : "group-hover/menu:w-4"
+        }`}
+      />
+      <span
+        className={`absolute bottom-0 left-0 h-[3px] rounded-[2px] bg-ink transition-[translate,rotate,width] duration-300 ease-[var(--ease-back)] ${
+          open ? "w-6 -translate-y-[5.5px] -rotate-45" : "w-3.5 group-hover/menu:w-6"
+        }`}
+      />
     </span>
   );
 }
 
-function animateCharDance(el: HTMLElement) {
-  const chars = el.querySelectorAll<HTMLElement>("[data-char]");
-  if (!chars.length) return;
-  gsap.killTweensOf(chars);
-  gsap.fromTo(
-    chars,
-    { yPercent: 0, scaleY: 1, rotate: 0 },
-    {
-      keyframes: {
-        "0%": { yPercent: 0, scaleY: 1, rotate: 0 },
-        "20%": { yPercent: 55, scaleY: 0.3, rotate: 17, ease: "power2.in" },
-        "100%": { yPercent: 0, scaleY: 1, rotate: 0, ease: "elastic.out(1, 0.4)" },
-      },
-      duration: 0.725,
-      stagger: 0.025,
-    },
-  );
-}
-
-function resetCharDance(el: HTMLElement) {
-  const chars = el.querySelectorAll<HTMLElement>("[data-char]");
-  if (!chars.length) return;
-  gsap.to(chars, {
-    yPercent: 0,
-    scaleY: 1,
-    rotate: 0,
-    duration: 0.2,
-    ease: "power2.out",
-    overwrite: "auto",
-  });
-}
-
-/**
- * Aardvark-style organic pill button: chunky rounded-full shape with elastic hover bounce
- * and dancing text animation.
- */
-function AardvarkPillButton({
-  href,
-  label,
-  onClick,
-}: {
-  href: string;
-  label: string;
-  onClick: () => void;
-}) {
-  const rootRef = useRef<HTMLAnchorElement>(null);
-
-  return (
-    <Link
-      ref={rootRef}
-      href={href}
-      onClick={onClick}
-      onMouseEnter={(e) => animateCharDance(e.currentTarget)}
-      onMouseLeave={(e) => resetCharDance(e.currentTarget)}
-      className="display group relative flex h-[3.8rem] w-[min(84vw,20.5rem)] items-center justify-center rounded-full bg-white px-8 text-center text-[1.32rem] font-bold text-ink shadow-xl ring-1 ring-black/5 transition-transform duration-300 ease-[cubic-bezier(0.34,2.27,0.64,1)] hover:scale-105 active:scale-95 hover:text-crimson sm:h-[4.2rem] sm:text-[1.45rem]"
-    >
-      <DancingText text={label} />
-    </Link>
-  );
-}
-
-/**
- * Aardvark-style signature split button (like "Log-in / Sign-up ->"):
- * Two connected rounded blocks with an animated rotating arrow block and dancing text.
- */
-function AardvarkSplitButton({
-  href,
-  label,
-  onClick,
-}: {
-  href: string;
-  label: string;
-  onClick?: () => void;
-}) {
-  return (
-    <Link
-      href={href}
-      onClick={onClick}
-      onMouseEnter={(e) => animateCharDance(e.currentTarget)}
-      onMouseLeave={(e) => resetCharDance(e.currentTarget)}
-      className="group inline-flex items-center gap-2.5 transition-transform duration-300 ease-[cubic-bezier(0.34,2.27,0.64,1)] active:scale-95"
-    >
-      {/* Block 1: Main Text Block with subtle tilt */}
-      <div className="flex h-[3.4rem] items-center justify-center rounded-2xl bg-white px-6 text-center font-bold text-ink shadow-xl ring-1 ring-black/5 transition-all duration-300 ease-[cubic-bezier(0.34,2.27,0.64,1)] -rotate-[1deg] group-hover:-rotate-[2.5deg] group-hover:scale-[1.04] group-hover:text-crimson">
-        <span className="text-[1.18rem] sm:text-[1.25rem]">
-          <DancingText text={label} />
-        </span>
-      </div>
-
-      {/* Block 2: Distinct attached arrow box that spins/bounces on hover */}
-      <div className="grid size-[3.4rem] place-items-center rounded-2xl bg-white text-ink shadow-xl ring-1 ring-black/5 transition-all duration-300 ease-[cubic-bezier(0.34,2.27,0.64,1)] rotate-[3deg] group-hover:rotate-[18deg] group-hover:scale-110 group-hover:text-crimson">
-        <ArrowRight className="size-5 stroke-[2.6]" />
-      </div>
-    </Link>
-  );
-}
-
-/** Core destinations rendered in the mobile menu */
-const MOBILE_PILL_LINKS = [
+// Everything the desktop menus hold, regrouped for a thumb: big tabs first, then the quieter links.
+const BIG = [
   { label: "Our story", href: "/about-us/" },
   { label: "Products", href: "/products/" },
   { label: "Sustainability", href: "/sustainability/" },
-  { label: "Awards & Honours", href: "/awards-recognitions/" },
+  { label: "Awards", href: "/awards-recognitions/" },
   { label: "Career", href: "/career/" },
-  { label: "Packaging Partner", href: "/packaging-partnership/" },
+  { label: "Partner with us", href: "/packaging-partnership/" },
+];
+const SMALL = [
+  { title: "Products", links: nav.find((g) => g.label === "Products")?.children ?? [] },
+  {
+    title: "More",
+    links: [
+      { label: "Our offerings", href: "/offerings/" },
+      { label: "Gallery", href: "/gallery/" },
+      { label: "Vendor partnership", href: "/vendor-partnership/" },
+    ],
+  },
 ];
 
 /** Logo left, soft nav tabs in the centre, split call to action right: no bar behind them. */
@@ -193,10 +96,10 @@ export function SiteHeader() {
   const sheet = sheetPath === pathname;
   const setOpenKey = (k: string | null | ((cur: string | null) => string | null)) =>
     setOpen((cur) => ({ key: typeof k === "function" ? k(cur.path === pathname ? cur.key : null) : k, path: pathname }));
-  const setSheet = (v: boolean | ((cur: boolean) => boolean)) =>
-    setSheetPath((cur) => ((typeof v === "function" ? v(cur === pathname) : v) ? pathname : null));
+  const setSheet = (v: boolean) => setSheetPath(v ? pathname : null);
   const [scrolled, setScrolled] = useState(false);
   const sheetRef = useRef<HTMLDivElement>(null);
+  const openerRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60);
@@ -205,6 +108,7 @@ export function SiteHeader() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Read the hero of the page actually on screen; hidden, previously visited pages have no layout box.
   useEffect(() => {
     const pick = () => {
       const hero = [...document.querySelectorAll<HTMLElement>("main [data-hero]")].find((h) => h.getClientRects().length > 0);
@@ -226,41 +130,56 @@ export function SiteHeader() {
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
+  // Opening the menu: stop the page, move focus in, and deal the tabs in one after another.
   useEffect(() => {
     const lenis = window.__lenis;
-    if (sheet) {
-      lenis?.stop();
-      document.documentElement.style.overflow = "hidden";
-      document.body.style.overflow = "hidden";
-      sheetRef.current?.querySelector<HTMLElement>("button, a")?.focus();
-    } else {
+    const el = sheetRef.current;
+    const opener = openerRef.current;
+    if (!sheet || !el) {
       lenis?.start();
       document.documentElement.style.overflow = "";
-      document.body.style.overflow = "";
+      return;
     }
+    lenis?.stop();
+    document.documentElement.style.overflow = "hidden";
+    // Wait a frame for the panel to become visible before moving focus into it.
+    const focusId = window.setTimeout(() => el.querySelector<HTMLElement>("[data-sheet-close]")?.focus(), 60);
+    const mm = gsap.matchMedia();
+    mm.add("(prefers-reduced-motion: no-preference)", () => {
+      gsap.fromTo(
+        el.querySelectorAll("[data-sheet-tab]"),
+        { x: -28, rotate: -4, autoAlpha: 0 },
+        { x: 0, rotate: 0, autoAlpha: 1, duration: 0.6, ease: "back.out(1.8)", stagger: 0.05, delay: 0.12 },
+      );
+      gsap.fromTo(el.querySelectorAll("[data-sheet-fade]"), { y: 16, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.5, ease: "power3.out", stagger: 0.06, delay: 0.4 });
+    });
+    return () => {
+      window.clearTimeout(focusId);
+      mm.revert();
+      // Hand focus back to the menu button the panel was opened from.
+      if (el.contains(document.activeElement)) opener?.focus();
+    };
   }, [sheet]);
 
   return (
     <>
-      {/* Header bar: transparent overlay with floating pill tabs */}
       <header className="pointer-events-none fixed inset-x-0 top-0 z-50">
         <div className="shell flex h-[var(--header-h)] items-center gap-3 pt-[var(--frame)]">
-          {/* Logo slips away smoothly on scroll */}
+          {/* The logo sits on the page itself and slips away once you scroll, leaving the tabs. */}
           <Link
             href="/"
             aria-label={`${site.name} home`}
             tabIndex={scrolled && !sheet ? -1 : undefined}
-            className={`pointer-events-auto shrink-0 rounded-[var(--radius-sm)] transition-[opacity,translate] duration-500 ease-out-expo ${
+            className={`pointer-events-auto flex min-h-11 shrink-0 items-center rounded-[var(--radius-sm)] transition-[opacity,translate] duration-500 ease-out-expo ${
               scrolled && !sheet ? "pointer-events-none -translate-y-6 opacity-0" : "translate-y-0 opacity-100"
             }`}
           >
             <span className="relative block h-8 w-[195px] sm:h-9 sm:w-[219px]">
-              <Logo className={`absolute inset-0 h-full w-full ${sheet ? "" : ON_DARK_HIDE}`} />
-              <Logo tone="white" className={`absolute inset-0 h-full w-full invisible ${sheet ? "" : ON_DARK_SHOW}`} />
+              <Logo className={`absolute inset-0 h-full w-full ${ON_DARK_HIDE}`} />
+              <Logo tone="white" className={`invisible absolute inset-0 h-full w-full ${ON_DARK_SHOW}`} />
             </span>
           </Link>
 
-          {/* Desktop primary floating pill tabs on xl+ (1280px+) */}
           <nav aria-label="Primary" className="pointer-events-auto mx-auto hidden xl:block">
             <ul className="flex items-center gap-1.5">
               {nav.map((g) =>
@@ -274,8 +193,8 @@ export function SiteHeader() {
                   />
                 ) : (
                   <li key={g.label}>
-                    <Link href={g.href} className={tab}>
-                      {g.label}
+                    <Link href={g.href} className={tab} {...danceHandlers}>
+                      <DanceText text={g.label} />
                     </Link>
                   </li>
                 ),
@@ -284,147 +203,129 @@ export function SiteHeader() {
           </nav>
 
           <div className="pointer-events-auto hidden xl:block">
-            <ButtonLink href="/contact-us/" tone="ink" className="!min-h-10">
+            <ButtonLink href="/contact-us/" tone="ink" className="!min-h-11">
               Contact us
             </ButtonLink>
           </div>
 
-          {/* Unique tactile Menu pill button for mobile (< 1280px) replacing classic hamburger */}
           <button
+            ref={openerRef}
             type="button"
             onClick={() => setSheet(true)}
-            onMouseEnter={(e) => animateCharDance(e.currentTarget)}
-            onMouseLeave={(e) => resetCharDance(e.currentTarget)}
             aria-expanded={sheet}
-            aria-controls="mobile-nav-modal"
-            aria-label="Open navigation menu"
-            className="pointer-events-auto ml-auto flex items-center gap-2.5 rounded-full bg-white/95 px-4 py-2 text-[0.92rem] font-bold text-ink shadow-md ring-1 ring-black/5 backdrop-blur-md transition-all duration-300 hover:scale-105 active:scale-95 xl:hidden"
+            aria-controls="mobile-nav"
+            aria-label="Open menu"
+            className="group/menu pointer-events-auto ml-auto grid size-12 place-items-center rounded-[var(--radius-sm)] bg-white/95 backdrop-blur transition-[scale] duration-150 ease-out active:scale-[0.94] xl:hidden"
           >
-            <span className="flex flex-col gap-1 w-3.5 justify-center">
-              <span className="h-0.5 w-3.5 rounded-full bg-crimson" />
-              <span className="h-0.5 w-2 rounded-full bg-ink" />
-            </span>
-            <span className="tracking-tight">
-              <DancingText text="Menu" />
-            </span>
+            <MenuIcon open={false} />
           </button>
         </div>
       </header>
 
-      {/* Aardvark Book Club inspired Full-Screen Organic Wavy Navigation Modal */}
+      {/* Phone and tablet menu: a rounded crimson panel with tonal contours, big dancing tabs, then the quieter links */}
       <div
-        id="mobile-nav-modal"
+        id="mobile-nav"
         role="dialog"
         aria-modal="true"
-        aria-label="Site Navigation"
+        aria-label="Site menu"
         ref={sheetRef}
         data-lenis-prevent
-        className={`fixed inset-0 z-50 flex flex-col justify-between overflow-y-auto bg-crimson text-white transition-[opacity,transform] duration-400 ease-out-expo xl:hidden ${
-          sheet
-            ? "pointer-events-auto translate-y-0 opacity-100"
-            : "pointer-events-none -translate-y-4 opacity-0"
+        className={`fixed inset-[var(--frame)] z-[60] flex flex-col overflow-y-auto overflow-x-clip rounded-[var(--radius-2xl)] bg-crimson text-white transition-[opacity,translate,visibility] duration-500 ease-out-expo xl:hidden ${
+          sheet ? "visible translate-y-0 opacity-100" : "invisible -translate-y-5 opacity-0"
         }`}
       >
-        {/* Organic wavy background shapes in brand colours (crimson, blush, wine) */}
-        <svg
-          aria-hidden
-          viewBox="0 0 800 1200"
-          preserveAspectRatio="none"
-          className="pointer-events-none absolute inset-0 h-full w-full"
-        >
-          <path
-            d="M0 0 C 260 60, 520 280, 460 520 S 140 840, 260 1200 H0 Z"
-            fill="#b80000"
-            opacity="0.75"
-          />
-          <path
-            d="M800 0 C 640 180, 520 440, 680 720 S 500 1040, 800 1200 Z"
-            fill="#ffb4aa"
-            opacity="0.85"
-          />
-          <path
-            d="M0 1200 C 200 1080, 340 940, 500 1020 S 740 1120, 800 1200 Z"
-            fill="#45060e"
-            opacity="0.8"
-          />
+        <svg aria-hidden viewBox="0 0 800 1200" preserveAspectRatio="xMaxYMax slice" className="pointer-events-none absolute inset-0 h-full w-full">
+          <path d="M0 0 H380 C 320 120, 200 170, 110 150 S 0 190, 0 280 Z" fill="#e01810" />
+          <path d="M260 1200 C 280 990, 410 900, 520 760 S 700 520, 800 470 V1200 Z" fill="#dc0a05" />
+          <path d="M410 1200 C 430 1040, 550 980, 630 880 S 760 720, 800 700 V1200 Z" fill="#b80000" />
+          <path d="M560 1200 C 580 1100, 660 1060, 720 1000 S 790 940, 800 930 V1200 Z" fill="#a10000" />
         </svg>
 
-        {/* Top bar: Brand logo left + rounded close button right */}
-        <div className="relative z-10 flex h-[var(--header-h)] items-center justify-between px-6 pt-[var(--frame)]">
-          <Link
-            href="/"
-            onClick={() => setSheet(false)}
-            aria-label={`${site.name} home`}
-            className="block h-8 w-[180px]"
-          >
-            <Logo tone="white" className="h-full w-full" />
+        <div className="relative z-10 flex h-[var(--header-h)] shrink-0 items-center justify-between px-[calc(var(--gutter)-var(--frame))] pt-[var(--frame)]">
+          <Link href="/" onClick={() => setSheet(false)} aria-label={`${site.name} home`} className="flex min-h-11 items-center">
+            <Logo tone="white" className="h-8 w-[195px]" />
           </Link>
-
           <button
             type="button"
+            data-sheet-close
             onClick={() => setSheet(false)}
-            aria-label="Close navigation"
-            className="grid size-11 place-items-center rounded-2xl bg-white text-ink shadow-xl transition-transform hover:scale-105 active:scale-95"
+            aria-label="Close menu"
+            className="group/menu grid size-12 place-items-center rounded-[var(--radius-sm)] bg-white transition-[scale] duration-150 ease-out active:scale-[0.94]"
           >
-            <X className="size-5 text-ink" strokeWidth={2.5} />
+            <MenuIcon open />
           </button>
         </div>
 
-        {/* Centrepiece: Stacked tactile white pill buttons with dancing text on hover */}
-        <nav
-          aria-label="Mobile Navigation"
-          className="relative z-10 my-auto flex flex-col items-center justify-center gap-3.5 px-6 py-4"
-        >
-          {MOBILE_PILL_LINKS.map((link) => (
-            <AardvarkPillButton
-              key={link.href}
-              href={link.href}
-              label={link.label}
-              onClick={() => setSheet(false)}
-            />
-          ))}
+        <nav aria-label="Menu" className="relative z-10 flex flex-1 flex-col justify-center gap-6 px-[calc(var(--gutter)-var(--frame))] py-3">
+          <ul className="flex flex-col items-start gap-2">
+            {BIG.map((l) => {
+              const here = pathname === l.href;
+              return (
+                <li key={l.href} data-sheet-tab>
+                  <Link
+                    href={l.href}
+                    onClick={() => setSheet(false)}
+                    aria-current={here ? "page" : undefined}
+                    className={`display inline-flex h-[3.25rem] items-center rounded-[1.625rem] px-5 text-[clamp(1.45rem,5.6vw,2.1rem)] sm:h-[3.6rem] sm:rounded-[1.8rem] sm:px-6 transition-[scale,background-color] duration-150 ease-out active:scale-[0.96] ${
+                      here ? "bg-wine text-white" : "bg-white text-ink hover:bg-crimson-wash"
+                    }`}
+                    {...danceHandlers}
+                  >
+                    <DanceText text={l.label} />
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+
+          <div className="grid gap-3 sm:grid-cols-2 sm:gap-5">
+            {SMALL.map((g) => (
+              <div key={g.title} data-sheet-fade>
+                <p className="hand -rotate-2 text-note text-blush">{g.title}</p>
+                <ul className="mt-1 flex flex-wrap gap-x-5">
+                  {g.links.map((l) => (
+                    <li key={l.href}>
+                      <Link
+                        href={l.href}
+                        onClick={() => setSheet(false)}
+                        className="inline-flex min-h-11 items-center font-semibold text-white underline decoration-white/40 underline-offset-4 hover:decoration-white"
+                      >
+                        {l.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
         </nav>
 
-        {/* Bottom bar: Signature Aardvark split button + social circles + copyright */}
-        <div className="relative z-10 flex flex-col items-center gap-4 pb-8 pt-2">
-          <div className="flex flex-wrap items-center justify-center gap-3">
-            {/* Signature 2-piece split button matching Aardvark's "Log-in / Sign-up ->" */}
-            <AardvarkSplitButton
-              href="/contact-us/"
-              label="Start an enquiry"
-              onClick={() => setSheet(false)}
-            />
-
-            <div className="flex items-center gap-2.5">
-              <a
-                href={site.social.linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Aditya Flexipack on LinkedIn"
-                className="grid size-[3.4rem] place-items-center rounded-2xl bg-white text-ink shadow-xl transition-all duration-300 ease-[cubic-bezier(0.34,2.27,0.64,1)] hover:scale-110 hover:rotate-6 hover:text-crimson active:scale-95"
-              >
-                <svg className="size-5" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.45c-.89 0-1.61.72-1.61 1.61 0 .89.72 1.61 1.61 1.61.89 0 1.61-.72 1.61-1.61 0-.89-.72-1.61-1.61-1.61Z" />
-                </svg>
-              </a>
-
-              <a
-                href={site.social.facebook}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Aditya Flexipack on Facebook"
-                className="grid size-[3.4rem] place-items-center rounded-2xl bg-white text-ink shadow-xl transition-all duration-300 ease-[cubic-bezier(0.34,2.27,0.64,1)] hover:scale-110 hover:-rotate-6 hover:text-crimson active:scale-95"
-              >
-                <svg className="size-5" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c5.05-.5 9-4.76 9-9.95z" />
-                </svg>
-              </a>
-            </div>
-          </div>
-
-          <p className="text-[0.74rem] font-medium text-white/75 tracking-wide">
-            © Aditya Flexipack Private Limited
-          </p>
+        <div data-sheet-fade className="relative z-10 flex flex-wrap items-center gap-3 px-[calc(var(--gutter)-var(--frame))] pb-4 pt-1">
+          <ButtonLink href="/contact-us/" tone="white" onClick={() => setSheet(false)}>
+            Contact us
+          </ButtonLink>
+          <a
+            href={site.social.linkedin}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Aditya Flexipack on LinkedIn"
+            className="grid size-12 place-items-center rounded-[var(--radius-sm)] bg-wine text-white transition-[scale] duration-150 active:scale-[0.94]"
+          >
+            <svg aria-hidden className="size-5" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.45c-.89 0-1.61.72-1.61 1.61 0 .89.72 1.61 1.61 1.61.89 0 1.61-.72 1.61-1.61 0-.89-.72-1.61-1.61-1.61Z" />
+            </svg>
+          </a>
+          <a
+            href={site.social.facebook}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Aditya Flexipack on Facebook"
+            className="grid size-12 place-items-center rounded-[var(--radius-sm)] bg-wine text-white transition-[scale] duration-150 active:scale-[0.94]"
+          >
+            <svg aria-hidden className="size-5" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c5.05-.5 9-4.76 9-9.95z" />
+            </svg>
+          </a>
         </div>
       </div>
     </>

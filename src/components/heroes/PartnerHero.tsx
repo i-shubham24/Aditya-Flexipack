@@ -21,7 +21,7 @@ const CONTOURS: Record<Tone, [string, string, string]> = {
 };
 
 /**
- * Short opener for desk pages: calibrated to the exact same height as the Home hero (h-[100svh] min-h-[640px]).
+ * Short opener for desk pages: full screen on desktop like the Home hero, shorter on phones and tablets (.hero-h).
  */
 export function PartnerHero({
   title,
@@ -57,7 +57,7 @@ export function PartnerHero({
   );
 
   return (
-    <section ref={root} data-hero={t.dark ? "dark" : "light"} aria-labelledby="page-title" className="h-[100svh] min-h-[640px]">
+    <section ref={root} data-hero={t.dark ? "dark" : "light"} aria-labelledby="page-title" className="hero-h">
       <div className={`relative h-full overflow-clip rounded-b-[var(--radius-2xl)] ${t.bg} ${t.ink}`}>
         {/* Dynamic wavy contour graphics matched to the palette */}
         <svg

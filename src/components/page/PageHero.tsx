@@ -21,7 +21,7 @@ const TONES: Record<HeroTone, { bg: string; ink: string; note: string; sub: stri
 type Photo = { src: string; alt: string };
 
 /**
- * Inner-page opener: calibrated to the exact same height as the Home hero (h-[100svh] min-h-[640px]).
+ * Inner-page opener: full screen on desktop like the Home hero, shorter on phones and tablets (.hero-h).
  */
 export function PageHero({
   title,
@@ -65,7 +65,7 @@ export function PageHero({
   );
 
   return (
-    <section ref={root} data-hero={t.dark ? "dark" : "light"} aria-labelledby="page-title" className="h-[100svh] min-h-[640px]">
+    <section ref={root} data-hero={t.dark ? "dark" : "light"} aria-labelledby="page-title" className="hero-h">
       <div className={`relative h-full overflow-clip rounded-b-[var(--radius-2xl)] ${t.bg} ${t.ink}`}>
         <svg aria-hidden viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice" className="absolute inset-0 h-full w-full">
           <path data-layer d="M640 800 C 610 640, 520 560, 600 430 S 860 300, 900 170 S 1080 -20, 1200 40 V800 Z" fill={t.layers[0]} />

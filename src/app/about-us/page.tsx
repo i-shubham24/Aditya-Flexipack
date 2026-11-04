@@ -1,18 +1,16 @@
 import type { Metadata } from "next";
 import { Check } from "lucide-react";
-import { CompanyHero } from "@/components/heroes/CompanyHero";
+import { AboutHero } from "@/components/company/about/AboutHero";
 import { TearStrip } from "@/components/system/TearStrip";
 import { SectionHeader } from "@/components/system/SectionHeader";
 import { NumberedList } from "@/components/system/NumberedList";
 import { PhotoFrame } from "@/components/system/PhotoFrame";
-import { ButtonLink } from "@/components/ui/Button";
+import { ButtonLink, TextLink } from "@/components/ui/Button";
 import { Pack, type PackFormat } from "@/components/ui/Pack";
 import { Rise } from "@/components/company/common/Rise";
-import { CountUp } from "@/components/company/common/CountUp";
 import { DriftPhoto } from "@/components/company/common/DriftPhoto";
 import { UnderOneRoof } from "@/components/company/about/UnderOneRoof";
-import { compliance, facts } from "@/content/site";
-import { pageOf } from "@/content/next";
+import { compliance } from "@/content/site";
 
 const PATH = "/about-us/";
 
@@ -22,14 +20,6 @@ export const metadata: Metadata = {
     "Over 25 years of flexible packaging for India's leading FMCG brands: 4,000 MT a month of laminates, in-house inks, cylinders and metallising, on an 18-acre BRC A Grade campus near Kanpur.",
   alternates: { canonical: PATH },
 };
-
-/** The four published figures, as type only. */
-const IDENTITY = [
-  { value: facts.years.value, unit: "years", label: "Of flexible packaging expertise" },
-  { value: facts.team.value, unit: "people", label: "Skilled professionals" },
-  { value: facts.capacity.value, unit: "MT / month", label: "Laminates production capacity" },
-  { value: facts.acres.value, unit: "acres", label: "Campus near Kanpur, Uttar Pradesh" },
-];
 
 const REASONS = ["Benchmarked quality", "Rapid turnaround time", "Heavily backward integrated", "Customer satisfaction", "Ethical practices"];
 
@@ -57,20 +47,15 @@ const AREAS: { name: string; format: PackFormat }[] = [
 export default function AboutPage() {
   return (
     <>
-      <CompanyHero
-        tone={pageOf(PATH).tone}
-        shape="standup"
-        title="Pioneering flexible packaging for India's leading food brands"
-        intro="High-performance, sustainable packaging engineered for India's leading brands."
-        photo={{ src: "/media/old/home/plant-exterior-building.webp", alt: "The plant: a grey factory building with a brown entrance block, flagpoles and a lawn" }}
+      <AboutHero
         actions={
           <>
             <ButtonLink href="/contact-us/" tone="white">
               Contact us
             </ButtonLink>
-            <ButtonLink href="/products/" tone="crimson" plain>
+            <TextLink href="/products/" tone="white">
               Our products
-            </ButtonLink>
+            </TextLink>
           </>
         }
       />
@@ -87,19 +72,6 @@ export default function AboutPage() {
             <p>Our packs meet the highest global standards. They protect, preserve and add brand value.</p>
             <p className="font-semibold text-ink">We don&apos;t just make packaging. We engineer solutions for sustainable consumer goods.</p>
           </div>
-          <dl className="col-span-full mt-[var(--stack)] grid grid-cols-subgrid gap-y-10">
-            {IDENTITY.map((f) => (
-              <div key={f.unit} data-rise className="col-span-2 flex flex-col-reverse lg:col-span-3">
-                <dt className="mt-3 text-small">
-                  <span className="block font-semibold text-ink">{f.unit}</span>
-                  <span className="block text-ink-soft">{f.label}</span>
-                </dt>
-                <dd className="display tabular text-d2 text-crimson">
-                  <CountUp value={f.value} />
-                </dd>
-              </div>
-            ))}
-          </dl>
         </Rise>
       </section>
 

@@ -15,7 +15,7 @@ export function CtaPanel({
 }) {
   return (
     <section aria-labelledby="cta-title" className="pt-[var(--frame)]">
-      <div className="panel bg-white border-t border-foil-2 py-[calc(var(--section-y)*0.8)] text-ink shadow-sm">
+      <div className="panel bg-white py-[calc(var(--section-y)*0.8)] text-ink ">
         <div className="shell relative grid gap-8 lg:grid-cols-12 lg:items-end">
           <div className="lg:col-span-7">
             <h2 id="cta-title" className="display text-[clamp(2.6rem,6vw,6rem)] text-ink">

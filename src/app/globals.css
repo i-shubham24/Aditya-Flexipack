@@ -308,6 +308,7 @@ select {
 .js [data-card-front],
 .js [data-card-back],
 .js [data-photo],
+.js [data-hero-photo],
 .js [data-range-photo] {
   visibility: hidden;
   animation: intro-failsafe 0s 4.5s forwards;
@@ -323,9 +324,26 @@ select {
   .js [data-card-front],
   .js [data-card-back],
   .js [data-photo],
+  .js [data-hero-photo],
   .js [data-range-photo] {
     visibility: visible;
     animation: none;
+  }
+}
+
+/*
+  Inner-page heroes: full screen on desktop like the home hero; on phones and tablets a shorter opener, so the
+  page's own content starts within the first swipe. Direct children inherit the floor so coloured fields fill it.
+*/
+.hero-h {
+  min-height: min(72svh, 44rem);
+}
+.hero-h > * {
+  min-height: inherit;
+}
+@media (min-width: 1024px) {
+  .hero-h {
+    min-height: max(100svh, 640px);
   }
 }
 

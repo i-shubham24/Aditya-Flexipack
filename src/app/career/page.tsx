@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { TearStrip } from "@/components/system/TearStrip";
 import { NumberedList } from "@/components/system/NumberedList";
 import { PhotoFrame } from "@/components/system/PhotoFrame";
-import { ButtonLink } from "@/components/ui/Button";
+import { ButtonLink, TextLink } from "@/components/ui/Button";
 import { EnquiryForm } from "@/components/forms/EnquiryForm";
 import { Rise } from "@/components/company/common/Rise";
 import { CareerHero } from "@/components/company/career/CareerHero";
@@ -45,9 +45,7 @@ export default function CareerPage() {
               <ButtonLink href="#apply" tone="ink">
                 View open positions
               </ButtonLink>
-              <ButtonLink href="/about-us/" tone="crimson" plain>
-                About us
-              </ButtonLink>
+              <TextLink href="/about-us/">About us</TextLink>
             </div>
           </div>
           <PhotoFrame

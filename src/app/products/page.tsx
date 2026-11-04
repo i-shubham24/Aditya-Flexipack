@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import { RangeHero } from "@/components/heroes/RangeHero";
+import { ProductsHero } from "@/components/products/ProductsHero";
 import { TearStrip } from "@/components/system/TearStrip";
 import { SectionHeader } from "@/components/system/SectionHeader";
 import { PhotoFrame } from "@/components/system/PhotoFrame";
-import { ButtonLink } from "@/components/ui/Button";
+import { ButtonLink, TextLink } from "@/components/ui/Button";
 import { Slitter } from "@/components/products/Slitter";
-import { pageOf } from "@/content/next";
+
 import { TONES } from "@/components/system/tones";
 import { industries } from "@/content/products";
 
@@ -27,14 +27,8 @@ export const metadata: Metadata = {
 export default function ProductsPage() {
   return (
     <>
-      <RangeHero
-        name="Products"
-        tone={pageOf("/products/").tone}
+      <ProductsHero
         lead={<p>Innovative packaging for every industry: food, pharma, FMCG and more.</p>}
-        photo={{
-          src: "/media/old/home/photo-printed-film-rolls-on-shafts.webp",
-          alt: "Printed and metallised film wound on large shafts inside a blue-framed machine",
-        }}
         spec={[
           { value: "6 lines", label: "laminates, pouches, films, inks, cylinders, polybags" },
           { value: "4,000 MT", label: "laminates production capacity every month" },
@@ -44,9 +38,7 @@ export default function ProductsPage() {
         actions={
           <>
             <ButtonLink href="/contact-us/">Get in touch</ButtonLink>
-            <ButtonLink href="/packaging-partnership/" tone="ink" plain>
-              Packaging partnership
-            </ButtonLink>
+            <TextLink href="/packaging-partnership/">Packaging partnership</TextLink>
           </>
         }
       />

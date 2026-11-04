@@ -7,8 +7,7 @@ import { NumberedList } from "@/components/system/NumberedList";
 import { TearStrip } from "@/components/system/TearStrip";
 import { EnquiryForm } from "@/components/forms/EnquiryForm";
 import { Rise } from "@/components/desk/Rise";
-import { BinStack } from "@/components/desk/StoresBin";
-import { StoresRack } from "@/components/desk/StoresRack";
+import { SupplyTags } from "@/components/desk/SupplyTags";
 import { VendorRoute } from "@/components/desk/VendorRoute";
 
 export const metadata: Metadata = {
@@ -69,7 +68,7 @@ export default function VendorPartnershipPage() {
             Fill the form
           </ButtonLink>
         }
-        teaser={<BinStack />}
+        teaser={<SupplyTags />}
       />
 
       <section aria-labelledby="vendor-why-title" className="py-[var(--section-y)]">
@@ -107,13 +106,6 @@ export default function VendorPartnershipPage() {
             ))}
           </ul>
         </Rise>
-      </section>
-
-      <section aria-labelledby="rack-title" className="py-[var(--section-y)]">
-        <div className="shell">
-          <SectionHeader id="rack-title" title="Products we source" standfirst="Pick what you supply. We add it to the form for you." />
-          <StoresRack formId="vendor-form" />
-        </div>
       </section>
 
       <section aria-labelledby="route-title" className="panel bg-crimson py-[calc(var(--section-y)*0.75)]">

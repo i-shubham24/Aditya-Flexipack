@@ -13,7 +13,7 @@ const PATH = "/sustainability/";
 export const metadata: Metadata = {
   title: "Sustainability",
   description:
-    "1.35 MW of on-site solar power, 100% waste recycling through pyrolysis, rainwater harvesting and low-emission inks across our 18-acre BRC A Grade campus near Kanpur.",
+    "1.35 MW of on-site solar power, three rainwater harvesting systems, a recycling plant with three-stage pyrolysis, and recycled materials on request, across our 18-acre campus near Kanpur.",
   alternates: { canonical: PATH },
 };
 
@@ -36,7 +36,7 @@ export default function SustainabilityPage() {
         }}
         action={
           <ButtonLink href="/packaging-partnership/" tone="white">
-            Talk to us about recyclable packs
+            Talk to us
           </ButtonLink>
         }
       />
@@ -122,7 +122,7 @@ export default function SustainabilityPage() {
             </div>
             <div data-rise className="col-span-full lg:col-span-4 lg:text-right">
               <ButtonLink href="/packaging-partnership/" tone="white">
-                Talk to us about recyclable packs
+                Talk to us
               </ButtonLink>
             </div>
           </Rise>

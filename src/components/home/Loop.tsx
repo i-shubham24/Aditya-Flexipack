@@ -59,7 +59,7 @@ export function Loop() {
             {INITIATIVES.map(({ icon: Icon, figure, title, body }, i) => (
               <li
                 key={title}
-                className={`rounded-[var(--radius-xl)] bg-white p-7 shadow-[var(--shadow-lift)] ${i % 2 ? "sm:translate-y-12" : ""}`}
+                className={`rounded-[var(--radius-xl)] bg-white p-7  ${i % 2 ? "sm:translate-y-12" : ""}`}
               >
                 <span className="grid size-12 place-items-center rounded-[var(--radius-sm)] bg-white text-crimson">
                   <Icon className="size-6" strokeWidth={1.8} />

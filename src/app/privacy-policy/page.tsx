@@ -126,11 +126,11 @@ const CLAUSES: ClauseDef[] = [
         <address className="not-italic">
           <strong>{site.name}</strong>
           <br />
-          <a href={site.phoneHref}>{site.phone}</a>
+          <a href={site.phoneHref} className="inline-flex min-h-11 items-center">{site.phone}</a>
           <br />
           {site.cityOffice.lines.join(", ")}
           <br />
-          <a href={`mailto:${site.emailAlt}`}>{site.emailAlt}</a>
+          <a href={`mailto:${site.emailAlt}`} className="inline-flex min-h-11 items-center [overflow-wrap:anywhere]">{site.emailAlt}</a>
         </address>
       </>
     ),
