@@ -15,7 +15,7 @@ const COUNTS = [
 export function PartnerCounts() {
   return (
     <div>
-      <div className="relative aspect-[4/3] overflow-hidden rounded-[var(--radius-lg)]">
+      <div className="relative aspect-[4/3] overflow-hidden rounded-[var(--radius-xl)] shadow-xl">
         <Image
           src="/media/old/home/mockup-pouches-supermarket-shelf.webp"
           alt="Pouches printed with the Aditya Flexipack mark on a supermarket shelf"
@@ -25,13 +25,13 @@ export function PartnerCounts() {
           className="object-cover"
         />
       </div>
-      <dl className="mt-5 grid grid-cols-3 gap-3">
+      <dl className="mt-6 grid grid-cols-3 gap-3.5">
         {COUNTS.map((c) => (
           <div key={c.label}>
             <dt className="sr-only">{c.label}</dt>
             <dd>
-              <CountUp value={c.value} className="display tabular block text-[clamp(1.9rem,3vw,2.6rem)] leading-none text-white" />
-              <span className="mt-1.5 block text-small leading-snug text-white/75">{c.label}</span>
+              <CountUp value={c.value} className="display tabular block text-[clamp(2.2rem,3.4vw,3.2rem)] leading-none text-white" />
+              <span className="mt-2 block text-[0.95rem] leading-snug text-white/80">{c.label}</span>
             </dd>
           </div>
         ))}

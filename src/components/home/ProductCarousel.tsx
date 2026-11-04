@@ -49,12 +49,12 @@ export function ProductCarousel() {
 
       <ul
         ref={track}
-        className="mt-5 flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-px-[var(--gutter)] px-[var(--gutter)] pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        className="mt-2 flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-px-[var(--gutter)] px-[var(--gutter)] pt-4 pb-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
         {products.map((p, i) => {
           const c = CARD[i % CARD.length];
           return (
-            <li key={p.slug} className="w-[min(82vw,22rem)] shrink-0 snap-start">
+            <li key={p.slug} className="w-[min(82vw,22rem)] shrink-0 snap-start py-1">
               <Link
                 href={`/products/${p.slug}/`}
                 className={`group flex h-full flex-col rounded-[var(--radius-xl)] p-3 transition-transform duration-500 ease-[var(--ease-back)] hover:-translate-y-1.5 hover:-rotate-1 ${c.bg}`}

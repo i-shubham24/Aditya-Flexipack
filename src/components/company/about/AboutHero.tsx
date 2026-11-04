@@ -48,23 +48,23 @@ export function AboutHero({ actions }: { actions?: ReactNode }) {
             )}
           </div>
 
-          <div className="col-span-full grid grid-cols-2 gap-[clamp(0.6rem,1.1vw,0.9rem)] lg:col-[7/13]">
-            <div data-hero-photo className="relative col-span-2 aspect-[16/9] overflow-hidden rounded-[var(--radius-xl)]">
+          <div className="col-span-full grid grid-cols-2 gap-[clamp(0.45rem,0.8vw,0.65rem)] lg:col-[7/13] lg:w-[86%] lg:justify-self-end">
+            <div data-hero-photo className="relative col-span-2 aspect-[2/1] overflow-hidden rounded-[var(--radius-xl)]">
               <Image
                 src="/media/old/about-us/plant-exterior-wide.webp"
                 alt="The Aditya Flexipack plant across its lawn under a hazy sun"
                 fill
                 priority
-                sizes="(min-width: 1024px) 40vw, 92vw"
+                sizes="(min-width: 1024px) 38vw, 92vw"
                 className="object-cover"
               />
             </div>
             {BLOCKS.map((b) => (
-              <div key={b.label} data-hero-photo className={`rounded-[var(--radius-xl)] p-[clamp(0.9rem,1.6vw,1.4rem)] ${b.look}`}>
-                <p className="display tabular text-[clamp(2rem,3.6vw,3.4rem)] leading-none">
+              <div key={b.label} data-hero-photo className={`rounded-[var(--radius-xl)] p-[clamp(0.6rem,1.1vw,0.95rem)] ${b.look}`}>
+                <p className="display tabular text-[clamp(1.5rem,2.6vw,2.5rem)] leading-none">
                   <CountUp value={b.value} />
                 </p>
-                <p className="mt-2 text-small leading-snug opacity-90">{b.label}</p>
+                <p className="mt-1 text-[clamp(0.75rem,0.85vw,0.82rem)] leading-snug opacity-90">{b.label}</p>
               </div>
             ))}
           </div>

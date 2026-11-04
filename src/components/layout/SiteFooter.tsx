@@ -1,9 +1,9 @@
 import Link from "next/link";
-import { Mail, MapPin, Phone } from "lucide-react";
+import { MapPin, Phone } from "lucide-react";
 import { footerNav, site } from "@/content/site";
 import { FacebookIcon, LinkedInIcon } from "@/components/ui/BrandIcons";
-import { ButtonLink } from "@/components/ui/Button";
 import { Year } from "@/components/layout/Year";
+import { EmailLink } from "@/components/ui/EmailLink";
 
 /** The wine field the white page lifts off. */
 export function SiteFooter() {
@@ -15,11 +15,6 @@ export function SiteFooter() {
             Quality is our <span className="text-crimson-light">identity.</span>
           </p>
           <p className="mt-5 max-w-md text-white/75">{site.footerLine}</p>
-          <div className="mt-8 flex flex-wrap gap-2">
-            <ButtonLink href="/contact-us/" tone="white">
-              Start an enquiry
-            </ButtonLink>
-          </div>
         </div>
 
         <nav aria-label="Footer" className="grid grid-cols-2 gap-10 sm:grid-cols-3 lg:col-span-7">
@@ -68,9 +63,7 @@ export function SiteFooter() {
             </address>
           </div>
           <div className="grid content-start gap-2.5 rounded-[var(--radius-lg)] bg-wine-2 p-6">
-            <a href={`mailto:${site.email}`} className="flex items-center gap-2 hover:underline">
-              <Mail className="size-4 text-white/60" /> {site.email}
-            </a>
+            <EmailLink email={site.email} showIcon className="hover:underline" />
             <a href={site.phoneHref} className="flex items-center gap-2 hover:underline">
               <Phone className="size-4 text-white/60" /> {site.phone}
             </a>

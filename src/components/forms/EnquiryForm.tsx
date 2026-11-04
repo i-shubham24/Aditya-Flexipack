@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, type FormEvent, type ReactNode } from "rea
 import { ChevronDown, Paperclip } from "lucide-react";
 import { forms, type Field, type FormId } from "@/content/forms";
 import { site } from "@/content/site";
+import { EmailLink } from "@/components/ui/EmailLink";
 import { Button } from "@/components/ui/Button";
 
 export type EnquiryStatus = "idle" | "sending" | "sent" | "not-live" | "failed";
@@ -106,13 +107,14 @@ export function StatusMessage({ status, className = "" }: { status: EnquiryStatu
     return (
       <p className={className}>
         Your details look complete, but online delivery for this form is not switched on yet. Please write to{" "}
-        <a href={`mailto:${site.email}`} className="font-semibold text-crimson underline">
-          {site.email}
-        </a>{" "}
+        <EmailLink email={site.email} className="font-semibold text-crimson underline" />{" "}
+
+
         or call{" "}
         <a href={site.phoneHref} className="font-semibold text-crimson underline">
           {site.phone}
         </a>{" "}
+
         and we will take it from there.
       </p>
     );
@@ -120,9 +122,9 @@ export function StatusMessage({ status, className = "" }: { status: EnquiryStatu
     return (
       <p className={className}>
         Something went wrong while sending. Please try again, or write to{" "}
-        <a href={`mailto:${site.email}`} className="font-semibold text-crimson underline">
-          {site.email}
-        </a>
+        <EmailLink email={site.email} className="font-semibold text-crimson underline" />{" "}
+
+
         .
       </p>
     );

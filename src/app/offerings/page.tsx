@@ -49,14 +49,9 @@ export default function OfferingsPage() {
         lead={<p>Great snacks deserve packaging that works as hard as the recipe.</p>}
         photo={{ src: "/media/old/products-pouches/banner-foil-pouches-red.webp", alt: "Plain silver foil zip pouches in several sizes against a dark red background" }}
         actions={
-          <>
-            <ButtonLink href="/products/" tone="crimson">
-              Explore products
-            </ButtonLink>
-            <ButtonLink href="/packaging-partnership/" tone="ink">
-              Partner with us
-            </ButtonLink>
-          </>
+          <ButtonLink href="/products/" tone="crimson">
+            Explore products
+          </ButtonLink>
         }
       />
 

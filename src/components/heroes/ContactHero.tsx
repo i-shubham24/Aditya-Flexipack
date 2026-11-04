@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import { ButtonLink, TextLink } from "@/components/ui/Button";
+import { EmailLink } from "@/components/ui/EmailLink";
 import { useHeroIntro } from "@/components/heroes/useHeroIntro";
 import { site } from "@/content/site";
 
@@ -69,9 +70,10 @@ export function ContactHero() {
               <TextLink href={site.phoneHref} tone="white">
                 {site.phone}
               </TextLink>
-              <TextLink href={`mailto:${site.email}`} tone="white">
-                {site.email}
-              </TextLink>
+
+              <EmailLink email={site.email} className="inline-flex min-h-11 items-center font-semibold text-white underline decoration-white/40 underline-offset-4 hover:decoration-white" />
+
+
             </div>
           </div>
 

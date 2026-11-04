@@ -7,6 +7,7 @@ import { ClauseIndex, Clauses, SplitFacts, type ClauseDef } from "@/components/d
 import { Contour } from "@/components/desk/Contour";
 import { SectionHeader } from "@/components/system/SectionHeader";
 import { site } from "@/content/site";
+import { EmailLink } from "@/components/ui/EmailLink";
 
 export const metadata: Metadata = {
   title: "Terms and conditions",
@@ -28,10 +29,11 @@ const SUMMARY = [
         <a href={site.phoneHref} className="inline-flex min-h-11 items-center font-semibold text-crimson underline underline-offset-4">
           {site.phone}
         </a>
+
         , {site.cityOffice.lines.join(", ")},{" "}
-        <a href={`mailto:${site.emailAlt}`} className="inline-flex min-h-11 items-center font-semibold text-crimson underline underline-offset-4 [overflow-wrap:anywhere]">
-          {site.emailAlt}
-        </a>
+        <EmailLink email={site.emailAlt} className="inline-flex min-h-11 items-center font-semibold text-crimson underline underline-offset-4 [overflow-wrap:anywhere]" />
+
+
       </>
     ),
   },
@@ -147,7 +149,7 @@ const CLAUSES: ClauseDef[] = [
           <br />
           {site.cityOffice.lines.join(", ")}
           <br />
-          <a href={`mailto:${site.emailAlt}`} className="inline-flex min-h-11 items-center [overflow-wrap:anywhere]">{site.emailAlt}</a>
+          <EmailLink email={site.emailAlt} className="inline-flex min-h-11 items-center text-crimson underline underline-offset-4 [overflow-wrap:anywhere]" />
         </address>
       </>
     ),

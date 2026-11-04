@@ -58,7 +58,7 @@ export function PartnerHero({
 
   return (
     <section ref={root} data-hero={t.dark ? "dark" : "light"} aria-labelledby="page-title" className="hero-h">
-      <div className={`relative h-full overflow-clip rounded-b-[var(--radius-2xl)] ${t.bg} ${t.ink}`}>
+      <div className={`relative flex h-full min-h-[inherit] flex-col overflow-clip rounded-b-[var(--radius-2xl)] ${t.bg} ${t.ink}`}>
         {/* Dynamic wavy contour graphics matched to the palette */}
         <svg
           aria-hidden
@@ -83,24 +83,24 @@ export function PartnerHero({
           />
         </svg>
 
-        <div className="shell page-grid relative z-10 flex h-full flex-col justify-center pb-[4svh] pt-[var(--header-h)] lg:grid lg:items-center lg:gap-y-6">
-          <div className="span-lead max-w-[42rem]">
-            <h1 id="page-title" data-hero-title className="display text-[clamp(2.4rem,4.6vw,4.8rem)] leading-[0.92]">
+        <div className="shell page-grid relative z-10 flex-1 content-center items-center gap-y-8 pb-[clamp(2.5rem,6svh,5rem)] pt-[calc(var(--header-h)+2rem)] lg:pt-[calc(var(--header-h)+1.5rem)]">
+          <div className="span-lead max-w-[46rem] lg:max-w-[48rem]">
+            <h1 id="page-title" data-hero-title className="display text-[clamp(2.9rem,5.6vw,5.6rem)] leading-[0.92]">
               {title}
             </h1>
             {intro && (
-              <div data-hero-fade className={`mt-4 max-w-[32rem] text-[clamp(1rem,1.2vw,1.15rem)] leading-relaxed ${t.sub}`}>
+              <div data-hero-fade className={`mt-5 max-w-[34rem] text-[clamp(1.1rem,1.35vw,1.25rem)] leading-relaxed ${t.sub}`}>
                 {intro}
               </div>
             )}
             {actions && (
-              <div data-hero-fade className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3">
+              <div data-hero-fade className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3">
                 {actions}
               </div>
             )}
           </div>
           {teaser && (
-            <div data-hero-teaser className="span-quarter mt-6 lg:mt-0">
+            <div data-hero-teaser className="col-span-full mt-8 lg:mt-0 lg:col-[8/12] xl:col-[8/12] lg:-translate-x-2 xl:-translate-x-4">
               {teaser}
             </div>
           )}

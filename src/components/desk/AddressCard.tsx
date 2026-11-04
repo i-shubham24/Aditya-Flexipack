@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import { ArrowUpRight, Copy, Mail, Phone } from "lucide-react";
+import { ArrowUpRight, Check, Copy, Mail, Phone } from "lucide-react";
 
 const row = "group/act flex min-h-12 w-full items-stretch gap-[3px] text-left text-[0.98rem] font-semibold";
 const labelCls =
@@ -40,7 +40,22 @@ export function AddressCard({
   const [copied, setCopied] = useState(false);
   const text = useRef<HTMLElement>(null);
   const timer = useRef<number | undefined>(undefined);
-  useEffect(() => () => window.clearTimeout(timer.current), []);
+  const [emailCopied, setEmailCopied] = useState(false);
+  const emailTimer = useRef<number | undefined>(undefined);
+  useEffect(() => () => {
+    window.clearTimeout(timer.current);
+    window.clearTimeout(emailTimer.current);
+  }, []);
+
+  const handleEmailClick = () => {
+    if (typeof navigator !== "undefined" && navigator.clipboard && email) {
+      navigator.clipboard.writeText(email).then(() => {
+        setEmailCopied(true);
+        window.clearTimeout(emailTimer.current);
+        emailTimer.current = window.setTimeout(() => setEmailCopied(false), 2400);
+      }).catch(() => {});
+    }
+  };
 
   async function copy() {
     const value = lines.join(", ");
@@ -91,9 +106,21 @@ export function AddressCard({
         )}
         {email && (
           <li>
-            <Act href={`mailto:${email}`} icon={<Mail className="size-5" strokeWidth={2.2} />}>
-              {email}
-            </Act>
+            <a
+              href={`mailto:${email}`}
+              onClick={handleEmailClick}
+              title={emailCopied ? "Email copied to clipboard!" : `Email ${email} (clicks to copy & open)`}
+              className={row}
+            >
+              <span className={labelCls}>{emailCopied ? "Email copied to clipboard!" : email}</span>
+              <span aria-hidden className={knobCls}>
+                {emailCopied ? (
+                  <Check className="size-5 text-crimson-light" strokeWidth={2.5} />
+                ) : (
+                  <Mail className="size-5" strokeWidth={2.2} />
+                )}
+              </span>
+            </a>
           </li>
         )}
       </ul>

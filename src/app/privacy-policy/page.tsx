@@ -6,6 +6,7 @@ import { ClauseIndex, Clauses, FactBlocks, type ClauseDef, type Fact } from "@/c
 import { Contour } from "@/components/desk/Contour";
 import { SectionHeader } from "@/components/system/SectionHeader";
 import { site } from "@/content/site";
+import { EmailLink } from "@/components/ui/EmailLink";
 
 export const metadata: Metadata = {
   title: "Privacy policy",
@@ -130,7 +131,7 @@ const CLAUSES: ClauseDef[] = [
           <br />
           {site.cityOffice.lines.join(", ")}
           <br />
-          <a href={`mailto:${site.emailAlt}`} className="inline-flex min-h-11 items-center [overflow-wrap:anywhere]">{site.emailAlt}</a>
+          <EmailLink email={site.emailAlt} className="inline-flex min-h-11 items-center text-crimson underline underline-offset-4 [overflow-wrap:anywhere]" />
         </address>
       </>
     ),

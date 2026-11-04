@@ -13,11 +13,11 @@ gsap.registerPlugin(ScrollTrigger, useGSAP);
  * Calibrated to large display scale with slants preserved across render cycles.
  */
 const STICKERS = [
-  { t: "Benchmarked quality", c: "bg-crimson text-white", pos: "left-[0%] top-[54%]", r: -4.5 },
-  { t: "Rapid turnaround", c: "bg-white text-crimson", pos: "right-[0%] top-[54%]", r: 3.5 },
-  { t: "Backward integrated", c: "bg-wine text-white", pos: "left-[3%] top-[71%]", r: 3 },
-  { t: "Ethical practices", c: "bg-ink text-white", pos: "right-[2%] top-[71%]", r: -3 },
-  { t: "25+ years, family owned", c: "bg-blush text-wine", pos: "lg:left-1/2 lg:-translate-x-1/2 top-[86%]", r: -2.5 },
+  { t: "Benchmarked quality", c: "bg-crimson text-white", pos: "lg:left-[2%] lg:top-[55%]", r: -4.5 },
+  { t: "Rapid turnaround", c: "bg-white text-crimson", pos: "lg:right-[2%] lg:top-[55%]", r: 3.5 },
+  { t: "Backward integrated", c: "bg-wine text-white", pos: "lg:left-[4%] lg:top-[72%]", r: 3 },
+  { t: "Ethical practices", c: "bg-ink text-white", pos: "lg:right-[3%] lg:top-[72%]", r: -3 },
+  { t: "25+ years, family owned", c: "bg-blush text-wine", pos: "lg:left-1/2 lg:-translate-x-1/2 lg:top-[88%]", r: -2.5 },
 ];
 
 export function WhyUs() {
@@ -50,7 +50,7 @@ export function WhyUs() {
 
   return (
     <section ref={root} aria-labelledby="why-title" className="pt-[var(--frame)]">
-      <div className="panel bg-foil pb-[calc(var(--section-y)*0.8)] pt-[calc(var(--section-y)*0.35)]">
+      <div className="panel bg-foil pb-14 pt-12 sm:pb-16 sm:pt-16 lg:pb-[calc(var(--section-y)*0.8)] lg:pt-[calc(var(--section-y)*0.55)]">
         <svg aria-hidden viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice" className="absolute inset-0 h-full w-full">
           <path d="M0 300 C 200 180, 360 420, 600 330 S 980 120, 1200 230 V800 H0 Z" fill="#e4e7eb" />
           <path d="M0 560 C 220 470, 400 650, 640 570 S 1000 420, 1200 500 V800 H0 Z" fill="#dadee3" />
@@ -75,7 +75,7 @@ export function WhyUs() {
             </svg>
 
             {/* Centred on the arc: lift the seal by its own radius past the arc's baseline */}
-            <div className="relative mx-auto -mt-[calc(min(92vw,40rem)*0.0125_+_min(26vw,8.5rem)_+_10px_-_1.25rem)] aspect-square w-[min(52vw,17rem)] rounded-full bg-[#fff6f5] ring-[10px] ring-wine">
+            <div className="relative mx-auto -mt-8 aspect-square w-[min(44vw,11.5rem)] rounded-full bg-[#fff6f5] ring-[6px] ring-wine sm:-mt-12 sm:w-[min(46vw,14rem)] sm:ring-[8px] lg:-mt-[4.5rem] lg:w-[min(52vw,17rem)] lg:ring-[10px]">
               <Image
                 src="/media/brand/af-emblem.png"
                 alt="The Aditya Flexipack AF emblem"
@@ -86,18 +86,17 @@ export function WhyUs() {
             </div>
 
             {/* Chunky slanted stickers: large display font with preserved slants */}
-            <ul className="mt-10 flex flex-wrap justify-center gap-3 lg:mt-0 lg:block">
+            <ul className="mt-6 flex flex-col items-center gap-2.5 sm:mt-8 sm:flex-row sm:flex-wrap sm:justify-center sm:gap-3 lg:mt-0 lg:block">
               {STICKERS.map((s) => (
                 <li
                   key={s.t}
                   data-sticker
-                  className={`lg:absolute lg:whitespace-nowrap ${s.pos}`}
+                  className={`w-fit max-w-[min(88vw,22rem)] lg:max-w-none lg:absolute lg:whitespace-nowrap ${s.pos}`}
                 >
                   <div
-                    className={`display rounded-[1.25rem] px-5 py-3 text-[clamp(1.6rem,3.6vw,4.2rem)] leading-none lg:px-8 lg:py-5  transition-transform hover:scale-105 ${s.c}`}
+                    className={`display rounded-[1.25rem] px-4 py-2 text-center text-[clamp(1rem,3.2vw,1.35rem)] leading-none sm:px-5 sm:py-2.5 lg:px-6 lg:py-3.5 lg:text-[clamp(1.1rem,2.5vw,2.75rem)] shadow-md transition-transform hover:scale-105 ${s.c}`}
                     style={{
                       transform: `rotate(${s.r}deg)`,
-                      rotate: `${s.r}deg`,
                       transformOrigin: "center center",
                     }}
                   >

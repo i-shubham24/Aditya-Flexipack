@@ -31,7 +31,7 @@ export default function PackagingPartnershipPage() {
       <PartnerHero
         tone="ink"
         title="Packaging partnership"
-        intro={<p className="hand inline-block -rotate-2 text-note text-blush">Ready to innovate? Partner with the leaders.</p>}
+        intro={<p className="hand inline-block -rotate-2 text-[clamp(1.7rem,2.3vw,2.2rem)] text-blush">Ready to innovate? Partner with the leaders.</p>}
         actions={
           <ButtonLink href="#begin" tone="white">
             Begin your partnership
