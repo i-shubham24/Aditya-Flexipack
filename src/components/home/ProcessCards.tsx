@@ -43,6 +43,15 @@ export function ProcessCards() {
       mm.add("(prefers-reduced-motion: reduce) and (min-width: 768px)", () => {
         gsap.utils.toArray<HTMLElement>("[data-step]").forEach((card, i) => gsap.set(card, { rotate: STEPS[i].tilt }));
       });
+      mm.add("(prefers-reduced-motion: no-preference) and (max-width: 767px)", () => {
+        gsap.from("[data-step]", {
+          y: 25,
+          duration: 0.6,
+          stagger: 0.08,
+          ease: "power2.out",
+          scrollTrigger: { trigger: "[data-deck]", start: "top 85%", once: true },
+        });
+      });
       return () => mm.revert();
     },
     { scope: root },

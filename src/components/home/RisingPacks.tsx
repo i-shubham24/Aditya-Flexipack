@@ -16,6 +16,7 @@ export function RisingPacks() {
   const root = useRef<HTMLElement>(null);
   const textPathRef = useRef<SVGTextPathElement>(null);
   const measureRef = useRef<SVGTextElement>(null);
+  const stageRef = useRef<HTMLDivElement>(null);
 
   useGSAP(
     () => {
@@ -28,29 +29,26 @@ export function RisingPacks() {
         const baseOffset = 2450;
         const phraseLength = measure?.getComputedTextLength() || 1920;
 
-        let totalProgress = 0;
-        let lastScrollY = typeof window !== "undefined" ? window.scrollY : 0;
-
-        const updateOffset = (delta: number) => {
-          if (!textPath) return;
-          totalProgress = (totalProgress + delta) % phraseLength;
-          if (totalProgress < 0) totalProgress += phraseLength;
-          textPath.setAttribute("startOffset", `${baseOffset - totalProgress}`);
-        };
-
-        // The text travels along the wave as the page scrolls
-        const scrollListener = () => {
-          const currentY = window.scrollY;
-          const deltaY = currentY - lastScrollY;
-          lastScrollY = currentY;
-          if (deltaY !== 0) {
-            updateOffset(deltaY * 0.75);
-          }
-        };
-        window.addEventListener("scroll", scrollListener, { passive: true });
+        // Sync wave text travel with ScrollTrigger scrub tied to the section
+        const waveObj = { progress: 0 };
+        gsap.to(waveObj, {
+          progress: phraseLength * 2.5,
+          ease: "none",
+          scrollTrigger: {
+            trigger: root.current,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: 0.8,
+            onUpdate: () => {
+              if (!textPath) return;
+              const currentOffset = (baseOffset - waveObj.progress) % phraseLength;
+              textPath.setAttribute("startOffset", `${currentOffset < 0 ? currentOffset + phraseLength : currentOffset}`);
+            },
+          },
+        });
 
         // Two photo cards entrance and scroll scrub
-        const cardsStage = root.current?.querySelector("[data-cards-stage]");
+        const cardsStage = stageRef.current;
         if (cardsStage) {
           gsap.from("[data-card-back]", {
             y: 110,
@@ -73,11 +71,50 @@ export function RisingPacks() {
           const cardsScrub = { trigger: cardsStage, start: "top bottom", end: "bottom top", scrub: 1.2 };
           gsap.to("[data-scrub-front]", { y: -45, rotate: -3, ease: "none", scrollTrigger: cardsScrub });
           gsap.to("[data-scrub-back]", { y: -80, x: 20, rotate: 4, ease: "none", scrollTrigger: cardsScrub });
-        }
 
-        return () => {
-          window.removeEventListener("scroll", scrollListener);
-        };
+          // Interactive 3D tilt on mousemove over the cards stage
+          const handleMouseMove = (e: MouseEvent) => {
+            const rect = cardsStage.getBoundingClientRect();
+            const relX = (e.clientX - rect.left) / rect.width - 0.5;
+            const relY = (e.clientY - rect.top) / rect.height - 0.5;
+
+            gsap.to("[data-card-front]", {
+              rotateY: relX * 12,
+              rotateX: -relY * 12,
+              duration: 0.5,
+              ease: "power2.out",
+            });
+            gsap.to("[data-card-back]", {
+              rotateY: relX * 8,
+              rotateX: -relY * 8,
+              duration: 0.6,
+              ease: "power2.out",
+            });
+          };
+
+          const handleMouseLeave = () => {
+            gsap.to("[data-card-front]", {
+              rotateY: 0,
+              rotateX: 0,
+              duration: 0.8,
+              ease: "power2.out",
+            });
+            gsap.to("[data-card-back]", {
+              rotateY: 0,
+              rotateX: 0,
+              duration: 0.8,
+              ease: "power2.out",
+            });
+          };
+
+          cardsStage.addEventListener("mousemove", handleMouseMove);
+          cardsStage.addEventListener("mouseleave", handleMouseLeave);
+
+          return () => {
+            cardsStage.removeEventListener("mousemove", handleMouseMove);
+            cardsStage.removeEventListener("mouseleave", handleMouseLeave);
+          };
+        }
       });
       return () => mm.revert();
     },
@@ -168,12 +205,17 @@ export function RisingPacks() {
 
           {/* Two tactile photo cards, dealt across the peach field */}
           <div
+            ref={stageRef}
             data-cards-stage
-            className="relative mx-auto aspect-[16/11] w-[min(90vw,36rem)] lg:col-span-7 lg:mr-0 flex items-center justify-center min-h-[285px] sm:min-h-[360px]"
+            className="relative mx-auto aspect-[16/11] w-[min(90vw,36rem)] lg:col-span-7 lg:mr-0 flex items-center justify-center min-h-[285px] sm:min-h-[360px] [perspective:1000px] cursor-pointer"
           >
-            {/* Outer layer tracks scrub, inner plays entrance */}
-            <div data-scrub-back className="absolute inset-0 flex items-center justify-center">
-              <div data-card-back className="w-[min(50vw,18rem)] translate-x-[22%] -translate-y-[8%] rotate-[9deg] rounded-[var(--radius-xl)] bg-white p-2.5 shadow-xl">
+            {/* Outer layer tracks scrub, inner plays entrance and mouse tilt */}
+            <div data-scrub-back className="absolute inset-0 flex items-center justify-center pointer-events-none">
+              <div
+                data-card-back
+                className="w-[min(50vw,18rem)] translate-x-[22%] -translate-y-[8%] rotate-[9deg] rounded-[var(--radius-xl)] bg-white p-2.5 shadow-xl transition-shadow duration-300 hover:shadow-2xl"
+                style={{ transformStyle: "preserve-3d" }}
+              >
                 <div className="relative aspect-[1100/1456] overflow-hidden rounded-[var(--radius-lg)]">
                   <Image
                     src="/media/products/foil-pouch-zip.webp"
@@ -185,8 +227,12 @@ export function RisingPacks() {
                 </div>
               </div>
             </div>
-            <div data-scrub-front className="relative z-10 flex items-center justify-center">
-              <div data-card-front className="w-[min(53vw,20rem)] -translate-x-[14%] translate-y-[6%] -rotate-[6deg] rounded-[var(--radius-xl)] bg-white p-2.5 shadow-2xl">
+            <div data-scrub-front className="relative z-10 flex items-center justify-center pointer-events-none">
+              <div
+                data-card-front
+                className="w-[min(53vw,20rem)] -translate-x-[14%] translate-y-[6%] -rotate-[6deg] rounded-[var(--radius-xl)] bg-white p-2.5 shadow-2xl transition-shadow duration-300 hover:shadow-3xl"
+                style={{ transformStyle: "preserve-3d" }}
+              >
                 <div className="relative aspect-[1100/1456] overflow-hidden rounded-[var(--radius-lg)]">
                   <Image
                     src="/media/products/branded-pouches.webp"

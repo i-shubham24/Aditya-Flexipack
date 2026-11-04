@@ -74,6 +74,14 @@ export function IndustryList() {
             What we pack
           </h2>
 
+          {/* Mobile visual preview badge showing current active aisle pack photo */}
+          <div className="lg:hidden mx-auto mt-4 flex items-center justify-center gap-2.5 rounded-full bg-white/95 px-3.5 py-1.5 shadow-sm border border-crimson/15 w-fit transition-all duration-300">
+            <div className="relative size-8 overflow-hidden rounded-full ring-1 ring-crimson/30 shrink-0">
+              <Image src={item.left} alt="" fill sizes="32px" className="object-cover" />
+            </div>
+            <span className="text-xs sm:text-sm font-semibold text-crimson truncate max-w-[14rem]">{item.name}</span>
+          </div>
+
           <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,12rem)_1fr_minmax(0,12rem)] xl:grid-cols-[minmax(0,15rem)_1fr_minmax(0,15rem)]">
             <div className="hidden lg:block">
               <div className="sticky top-[24vh]">

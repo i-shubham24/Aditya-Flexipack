@@ -160,7 +160,51 @@ export function Hero() {
             delay: 1.2 + i * 0.12,
           });
         });
-        return release;
+
+        // Interactive mouse parallax drift on desktop
+        const heroEl = root.current;
+        const handleHeroMouseMove = (e: MouseEvent) => {
+          if (window.innerWidth < 1024) return;
+          const rect = heroEl?.getBoundingClientRect();
+          if (!rect) return;
+          const relX = (e.clientX - rect.left) / rect.width - 0.5;
+          const relY = (e.clientY - rect.top) / rect.height - 0.5;
+
+          const mouseShifts = gsap.utils.toArray<HTMLElement>("[data-mouse-shift]");
+          mouseShifts.forEach((el) => {
+            const depth = Number(el.dataset.depth || 1);
+            gsap.to(el, {
+              x: relX * 28 * depth,
+              y: relY * 24 * depth,
+              duration: 0.6,
+              ease: "power2.out",
+              overwrite: "auto",
+            });
+          });
+        };
+
+        const handleHeroMouseLeave = () => {
+          gsap.to("[data-mouse-shift]", {
+            x: 0,
+            y: 0,
+            duration: 0.9,
+            ease: "power2.out",
+            overwrite: "auto",
+          });
+        };
+
+        if (heroEl) {
+          heroEl.addEventListener("mousemove", handleHeroMouseMove);
+          heroEl.addEventListener("mouseleave", handleHeroMouseLeave);
+        }
+
+        return () => {
+          release?.();
+          if (heroEl) {
+            heroEl.removeEventListener("mousemove", handleHeroMouseMove);
+            heroEl.removeEventListener("mouseleave", handleHeroMouseLeave);
+          }
+        };
       });
       return () => mm.revert();
     },
@@ -213,25 +257,27 @@ export function Hero() {
                 width: `${l.width}%`,
               }}
             >
-              <div
-                data-float
-                data-depth={l.depth}
-                data-spin={l.spin}
-                className="w-full"
-              >
-                <Image
-                  src={`/media/packs/${l.src}.webp`}
-                  alt={
-                    l.src === "cluster"
-                      ? "Printed stand-up pouches carrying the Aditya Flexipack mark"
-                      : ""
-                  }
-                  width={400}
-                  height={340}
-                  priority={l.src === "cluster" || l.src === "green"}
-                  sizes="(min-width: 1024px) 40vw, 68vw"
-                  className="h-auto w-full drop-shadow-2xl"
-                />
+              <div data-mouse-shift data-depth={l.depth}>
+                <div
+                  data-float
+                  data-depth={l.depth}
+                  data-spin={l.spin}
+                  className="w-full"
+                >
+                  <Image
+                    src={`/media/packs/${l.src}.webp`}
+                    alt={
+                      l.src === "cluster"
+                        ? "Printed stand-up pouches carrying the Aditya Flexipack mark"
+                        : ""
+                    }
+                    width={400}
+                    height={340}
+                    priority={l.src === "cluster" || l.src === "green"}
+                    sizes="(min-width: 1024px) 40vw, 68vw"
+                    className="h-auto w-full drop-shadow-2xl"
+                  />
+                </div>
               </div>
             </div>
           ))}

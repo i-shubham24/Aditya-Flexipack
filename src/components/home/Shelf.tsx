@@ -84,9 +84,11 @@ export function Shelf() {
                   <li
                     key={i}
                     data-drop
-                    className={`${p.mobileHidden ? "hidden sm:flex" : "flex"} ${p.h} max-w-[28%] sm:max-w-[18%] items-end shrink-0`}
+                    className={`${p.mobileHidden ? "hidden sm:flex" : "flex"} ${p.h} max-w-[28%] sm:max-w-[18%] items-end shrink-0 group/pack relative`}
                   >
-                    <Pack format={p.format} ink={p.ink} className="h-full w-auto" />
+                    <div className="h-full w-auto transition-transform duration-300 ease-[var(--ease-back)] group-hover/pack:-translate-y-3 cursor-pointer">
+                      <Pack format={p.format} ink={p.ink} className="h-full w-auto drop-shadow-sm group-hover/pack:drop-shadow-md" />
+                    </div>
                   </li>
                 ))}
                 {r === 1 && (

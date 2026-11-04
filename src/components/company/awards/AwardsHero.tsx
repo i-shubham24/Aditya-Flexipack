@@ -81,8 +81,9 @@ export function AwardsHero({ tone }: { tone?: string } = {}) {
             </div>
           </div>
 
-          <div className="span-side flex justify-center lg:justify-end lg:pr-6 xl:pr-12">
-            <ul data-seals aria-label="Our certifications" className="relative aspect-square w-[min(68vw,16rem)] lg:w-[min(20vw,17.5rem)]">
+          <div className="span-side flex justify-center lg:justify-end lg:pr-4 xl:pr-8">
+            {/* Graphics scaled up +35% to be prominent and clear */}
+            <ul data-seals aria-label="Our certifications" className="relative aspect-square w-[min(84vw,21.5rem)] lg:w-[min(28vw,23.5rem)]">
               {certificates.map((c, i) => {
                 const p = PLACES[i % PLACES.length];
                 return (
@@ -93,9 +94,9 @@ export function AwardsHero({ tone }: { tone?: string } = {}) {
                   >
                     <div
                       data-hero-photo
-                      className="group relative aspect-square rounded-full bg-white p-[17%] ring-[6px] ring-crimson transition-transform duration-300 ease-[var(--ease-back)] hover:scale-[1.06]"
+                      className="group relative aspect-square rounded-full bg-white p-[17%] ring-[6px] ring-crimson shadow-xl transition-transform duration-300 ease-[var(--ease-back)] hover:scale-[1.06]"
                     >
-                      <Image src={c.mark} alt={c.name} fill priority sizes="12rem" className="object-contain p-[17%]" />
+                      <Image src={c.mark} alt={c.name} fill priority sizes="16rem" className="object-contain p-[17%]" />
                     </div>
                   </li>
                 );
@@ -104,16 +105,17 @@ export function AwardsHero({ tone }: { tone?: string } = {}) {
           </div>
         </div>
 
+        {/* Bottom statistics strip: matching height and two-line stacked layout as used in Products hero */}
         <div className="relative bg-crimson-deep shrink-0">
-          <dl className="shell page-grid gap-y-3 py-3.5 sm:py-4">
+          <dl className="shell page-grid gap-y-3 py-4">
             {STATS.map((s) => (
               <div key={s.label} className="col-span-full sm:col-span-4 lg:col-span-4">
                 <dt className="sr-only">{s.label}</dt>
-                <dd className="flex items-baseline gap-3">
-                  <span className="display tabular text-[clamp(1.6rem,2.4vw,2.4rem)] leading-none">
+                <dd>
+                  <span className="display tabular block text-[clamp(1.6rem,2.2vw,2.2rem)] leading-tight">
                     <CountUp value={s.value} />
                   </span>
-                  <span className="text-small leading-snug text-white/85">{s.label}</span>
+                  <span className="mt-0.5 block text-small text-white/85">{s.label}</span>
                 </dd>
               </div>
             ))}

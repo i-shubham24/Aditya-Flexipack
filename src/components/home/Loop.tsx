@@ -1,3 +1,5 @@
+"use client";
+
 import { Droplets, Factory, Recycle, Sun } from "lucide-react";
 import { ButtonLink } from "@/components/ui/Button";
 import { ProofMark } from "@/components/ui/ProofMark";
@@ -59,14 +61,19 @@ export function Loop() {
             {INITIATIVES.map(({ icon: Icon, figure, title, body }, i) => (
               <li
                 key={title}
-                className={`rounded-[var(--radius-xl)] bg-white p-7  ${i % 2 ? "sm:translate-y-12" : ""}`}
+                className={i % 2 ? "sm:translate-y-12" : ""}
               >
-                <span className="grid size-12 place-items-center rounded-[var(--radius-sm)] bg-white text-crimson">
-                  <Icon className="size-6" strokeWidth={1.8} />
-                </span>
-                <p className="display mt-6 text-[3.2rem] text-ink">{figure}</p>
-                <h3 className="mt-1 text-[1.15rem] font-semibold text-ink">{title}</h3>
-                <p className="mt-2 text-[1rem] leading-relaxed text-ink-soft">{body}</p>
+                <div className="group h-full rounded-[var(--radius-xl)] bg-white p-7 shadow-sm transition-all duration-300 ease-[var(--ease-back)] hover:-translate-y-2 hover:shadow-xl">
+                  {/* Tactile icon container with crisp brand tint and ring */}
+                  <span className="grid size-12 place-items-center rounded-[var(--radius-sm)] bg-crimson/10 text-crimson ring-1 ring-crimson/20 transition-all duration-300 group-hover:bg-crimson group-hover:text-white group-hover:scale-110">
+                    <Icon className="size-6" strokeWidth={1.8} />
+                  </span>
+                  <p className="display mt-6 text-[3.2rem] text-ink transition-transform duration-300 group-hover:translate-x-1">
+                    {figure}
+                  </p>
+                  <h3 className="mt-1 text-[1.15rem] font-semibold text-ink">{title}</h3>
+                  <p className="mt-2 text-[1rem] leading-relaxed text-ink-soft">{body}</p>
+                </div>
               </li>
             ))}
           </ul>

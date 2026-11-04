@@ -36,6 +36,21 @@ export function Credentials() {
   useGSAP(
     () => {
       const mm = gsap.matchMedia();
+      mm.add("(prefers-reduced-motion: no-preference)", () => {
+        // Entrance animation for header & certificates
+        gsap.from("[data-cred-entry]", {
+          y: 25,
+          duration: 0.7,
+          stagger: 0.08,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: root.current,
+            start: "top 85%",
+            once: true,
+          },
+        });
+      });
+
       mm.add("(prefers-reduced-motion: no-preference) and (min-width: 768px)", () => {
         gsap.utils.toArray<HTMLElement>("[data-print]").forEach((el, i) => {
           const s = SCATTER[i % SCATTER.length];
@@ -52,6 +67,17 @@ export function Credentials() {
           );
         });
       });
+
+      mm.add("(prefers-reduced-motion: no-preference) and (max-width: 767px)", () => {
+        gsap.from("[data-print]", {
+          y: 20,
+          duration: 0.6,
+          stagger: 0.06,
+          ease: "power2.out",
+          scrollTrigger: { trigger: "[data-table]", start: "top 85%", once: true },
+        });
+      });
+
       return () => mm.revert();
     },
     { scope: root },
@@ -61,7 +87,7 @@ export function Credentials() {
     <section ref={root} aria-labelledby="cred-title" className="pt-[var(--frame)]">
       <div className="panel bg-crimson-wash py-[var(--section-y)]">
         <div className="shell grid gap-10 lg:grid-cols-12">
-          <div className="lg:col-span-6">
+          <div data-cred-entry className="lg:col-span-6">
             <h2 id="cred-title" className="display text-[clamp(2.6rem,5.6vw,6rem)] text-ink">
               Our credentials. <span className="text-crimson">Your assurance.</span>
             </h2>
@@ -73,10 +99,13 @@ export function Credentials() {
               View awards
             </ButtonLink>
           </div>
-          <div className="grid content-start gap-3 lg:col-span-6">
+          <div data-cred-entry className="grid content-start gap-3 lg:col-span-6">
             <ul className="grid grid-cols-3 gap-2 sm:grid-cols-5 sm:gap-3">
               {certificates.map((c) => (
-                <li key={c.name} className="grid place-items-center rounded-[var(--radius-lg)] bg-paper p-2 sm:p-3">
+                <li
+                  key={c.name}
+                  className="grid place-items-center rounded-[var(--radius-lg)] bg-paper p-2 sm:p-3 transition-transform duration-300 hover:scale-105 hover:shadow-md cursor-default"
+                >
                   <Image src={c.mark} alt={c.name} width={120} height={120} className="size-12 object-contain sm:size-20" />
                 </li>
               ))}
@@ -96,17 +125,19 @@ export function Credentials() {
         <div data-table className="shell mt-16 lg:mt-24">
           <ul className="grid grid-cols-2 gap-4 sm:grid-cols-3 xl:grid-cols-6">
             {PRINTS.map((p) => (
-              <li key={p.src} data-print className="will-change-transform">
-                <figure>
+              <li key={p.src} data-print className="will-change-transform group">
+                <figure className="transition-transform duration-300 group-hover:-translate-y-1.5 cursor-pointer">
                   <Image
                     src={p.src}
                     alt={p.alt}
                     width={p.w}
                     height={p.h}
                     sizes="(min-width: 1280px) 15vw, (min-width: 640px) 30vw, 48vw"
-                    className="aspect-[4/3] w-full rounded-[var(--radius-sm)] bg-white object-cover p-2 "
+                    className="aspect-[4/3] w-full rounded-[var(--radius-sm)] bg-white object-cover p-2 shadow-sm transition-shadow duration-300 group-hover:shadow-lg"
                   />
-                  <figcaption className="mt-3 text-[0.92rem] leading-snug text-ink-soft">{p.caption}</figcaption>
+                  <figcaption className="mt-3 text-[0.92rem] leading-snug text-ink-soft transition-colors duration-200 group-hover:text-ink">
+                    {p.caption}
+                  </figcaption>
                 </figure>
               </li>
             ))}

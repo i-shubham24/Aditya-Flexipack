@@ -1,4 +1,12 @@
+"use client";
+
+import { useRef, useState } from "react";
 import { Plus } from "lucide-react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
+
+gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 const QA: { q: string; a: string }[] = [
   {
@@ -30,26 +38,82 @@ const QA: { q: string; a: string }[] = [
 export type QA = { q: string; a: string };
 
 export function Faq({ items = QA, title = "Common questions" }: { items?: QA[]; title?: string }) {
+  const root = useRef<HTMLElement>(null);
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
+
+  const toggle = (idx: number) => {
+    setOpenIndex(openIndex === idx ? null : idx);
+  };
+
+  useGSAP(
+    () => {
+      const mm = gsap.matchMedia();
+      mm.add("(prefers-reduced-motion: no-preference)", () => {
+        gsap.from("[data-faq-item]", {
+          y: 20,
+          duration: 0.5,
+          stagger: 0.05,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: root.current,
+            start: "top 85%",
+            once: true,
+          },
+        });
+      });
+      return () => mm.revert();
+    },
+    { scope: root },
+  );
+
   return (
-    <section aria-labelledby="faq-title" className="py-[var(--section-y)]">
+    <section ref={root} aria-labelledby="faq-title" className="py-[var(--section-y)]">
       <div className="shell grid gap-10 lg:grid-cols-12">
         <h2 id="faq-title" className="display text-[clamp(2.8rem,6vw,5.8rem)] lg:col-span-4">
           {title}
         </h2>
         <ul className="grid gap-3 lg:col-span-8">
-          {items.map((x) => (
-            <li key={x.q}>
-              <details className="group rounded-[var(--radius-lg)] bg-foil open:bg-crimson-wash">
-                <summary className="flex min-h-16 cursor-pointer list-none items-center justify-between gap-4 px-6 py-4 text-[1.15rem] font-semibold [&::-webkit-details-marker]:hidden">
-                  {x.q}
-                  <span className="grid size-10 shrink-0 place-items-center rounded-[var(--radius-sm)] bg-white transition-transform duration-300 group-open:rotate-45 group-open:bg-crimson group-open:text-white">
-                    <Plus className="size-5" />
-                  </span>
-                </summary>
-                <p className="max-w-[46rem] px-6 pb-6 text-[1.04rem] leading-relaxed text-ink-soft">{x.a}</p>
-              </details>
-            </li>
-          ))}
+          {items.map((x, i) => {
+            const isOpen = openIndex === i;
+            return (
+              <li key={x.q} data-faq-item>
+                <div
+                  className={`overflow-hidden rounded-[var(--radius-lg)] transition-colors duration-300 ${
+                    isOpen ? "bg-crimson-wash" : "bg-foil hover:bg-foil/80"
+                  }`}
+                >
+                  <button
+                    type="button"
+                    onClick={() => toggle(i)}
+                    aria-expanded={isOpen}
+                    className="flex min-h-16 w-full cursor-pointer items-center justify-between gap-4 px-6 py-4 text-left text-[1.15rem] font-semibold text-ink"
+                  >
+                    <span>{x.q}</span>
+                    <span
+                      className={`grid size-10 shrink-0 place-items-center rounded-[var(--radius-sm)] transition-all duration-300 ${
+                        isOpen
+                          ? "rotate-45 bg-crimson text-white scale-105"
+                          : "bg-white text-ink hover:text-crimson"
+                      }`}
+                    >
+                      <Plus className="size-5" />
+                    </span>
+                  </button>
+                  <div
+                    className={`grid transition-[grid-template-rows] duration-350 ease-out ${
+                      isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+                    }`}
+                  >
+                    <div className="overflow-hidden">
+                      <p className="max-w-[46rem] px-6 pb-6 text-[1.04rem] leading-relaxed text-ink-soft">
+                        {x.a}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            );
+          })}
         </ul>
       </div>
     </section>
