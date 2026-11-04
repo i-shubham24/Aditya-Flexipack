@@ -215,12 +215,21 @@ export function SiteHeader() {
             aria-expanded={sheet}
             aria-controls="mobile-nav"
             aria-label="Open menu"
-            className="group/menu pointer-events-auto ml-auto grid size-12 place-items-center rounded-[var(--radius-sm)] bg-white/95 backdrop-blur transition-[scale] duration-150 ease-out active:scale-[0.94] xl:hidden"
+            className="group/menu pointer-events-auto ml-auto grid size-12 place-items-center rounded-full bg-white/95 shadow-sm backdrop-blur transition-[scale] duration-150 ease-out active:scale-[0.94] xl:hidden"
           >
             <MenuIcon open={false} />
           </button>
         </div>
       </header>
+
+      {/* Solid white backdrop so underlying page content never glimpses through */}
+      <div
+        aria-hidden="true"
+        onClick={() => setSheet(false)}
+        className={`fixed inset-0 z-[55] bg-white transition-opacity duration-300 xl:hidden ${
+          sheet ? "visible opacity-100" : "invisible opacity-0 pointer-events-none"
+        }`}
+      />
 
       {/* Phone and tablet menu: a rounded crimson panel with tonal contours, big dancing tabs, then the quieter links */}
       <div
@@ -230,7 +239,7 @@ export function SiteHeader() {
         aria-label="Site menu"
         ref={sheetRef}
         data-lenis-prevent
-        className={`fixed inset-[var(--frame)] z-[60] flex flex-col overflow-y-auto overflow-x-clip rounded-[var(--radius-2xl)] bg-crimson text-white transition-[opacity,translate,visibility] duration-500 ease-out-expo xl:hidden ${
+        className={`fixed inset-2 sm:inset-3 md:inset-[var(--frame)] z-[60] flex flex-col justify-between overflow-y-auto overflow-x-clip rounded-[1.75rem] sm:rounded-[var(--radius-2xl)] bg-crimson text-white shadow-2xl transition-[opacity,translate,visibility] duration-500 ease-out-expo xl:hidden ${
           sheet ? "visible translate-y-0 opacity-100" : "invisible -translate-y-5 opacity-0"
         }`}
       >
@@ -250,13 +259,13 @@ export function SiteHeader() {
             data-sheet-close
             onClick={() => setSheet(false)}
             aria-label="Close menu"
-            className="group/menu grid size-12 place-items-center rounded-[var(--radius-sm)] bg-white transition-[scale] duration-150 ease-out active:scale-[0.94]"
+            className="group/menu grid size-12 place-items-center rounded-full bg-white text-ink shadow-sm transition-[scale] duration-150 ease-out active:scale-[0.94]"
           >
             <MenuIcon open />
           </button>
         </div>
 
-        <nav aria-label="Menu" className="relative z-10 flex flex-1 flex-col justify-center gap-6 px-[calc(var(--gutter)-var(--frame))] py-3">
+        <nav aria-label="Menu" className="relative z-10 flex flex-1 flex-col justify-center gap-4 sm:gap-6 px-[calc(var(--gutter)-var(--frame))] py-2 sm:py-3">
           <ul className="flex flex-col items-start gap-2">
             {BIG.map((l) => {
               const here = pathname === l.href;
@@ -266,7 +275,7 @@ export function SiteHeader() {
                     href={l.href}
                     onClick={() => setSheet(false)}
                     aria-current={here ? "page" : undefined}
-                    className={`display inline-flex h-[3.25rem] items-center rounded-[1.625rem] px-5 text-[clamp(1.45rem,5.6vw,2.1rem)] sm:h-[3.6rem] sm:rounded-[1.8rem] sm:px-6 transition-[scale,background-color] duration-150 ease-out active:scale-[0.96] ${
+                    className={`display inline-flex h-11 items-center rounded-full px-4 text-[1.3rem] sm:h-[3.6rem] sm:px-6 sm:text-[2.1rem] transition-[scale,background-color] duration-150 ease-out active:scale-[0.96] ${
                       here ? "bg-wine text-white" : "bg-white text-ink hover:bg-crimson-wash"
                     }`}
                     {...danceHandlers}
@@ -278,9 +287,9 @@ export function SiteHeader() {
             })}
           </ul>
 
-          <div className="grid gap-3 sm:grid-cols-2 sm:gap-5">
+          <div className="grid gap-2 sm:grid-cols-2 sm:gap-5">
             {SMALL.map((g) => (
-              <div key={g.title} data-sheet-fade>
+              <div key={g.title} data-sheet-fade className={g.title === "Products" ? "hidden md:block" : ""}>
                 <p className="hand -rotate-2 text-note text-blush">{g.title}</p>
                 <ul className="mt-1 flex flex-wrap gap-x-5">
                   {g.links.map((l) => (
@@ -288,7 +297,7 @@ export function SiteHeader() {
                       <Link
                         href={l.href}
                         onClick={() => setSheet(false)}
-                        className="inline-flex min-h-11 items-center font-semibold text-white underline decoration-white/40 underline-offset-4 hover:decoration-white"
+                        className="inline-flex min-h-9 sm:min-h-11 items-center text-[0.92rem] sm:text-base font-semibold text-white underline decoration-white/40 underline-offset-4 hover:decoration-white"
                       >
                         {l.label}
                       </Link>
@@ -309,7 +318,7 @@ export function SiteHeader() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Aditya Flexipack on LinkedIn"
-            className="grid size-12 place-items-center rounded-[var(--radius-sm)] bg-wine text-white transition-[scale] duration-150 active:scale-[0.94]"
+            className="grid size-11 sm:size-12 place-items-center rounded-full bg-wine text-white transition-[scale] duration-150 active:scale-[0.94]"
           >
             <svg aria-hidden className="size-5" viewBox="0 0 24 24" fill="currentColor">
               <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.45c-.89 0-1.61.72-1.61 1.61 0 .89.72 1.61 1.61 1.61.89 0 1.61-.72 1.61-1.61 0-.89-.72-1.61-1.61-1.61Z" />
@@ -320,7 +329,7 @@ export function SiteHeader() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Aditya Flexipack on Facebook"
-            className="grid size-12 place-items-center rounded-[var(--radius-sm)] bg-wine text-white transition-[scale] duration-150 active:scale-[0.94]"
+            className="grid size-11 sm:size-12 place-items-center rounded-full bg-wine text-white transition-[scale] duration-150 active:scale-[0.94]"
           >
             <svg aria-hidden className="size-5" viewBox="0 0 24 24" fill="currentColor">
               <path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c5.05-.5 9-4.76 9-9.95z" />
